@@ -24,6 +24,9 @@ namespace dp {
 	template < typename T, std::size_t D >
 	class DopeVector {
 	public:
+
+		// constructors and assignments ////////////////////////////////////////
+
 		/**
 		 *    @brief Default constructor.
 		 */
@@ -69,6 +72,18 @@ namespace dp {
 		 *    @brief Move assignment operator.
 		 */
 		DopeVector & operator=(DopeVector &&other) = default;
+
+		/**
+		 *    @brief Copies all single elements from o to this matrix.
+		 *    @param o                  The matrix to copy from.
+		 */
+		virtual inline void import(const DopeVector<T, D> &o);
+
+		////////////////////////////////////////////////////////////////////////
+
+
+
+		// access methods //////////////////////////////////////////////////////
 
 		/**
 		 *    @brief Gives access to the i-th sub-matrix in the first dimension,
@@ -143,11 +158,11 @@ namespace dp {
 		 */
 		inline DopeVector<T, D> window(const std::array<std::size_t, D> &start, const std::array<std::size_t, D> &size) const;
 
-		/**
-		 *    @brief Copies all single elements from o to this matrix.
-		 *    @param o                  The matrix to copy from.
-		 */
-		virtual inline void import(const DopeVector<T, D> &o);
+		////////////////////////////////////////////////////////////////////////
+
+
+
+		// information /////////////////////////////////////////////////////////
 
 		/**
 		 *    @brief Gives the size of this matrix in the d dimension.
@@ -176,6 +191,10 @@ namespace dp {
 		 */
 		inline std::size_t accumulatedOffset(const std::size_t i, const std::size_t d = 0) const;
 
+		////////////////////////////////////////////////////////////////////////
+
+
+
 	private:
 		friend class DopeVector<T, D+1>;
 		T                          *_array;                 ///< Pointer in memory to the first element of this matrix.
@@ -194,6 +213,9 @@ namespace dp {
 	template < typename T >
 	class DopeVector<T, 1> {
 	public:
+
+		// constructors and assignment /////////////////////////////////////////
+
 		/**
 		 *    @brief Default constructor.
 		 */
@@ -256,6 +278,18 @@ namespace dp {
 		 *    @brief Move assignment operator.
 		 */
 		DopeVector & operator=(DopeVector &&other) = default;
+
+		/**
+		 *    @brief Copies all single elements from o to this matrix.
+		 *    @param o                  The matrix to copy from.
+		 */
+		virtual inline void import(const DopeVector<T, 1> &o);
+
+		////////////////////////////////////////////////////////////////////////
+
+
+
+		// access methods //////////////////////////////////////////////////////
 
 		/**
 		 *    @brief Gives constant access to the i-th element, i.e. m[i].
@@ -335,11 +369,11 @@ namespace dp {
 		 */
 		inline DopeVector<T, 1> window(const std::size_t start, const std::size_t size) const;
 
-		/**
-		 *    @brief Copies all single elements from o to this matrix.
-		 *    @param o                  The matrix to copy from.
-		 */
-		virtual inline void import(const DopeVector<T, 1> &o);
+		////////////////////////////////////////////////////////////////////////
+
+
+
+		// information /////////////////////////////////////////////////////////
 
 		/**
 		 *    @brief Gives the size of this vector
@@ -371,6 +405,10 @@ namespace dp {
 		 */
 		inline std::size_t accumulatedOffset(const std::size_t i = 0) const;
 
+		////////////////////////////////////////////////////////////////////////
+
+
+
 	private:
 		friend class DopeVector<T, 2>;
 		T                          *_array;                 ///< Pointer in memory to the first element of this vector.
@@ -379,8 +417,8 @@ namespace dp {
 		std::array<std::size_t, 1>  _offset;                ///< Jumps' offsets from the beginning of a "row" to the beginning of the next one, for each dimension.
 	};
 
-#include <DopeVector/inlines/DopeVector.inl>
-
 }
+
+#include <DopeVector/inlines/DopeVector.inl>
 
 #endif /* DopeVector_hpp */

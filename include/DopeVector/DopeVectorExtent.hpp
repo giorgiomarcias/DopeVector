@@ -18,6 +18,9 @@ namespace dp {
 template < typename T, std::size_t D >
 class DopeVectorExtent : public DopeVector<T, D> {
 public:
+
+	// constructors and assignment /////////////////////////////////////////////
+
     /**
      *    @brief Default constructor.
      */
@@ -49,6 +52,18 @@ public:
      */
 	DopeVectorExtent & operator=(DopeVectorExtent &&other) = default;
 
+	/**
+	 *    @brief Copies all single elements from o to this matrix.
+	 *    @param o                  The matrix to copy from.
+	 */
+	inline void import(const DopeVector<T, D> &o);
+
+	////////////////////////////////////////////////////////////////////////////
+
+
+
+	// matrix modifiers ////////////////////////////////////////////////////////
+
     /**
      *    @brief Changes the sizes of this matrix.
      *    @param size               The new sizes.
@@ -60,18 +75,16 @@ public:
      */
 	inline void clear();
 
-    /**
-     *    @brief Copies all single elements from o to this matrix.
-     *    @param o                  The matrix to copy from.
-     */
-	inline void import(const DopeVector<T, D> &o);
+	////////////////////////////////////////////////////////////////////////////
+
+
 
 private:
     std::unique_ptr<T[]>    _arrayPtr;              ///< Sharp pointer in memory to this matrix, with automatic storage (de)allocation.
 };
 
-#include <DopeVector/inlines/DopeVectorExtent.inl>
-
 }
+
+#include <DopeVector/inlines/DopeVectorExtent.inl>
 
 #endif /* DopeVectorExtent_hpp */
