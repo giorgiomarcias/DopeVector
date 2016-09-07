@@ -189,6 +189,12 @@ namespace dp {
 	}
 
 	template < typename T, std::size_t D >
+	inline const std::array<std::size_t, D> & DopeVector<T, D>::allSizes() const
+	{
+		return _size;
+	}
+
+	template < typename T, std::size_t D >
 	inline std::size_t DopeVector<T, D>::size() const
 	{
 		std::size_t total = _size[0];
@@ -410,11 +416,17 @@ namespace dp {
 	}
 
 	template < typename T >
+	inline const std::array<std::size_t, 1> & DopeVector<T, 1>::allSizes() const
+	{
+		return _size;
+	}
+
+	template < typename T >
 	inline std::size_t DopeVector<T, 1>::size() const
 	{
 		return _size[0];
 	}
-	
+
 	template < typename T >
 	inline std::size_t DopeVector<T, 1>::accumulatedOffset(const std::size_t i) const
 	{
@@ -425,5 +437,5 @@ namespace dp {
 		}
 		return _accumulatedOffset + _offset[0] * i;
 	}
-	
+
 }

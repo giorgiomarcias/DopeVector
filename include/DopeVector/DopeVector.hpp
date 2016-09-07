@@ -177,6 +177,11 @@ namespace dp {
 		 */
 		inline void allSizes(std::array<std::size_t, D> &s) const;
 
+        /**
+         *    @brief Gives the sizes of this matrix.
+         */
+        inline const std::array<std::size_t, D> & allSizes() const;
+
 		/**
 		 *    @brief Gives the total size (number of elements in memory) of this matrix.
 		 *    @return The total number of elements in memory.
@@ -388,6 +393,11 @@ namespace dp {
 		 *    @param s                  The output size of this vector.
 		 */
 		inline void allSizes(std::array<std::size_t, 1> &s) const;
+
+        /**
+         *    @brief Gives the sizes of this matrix.
+         */
+        inline const std::array<std::size_t, 1> & allSizes() const;
 
 		/**
 		 *    @brief Gives the total size (number of elements in memory) of this
