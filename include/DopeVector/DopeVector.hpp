@@ -40,7 +40,7 @@ namespace dp {
 		 *    @param accumulatedOffset  Offset from the origin of the array.
 		 *    @param size               Sizes of the D-dimensional matrix.
 		 */
-		inline DopeVector(const T *array, const std::size_t accumulatedOffset, const std::array<std::size_t, D> &size);
+		inline explicit DopeVector(T *array, const std::size_t accumulatedOffset, const std::array<std::size_t, D> &size);
 
 		/**
 		 *    @brief Initializer contructor.
@@ -51,7 +51,7 @@ namespace dp {
 		 *    @param offset             Offsets in each dimension, i.e. jumps in
 		 *                              memory.
 		 */
-		inline DopeVector(const T *array, const std::size_t accumulatedOffset, const std::array<std::size_t, D> &size, const std::array<std::size_t, D> &offset);
+		inline explicit DopeVector(T *array, const std::size_t accumulatedOffset, const std::array<std::size_t, D> &size, const std::array<std::size_t, D> &offset);
 
 		/**
 		 *    @brief Copy constructor.

@@ -9,19 +9,25 @@ namespace dp {
 	{ }
 
 	template < typename T, std::size_t D >
-	inline DopeVector<T, D>::DopeVector(const T *array, const std::size_t accumulatedOffset, const std::array<std::size_t, D> &size)
-		: _array(const_cast<T*>(array))
-		, _accumulatedOffset(accumulatedOffset)
-		, _size(size)
+	inline DopeVector<T, D>::DopeVector(T *array, const std::size_t accumulatedOffset, const std::array<std::size_t, D> &size)
+		: _array(array)
+		, _accumulatedOffset(array ? accumulatedOffset : 0)
+		, _size(array ? size : std::array<std::size_t, D>({{0}}))
 		, _offset({{0}})
-	{ }
+	{
+		if (array) {
+			_offset[D-1] = 1;
+			for (std::size_t j = D-1; j > 0; --j)
+				_offset[j-1] = _size[j] * _offset[j];
+		}
+	}
 
 	template < typename T, std::size_t D >
-	inline DopeVector<T, D>::DopeVector(const T *array, const std::size_t accumulatedOffset, const std::array<std::size_t, D> &size, const std::array<std::size_t, D> &offset)
-		: _array(const_cast<T*>(array))
-		, _accumulatedOffset(accumulatedOffset)
-		, _size(size)
-		, _offset(offset)
+	inline DopeVector<T, D>::DopeVector(T *array, const std::size_t accumulatedOffset, const std::array<std::size_t, D> &size, const std::array<std::size_t, D> &offset)
+		: _array(array)
+		, _accumulatedOffset(array ? accumulatedOffset : 0)
+		, _size(array ? size : std::array<std::size_t, D>({{0}}))
+		, _offset(array ? offset : std::array<std::size_t, D>({{0}}))
 	{ }
 
 	template < typename T, std::size_t D >

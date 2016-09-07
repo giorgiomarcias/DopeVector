@@ -2,8 +2,8 @@ namespace dp {
 
 	template < typename T, std::size_t D >
 	inline DopeVectorExtent<T, D>::DopeVectorExtent(const std::array<std::size_t, D> &size)
-	: DopeVector<T, D>()
-	, _arrayPtr(nullptr)
+		: DopeVector<T, D>()
+		, _arrayPtr(nullptr)
 	{
 		resize(size);
 	}
@@ -13,9 +13,9 @@ namespace dp {
 	{
 		if (&other != this) {
 			std::array<std::size_t, D> size;
-			other.size(size);
+			other.allSizes(size);
 			resize(size);
-			std::memcpy(_arrayPtr.get(), other._arrayPtr.get(), DopeVector<T, D>::totalSize() * sizeof(T));
+			std::memcpy(_arrayPtr.get(), other._arrayPtr.get(), DopeVector<T, D>::size() * sizeof(T));
 		}
 		return *this;
 	}
@@ -28,8 +28,8 @@ namespace dp {
 		try {
 			const DopeVectorExtent<T, D> &oo = dynamic_cast<const DopeVectorExtent<T, D> &>(o);
 			for (std::size_t d = 0; d < D; ++d)
-				if (DopeVector<T, D>::sizeAt(d) != oo.sizeAt(d))
-					throw std::out_of_range("Matrixes do not have same size.");
+			if (DopeVector<T, D>::sizeAt(d) != oo.sizeAt(d))
+				throw std::out_of_range("Matrixes do not have same size.");
 			std::memcpy(_arrayPtr.get(), oo._arrayPtr.get(), DopeVector<T, D>::size() * sizeof(T));
 		} catch(std::bad_cast &bc) {
 			DopeVector<T, D>::import(o);
@@ -59,5 +59,5 @@ namespace dp {
 		_arrayPtr.reset(nullptr);
 		DopeVector<T, D>::operator=(DopeVector<T, D>());
 	}
-	
+
 }
