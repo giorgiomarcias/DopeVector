@@ -30,6 +30,8 @@ namespace dp {
 		, _offset(array ? offset : std::array<std::size_t, D>({{0}}))
 	{ }
 
+
+
 	template < typename T, std::size_t D >
 	inline void DopeVector<T, D>::import(const DopeVector<T, D> &o)
 	{
@@ -66,6 +68,8 @@ namespace dp {
 		at(i, s);
 		return s;
 	}
+
+
 
 	template < typename T, std::size_t D >
 	inline void DopeVector<T, D>::slice(const std::size_t d, const std::size_t i, DopeVector<T, D-1> &s) const
@@ -183,12 +187,6 @@ namespace dp {
 	}
 
 	template < typename T, std::size_t D >
-	inline void DopeVector<T, D>::allSizes(std::array<std::size_t, D> &s) const
-	{
-		s = _size;
-	}
-
-	template < typename T, std::size_t D >
 	inline const std::array<std::size_t, D> & DopeVector<T, D>::allSizes() const
 	{
 		return _size;
@@ -264,6 +262,8 @@ namespace dp {
 		, _offset(offset)
 	{ }
 
+
+
 	template < typename T >
 	inline void DopeVector<T, 1>::import(const DopeVector<T, 1> &o)
 	{
@@ -298,6 +298,8 @@ namespace dp {
 		}
 		return *(_array + i * _offset[0]);
 	}
+
+
 
 	template < typename T >
 	inline const T & DopeVector<T, 1>::slice(const std::size_t i) const
@@ -407,12 +409,6 @@ namespace dp {
 			throw std::out_of_range(stream.str());
 		}
 		return _size[0];
-	}
-
-	template < typename T >
-	inline void DopeVector<T, 1>::allSizes(std::array<std::size_t, 1> &s) const
-	{
-		s = _size;
 	}
 
 	template < typename T >
