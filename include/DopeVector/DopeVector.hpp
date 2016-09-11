@@ -8,12 +8,12 @@
 #ifndef DopeVector_hpp
 #define DopeVector_hpp
 
-#include <array>
 #include <sstream>
 #include <stdexcept>
 #include <cstring>
+#include <Common/Common.hpp>
 
-namespace dp {
+namespace Container {
 
 	/// The DopeVector class represents a D-dimensional dope vector
 	/// (https://en.wikipedia.org/wiki/Dope_vector) of scalar type T. Given an
@@ -21,9 +21,39 @@ namespace dp {
 	/// multi-dimensional matrix interface. It is possible to take slices,
 	/// windows or even permutations without actually modifying the underlying
 	/// memory, no element hence gets moved.
-	template < typename T, std::size_t D >
+    template < typename T, SizeType Dimension, SizeType ... Args >
 	class DopeVector {
 	public:
+
+        ////////////////////////////////////////////////////////////////////////
+        // ASSERT
+        ////////////////////////////////////////////////////////////////////////
+
+        static_assert( ( Dimension != static_cast< SizeType >( 0 ) ), "DOPE_VECTOR_DIMENSION_CANNOT_BE_ZERO" );
+
+        ////////////////////////////////////////////////////////////////////////
+
+
+
+        ////////////////////////////////////////////////////////////////////////
+        // CONSTANTS
+        ////////////////////////////////////////////////////////////////////////
+
+        static const SizeType D = Dimension;
+
+        ////////////////////////////////////////////////////////////////////////
+
+
+
+        ////////////////////////////////////////////////////////////////////////
+        // TYPEDEFS
+        ////////////////////////////////////////////////////////////////////////
+
+        typedef Index< D > IndexD;
+
+        ////////////////////////////////////////////////////////////////////////
+
+
 
 		////////////////////////////////////////////////////////////////////////
 		// CONSTRUCTORS
@@ -42,7 +72,7 @@ namespace dp {
 		 *    @param accumulatedOffset  Offset from the origin of the array.
 		 *    @param size               Sizes of the D-dimensional matrix.
 		 */
-		inline explicit DopeVector(T *array, const std::size_t accumulatedOffset, const std::array<std::size_t, D> &size);
+        inline explicit DopeVector(T *array, const SizeType accumulatedOffset, const IndexD &size);
 
 		/**
 		 *    @brief Initializer contructor.
@@ -53,7 +83,7 @@ namespace dp {
 		 *    @param offset             Offsets in each dimension, i.e. jumps in
 		 *                              memory.
 		 */
-		inline explicit DopeVector(T *array, const std::size_t accumulatedOffset, const std::array<std::size_t, D> &size, const std::array<std::size_t, D> &offset);
+        inline explicit DopeVector(T *array, const SizeType accumulatedOffset, const IndexD &size, const IndexD &offset);
 
 		/**
 		 *    @brief Copy constructor.
@@ -87,7 +117,19 @@ namespace dp {
 		 *    @brief Copies all single elements from o to this matrix.
 		 *    @param o                  The matrix to copy from.
 		 */
-		virtual inline void import(const DopeVector<T, D> &o);
+        virtual inline void import(const DopeVector<T, D, Args...> &o);
+
+        /**
+         *    @brief Swap this vector with vector o.
+         *    @param o                  The DopeVector to swap with.
+         */
+        virtual inline void swap(DopeVector<T, D, Args...> &o);
+
+        /**
+         *    @brief Swap vector v0 with vector v1.
+         *    @param o                  The DopeVector to swap with.
+         */
+        friend inline void swap(DopeVector<T, D, Args...> &v0, DopeVector<T, D, Args...> &v1);
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -103,7 +145,29 @@ namespace dp {
 		 *    @param i                  The i-th "row" of this matrix.
 		 *    @param s                  The output sub-matrix at i.
 		 */
-		inline void at(const std::size_t i, DopeVector<T, D-1> &s) const;
+        inline void at(const SizeType i, DopeVector<T, D-1> &s) const;
+
+        /**
+         *    @brief Gives access to the i-th sub-matrix in the first dimension,
+         *           i.e. m[i][*]...[*].
+         *    @param i                  The i-th "row" of this matrix.
+         *    @return The output sub-matrix at i.
+         */
+        inline DopeVector<T, D-1> at(const SizeType i) const;
+
+        /**
+         *    @brief Gives access to the element at index i
+         *    @param i                  The index of the element.
+         *    @return The element at index i.
+         */
+        inline const T & at(const IndexD i) const;
+
+        /**
+         *    @brief Gives access to the element at index i
+         *    @param i                  The index of the element.
+         *    @return The element at index i.
+         */
+        inline T & at(const IndexD i);
 
 		/**
 		 *    @brief Gives access to the i-th sub-matrix in the first dimension,
@@ -111,7 +175,7 @@ namespace dp {
 		 *    @param i                  The i-th "row" of this matrix.
 		 *    @return The output sub-matrix at i.
 		 */
-		inline DopeVector<T, D-1> operator[](const std::size_t i) const;
+        inline DopeVector<T, D-1> operator[](const SizeType i) const;
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -129,7 +193,7 @@ namespace dp {
 		 *    @param s                  The output sub-matrix at i in the d
 		 *                              dimension.
 		 */
-		inline void slice(const std::size_t d, const std::size_t i, DopeVector<T, D-1> &s) const;
+        inline void slice(const SizeType d, const SizeType i, DopeVector<T, D-1> &s) const;
 
 		/**
 		 *    @brief Gives access to the i-th sub-matrix in the d-th dimension,
@@ -138,7 +202,7 @@ namespace dp {
 		 *    @param i                  The i-th "row" of this matrix.
 		 *    @return The output sub-matrix at i in the d dimension.
 		 */
-		inline DopeVector<T, D-1> slice(const std::size_t d, const std::size_t i) const;
+        inline DopeVector<T, D-1> slice(const SizeType d, const SizeType i) const;
 
 		/**
 		 *    @brief Reorders the sub-matrixes s.t. the one at 0 <= i < D goes 
@@ -148,19 +212,19 @@ namespace dp {
 		 *    @param p                  The output permuted matrix.
 		 *    @note Example: transpose a 2D matrix by swapping the access
 		 *                   indices:
-		 *                   MArray<T,2> m, mt;
-		 *                   std::size_t trans_ord[2] = {1, 0}; 
+         *                   DopeVector<T,2> m, mt;
+         *                   SizeType trans_ord[2] = {1, 0};
 		 *                   m.permute(trans_ord, mt);
 		 */
-		inline void permute(const std::array<std::size_t, D> &order, DopeVector<T, D> &p) const;
+        inline void permute(const IndexD &order, DopeVector<T, D, Args...> &p) const;
 
 		/**
 		 *    @brief Reorders the sub-matrixes s.t. the one at 0 <= i < D goes to 0 <= order[i] < D, i.e. m[*]..[*]_i...[*] swaps with m[*]...[i]...[*]_order[i]...[*].
 		 *    @param order              A permutation of the matrix indices.
 		 *    @return The output permuted matrix.
-		 *    @note Example: transpose a 2D matrix by swapping the access indices - MArray<T,2> m, mt; std::size_t trans_ord[2] = {1, 0}; mt = m.permute(trans_ord);
+         *    @note Example: transpose a 2D matrix by swapping the access indices - DopeVector<T,2> m, mt; SizeType trans_ord[2] = {1, 0}; mt = m.permute(trans_ord);
 		 */
-		inline DopeVector<T, D> permute(const std::array<std::size_t, D> &order) const;
+        inline DopeVector<T, D, Args...> permute(const IndexD &order) const;
 
 		/**
 		 *    @brief Extracts a D-dimensional window from this matrix.
@@ -168,7 +232,7 @@ namespace dp {
 		 *    @param size               The sizes of the window.
 		 *    @param w                  The output sub-matrix.
 		 */
-		inline void window(const std::array<std::size_t, D> &start, std::array<std::size_t, D> &size, DopeVector<T, D> &w) const;
+        inline void window(const IndexD &start, IndexD &size, DopeVector<T, D, Args...> &w) const;
 
 		/**
 		 *    @brief Extracts a D-dimensional window from this matrix.
@@ -176,7 +240,7 @@ namespace dp {
 		 *    @param size               The sizes of the window.
 		 *    @return The output sub-matrix.
 		 */
-		inline DopeVector<T, D> window(const std::array<std::size_t, D> &start, const std::array<std::size_t, D> &size) const;
+        inline DopeVector<T, D, Args...> window(const IndexD &start, const IndexD &size) const;
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -191,18 +255,18 @@ namespace dp {
 		 *    @param d                  The dimension whose size is requested.
 		 *    @return The size of this matrix at dimension d.
 		 */
-		inline std::size_t sizeAt(const std::size_t d) const;
+        inline SizeType sizeAt(const SizeType d) const;
 
         /**
          *    @brief Gives the sizes of this matrix.
          */
-        inline const std::array<std::size_t, D> & allSizes() const;
+        inline const IndexD & allSizes() const;
 
 		/**
 		 *    @brief Gives the total size (number of elements in memory) of this matrix.
 		 *    @return The total number of elements in memory.
 		 */
-		inline std::size_t size() const;
+        inline SizeType size() const;
 
 		/**
 		 *    @brief Gives the total offset, from the beginning of the stored array, of the i-th element at dimension d.
@@ -210,18 +274,18 @@ namespace dp {
 		 *    @param d                  The dimension whose i-th element offset is requested.
 		 *    @return The total offset from the beggining of the stored array of the i-th element at dimension d.
 		 */
-		inline std::size_t accumulatedOffset(const std::size_t i, const std::size_t d = 0) const;
+        inline SizeType accumulatedOffset(const SizeType i, const SizeType d = 0) const;
 
 		////////////////////////////////////////////////////////////////////////
 
 
 
 	private:
-		friend class DopeVector<T, D+1>;
-		T                          *_array;                 ///< Pointer in memory to the first element of this matrix.
-		std::size_t                 _accumulatedOffset;     ///< Offset of the first element of this matrix from the beginning of the stored array.
-		std::array<std::size_t, D>  _size;                  ///< Sizes of this matrix, for each dimension.
-		std::array<std::size_t, D>  _offset;                ///< Jumps' offsets from the beginning of a "row" to the beginning of the next one, for each dimension.
+        friend class DopeVector<T, D+1, Args...>;
+        T       *_array;                 ///< Pointer in memory to the first element of this matrix.
+        SizeType _accumulatedOffset;     ///< Offset of the first element of this matrix from the beginning of the stored array.
+        IndexD   _size;                  ///< Sizes of this matrix, for each dimension.
+        IndexD   _offset;                ///< Jumps' offsets from the beginning of a "row" to the beginning of the next one, for each dimension.
 	};
 
 
@@ -230,10 +294,28 @@ namespace dp {
 	/// Given an array stored sequentially in memory, this class wraps it provinding a mono-dimensional matrix interface.
 	/// It is possible to take slices, windows or even permutations without actually modifying the underlying memory, no element
 	/// hence moved.
-	/// This actually is the basis of the recursive class MArray<T, D> above.
-	template < typename T >
-	class DopeVector<T, 1> {
+    /// This actually is the basis of the recursive class DopeVector<T, D, Args...> above.
+    template < typename T, SizeType ... Args >
+    class DopeVector<T, 1, Args ...> {
 	public:
+
+        ////////////////////////////////////////////////////////////////////////
+        // CONSTANTS
+        ////////////////////////////////////////////////////////////////////////
+
+        static const SizeType D = 1;
+
+        ////////////////////////////////////////////////////////////////////////
+
+
+
+        ////////////////////////////////////////////////////////////////////////
+        // TYPEDEFS
+        ////////////////////////////////////////////////////////////////////////
+
+        typedef Index< 1 > Index1;
+
+        ////////////////////////////////////////////////////////////////////////
 
 		////////////////////////////////////////////////////////////////////////
 		// CONSTRUCTORS
@@ -250,7 +332,7 @@ namespace dp {
 		 *    @param accumulatedOffset  Offset from the origin of the array.
 		 *    @param size               Size of the 1-dimensional matrix.
 		 */
-		inline DopeVector(const T *array, const std::size_t accumulatedOffset, const std::size_t size);
+        inline DopeVector(const T *array, const SizeType accumulatedOffset, const SizeType size);
 
 		/**
 		 *    @brief Initializer contructor.
@@ -259,7 +341,7 @@ namespace dp {
 		 *    @param size               Size of the 1-dimensional matrix.
 		 *    @param offset             Offset in memory from one element to the next one.
 		 */
-		inline DopeVector(const T *array, const std::size_t accumulatedOffset, const std::size_t size, const std::size_t offset);
+        inline DopeVector(const T *array, const SizeType accumulatedOffset, const SizeType size, const SizeType offset);
 
 		/**
 		 *    @brief Initializer contructor.
@@ -269,7 +351,7 @@ namespace dp {
 		 *    @param accumulatedOffset  Offset from the origin of the array.
 		 *    @param size               Sizes of the 1-dimensional matrix.
 		 */
-		inline DopeVector(const T *array, const std::size_t accumulatedOffset, const std::array<std::size_t, 1> &size);
+        inline DopeVector(const T *array, const SizeType accumulatedOffset, const Index1 &size);
 
 		/**
 		 *    @brief Initializer contructor.
@@ -280,7 +362,7 @@ namespace dp {
 		 *    @param offset             Offsets in each dimension, i.e. jumps in
 		 *                              memory.
 		 */
-		inline DopeVector(const T *array, const std::size_t accumulatedOffset, const std::array<std::size_t, 1> &size, const std::array<std::size_t, 1> &offset);
+        inline DopeVector(const T *array, const SizeType accumulatedOffset, const Index1 &size, const Index1 &offset);
 
 		/**
 		 *    @brief Copy constructor.
@@ -314,7 +396,19 @@ namespace dp {
 		 *    @brief Copies all single elements from o to this matrix.
 		 *    @param o                  The matrix to copy from.
 		 */
-		virtual inline void import(const DopeVector<T, 1> &o);
+        virtual inline void import(const DopeVector<T, 1, Args...> &o);
+
+        /**
+         *    @brief Swap this vector with DopeVector o.
+         *    @param o                  The DopeVector to swap with.
+         */
+        virtual inline void swap( DopeVector<T, 1, Args...> &o);
+
+        /**
+         *    @brief Swap vector v0 with vector v1.
+         *    @param o                  The DopeVector to swap with.
+         */
+        friend inline void swap(DopeVector<T, 1, Args...> &v0, DopeVector<T, 1, Args...> &v1);
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -324,19 +418,61 @@ namespace dp {
 		// ACCESS METHODS
 		////////////////////////////////////////////////////////////////////////
 
+        /**
+         *    @brief Gives constant access to the i-th element, i.e. m[i].
+         *    @param i                  The i-th element of this vector
+         *    @return The output element at i.
+         */
+        inline const T & at(const SizeType i) const;
+
+        /**
+         *    @brief Gives access to the i-th element, i.e. m[i].
+         *    @param i                  The i-th element of this vector
+         *    @return The output element at i.
+         */
+        inline T & at(const SizeType i);
+
+        /**
+         *    @brief Gives constant access to the i-th element, i.e. m[i].
+         *    @param i                  The i-th element of this vector
+         *    @return The output element at i.
+         */
+        inline const T & at(const Index1 i) const;
+
+        /**
+         *    @brief Gives access to the i-th element, i.e. m[i].
+         *    @param i                  The i-th element of this vector
+         *    @return The output element at i.
+         */
+        inline T & at(const Index1 i);
+
 		/**
 		 *    @brief Gives constant access to the i-th element, i.e. m[i].
 		 *    @param i                  The i-th element of this vector
 		 *    @return The output element at i.
 		 */
-		inline const T & operator[](const std::size_t i) const;
+        inline const T & operator[](const SizeType i) const;
 
 		/**
 		 *    @brief Gives access to the i-th element, i.e. m[i].
 		 *    @param i                  The i-th element of this vector
 		 *    @return The output element at i.
 		 */
-		inline T & operator[](const std::size_t i);
+        inline T & operator[](const SizeType i);
+
+        /**
+         *    @brief Gives constant access to the i-th element, i.e. m[i].
+         *    @param i                  The i-th element of this vector
+         *    @return The output element at i.
+         */
+        inline const T & operator[](const Index1 i) const;
+
+        /**
+         *    @brief Gives access to the i-th element, i.e. m[i].
+         *    @param i                  The i-th element of this vector
+         *    @return The output element at i.
+         */
+        inline T & operator[](const Index1 i);
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -351,14 +487,14 @@ namespace dp {
 		 *    @param i                  The i-th element of this vector.
 		 *    @return The output element at i.
 		 */
-		inline const T & slice(const std::size_t i) const;
+        inline const T & slice(const SizeType i) const;
 
 		/**
 		 *    @brief Gives access to the i-th element, i.e. m[i].
 		 *    @param i                  The i-th element of this vector.
 		 *    @return The output element at i.
 		 */
-		inline T & slice(const std::size_t i);
+        inline T & slice(const SizeType i);
 
 		/**
 		 *    @brief Reorders the sub-matrixes s.t. the one at 0 <= i < 1 goes
@@ -366,17 +502,17 @@ namespace dp {
 		 *    @param order              A permutation of the matrix indices.
 		 *    @param p                  The output permuted matrix.
 		 *    @note In practice, this does nothing. It is kept for coherency
-		 *          with higher dimensional MArray.
+         *          with higher dimensional DopeVector.
 		 */
-		inline void permute(const std::array<std::size_t, 1> &order, DopeVector<T, 1> &p) const;
+        inline void permute(const Index1 &order, DopeVector<T, 1, Args...> &p) const;
 
 		/**
 		 *    @brief Reorders the sub-matrixes s.t. the one at 0 <= i < 1 goes to 0 <= order[i] < 1, i.e. m[0] swaps with m[order[0]].
 		 *    @param order              A permutation of the matrix indices.
 		 *    @return The output permuted matrix.
-		 *    @note In practice, this does nothing. It is kept for coherency with higher dimensional MArray.
+         *    @note In practice, this does nothing. It is kept for coherency with higher dimensional DopeVector.
 		 */
-		inline DopeVector<T, 1> permute(const std::array<std::size_t, 1> &order) const;
+        inline DopeVector<T, 1, Args...> permute(const Index1 &order) const;
 
 		/**
 		 *    @brief Extracts a 1-dimensional window from this vector.
@@ -384,7 +520,7 @@ namespace dp {
 		 *    @param size               The size of the window.
 		 *    @param w                  The output sub-vector.
 		 */
-		inline void window(const std::array<std::size_t, 1> &start, const std::array<std::size_t, 1> &size, DopeVector<T, 1> &w) const;
+        inline void window(const Index1 &start, const Index1 &size, DopeVector<T, 1, Args...> &w) const;
 
 		/**
 		 *    @brief Extracts a 1-dimensional window from this vector.
@@ -392,7 +528,7 @@ namespace dp {
 		 *    @param size               The size of the window.
 		 *    @return The output sub-vector.
 		 */
-		inline DopeVector<T, 1> window(const std::array<std::size_t, 1> &start, const std::array<std::size_t, 1> &size) const;
+        inline DopeVector<T, 1, Args...> window(const Index1 &start, const Index1 &size) const;
 
 		/**
 		 *    @brief Extracts a 1-dimensional window from this vector.
@@ -400,7 +536,7 @@ namespace dp {
 		 *    @param size               The size of the window.
 		 *    @param w                  The output sub-vector.
 		 */
-		inline void window(const std::size_t start, const std::size_t size, DopeVector<T, 1> &w) const;
+        inline void window(const SizeType start, const SizeType size, DopeVector<T, 1, Args...> &w) const;
 
 		/**
 		 *    @brief Extracts a 1-dimensional window from this vector.
@@ -408,7 +544,7 @@ namespace dp {
 		 *    @param size               The size of the window.
 		 *    @return The output sub-vector.
 		 */
-		inline DopeVector<T, 1> window(const std::size_t start, const std::size_t size) const;
+        inline DopeVector<T, 1, Args...> window(const SizeType start, const SizeType size) const;
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -424,19 +560,19 @@ namespace dp {
 		 *                              (MUST be 0).
 		 *    @return The size of this matrix at dimension d.
 		 */
-		inline std::size_t sizeAt(const std::size_t d) const;
+        inline SizeType sizeAt(const SizeType d) const;
 
         /**
          *    @brief Gives the sizes of this matrix.
          */
-        inline const std::array<std::size_t, 1> & allSizes() const;
+        inline const Index1 & allSizes() const;
 
 		/**
 		 *    @brief Gives the total size (number of elements in memory) of this
 		 *           vector.
 		 *    @return The total number of elements in memory.
 		 */
-		inline std::size_t size() const;
+        inline SizeType size() const;
 
 		/**
 		 *    @brief Gives the total offset, from the beginning of the stored
@@ -445,20 +581,56 @@ namespace dp {
 		 *    @return The total offset from the beggining of the stored array of
 		 *            the i-th element.
 		 */
-		inline std::size_t accumulatedOffset(const std::size_t i = 0) const;
+        inline SizeType accumulatedOffset(const SizeType i = 0) const;
 
 		////////////////////////////////////////////////////////////////////////
 
 
 
 	private:
-		friend class DopeVector<T, 2>;
-		T                          *_array;                 ///< Pointer in memory to the first element of this vector.
-		std::size_t                 _accumulatedOffset;     ///< Offset of the first element of this vector from the beginning of the stored array.
-		std::array<std::size_t, 1>  _size;                  ///< Sizes of this matrix, for each dimension.
-		std::array<std::size_t, 1>  _offset;                ///< Jumps' offsets from the beginning of a "row" to the beginning of the next one, for each dimension.
+        friend class DopeVector<T, 2, Args...>;
+        T       *_array;                 ///< Pointer in memory to the first element of this vector.
+        SizeType _accumulatedOffset;     ///< Offset of the first element of this vector from the beginning of the stored array.
+        Index1   _size;                  ///< Sizes of this matrix, for each dimension.
+        Index1   _offset;                ///< Jumps' offsets from the beginning of a "row" to the beginning of the next one, for each dimension.
 	};
 
+    template < typename T, SizeType ... Args >
+    using DopeVector1D = DopeVector<T, 1, Args...>;
+
+    template < typename T, SizeType ... Args >
+    using DopeVector2D = DopeVector<T, 2, Args...>;
+
+    template < typename T, SizeType ... Args >
+    using DopeVector3D = DopeVector<T, 3, Args...>;
+
+    //////////////////////////////////////////////////////////////////////////
+    // TO DO
+    //////////////////////////////////////////////////////////////////////////
+    /*
+    template < typename T, SizeType Size >
+    class DopeVector< T, 1, Size > { };
+
+    template < T, SizeType Size >
+    using FixedDopeVector1D = DopeVector<T, 1, Size>;
+
+
+
+    template < typename T, SizeType SizeU, SizeType SizeV >
+    class DopeVector< T, 2, SizeU, SizeV > { };
+
+    template < typename T, SizeType SizeU, SizeType SizeV >
+    using FixedDopeVector2D = DopeVector<T, 2, SizeU, SizeV>;
+
+
+
+    template < typename T, SizeType SizeU, SizeType SizeV, SizeType SizeW >
+    class DopeVector< T, 3, SizeU, SizeV, SizeW > { };
+
+    template < typename T, SizeType SizeU, SizeType SizeV, SizeType SizeW >
+    using FixedDopeVector3D = DopeVector<T, 3, SizeU, SizeV, SizeW>;
+
+    */
 }
 
 #include <DopeVector/inlines/DopeVector.inl>

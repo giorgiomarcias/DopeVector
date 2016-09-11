@@ -11,12 +11,12 @@
 #include <DopeVector/DopeVector.hpp>
 #include <memory>
 
-namespace dp {
+namespace Container {
 
 	/// The DopeVectorExtent class is a wrapper of DopeVector providing a
 	/// built-in memory storage and management.
-	template < typename T, std::size_t D >
-	class DopeVectorExtent : public DopeVector<T, D> {
+    template < typename T, SizeType Dimension >
+    class DopeVectorExtent : public DopeVector<T, Dimension> {
 	public:
 
 		// constructors and assignment /////////////////////////////////////////
@@ -30,7 +30,7 @@ namespace dp {
 		 *    @brief Initializer contructor.
 		 *    @param size               Sizes of the D-dimensional matrix.
 		 */
-		inline explicit DopeVectorExtent(const std::array<std::size_t, D> &size);
+        inline explicit DopeVectorExtent(const IndexD &size);
 
 		/**
 		 *    @brief Copy constructor.
@@ -68,7 +68,7 @@ namespace dp {
 		 *    @brief Changes the sizes of this matrix.
 		 *    @param size               The new sizes.
 		 */
-		inline void resize(const std::array<std::size_t, D> &size);
+        inline void resize(const IndexD &size);
 
 		/**
 		 *    @brief Empties this array, making its size 0.
