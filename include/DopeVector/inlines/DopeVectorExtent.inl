@@ -1,3 +1,5 @@
+#include <type_traits>
+
 namespace dp {
 
 	template < typename T, std::size_t D >
@@ -30,7 +32,11 @@ namespace dp {
 			for (std::size_t d = 0; d < D; ++d)
 			if (DopeVector<T, D>::sizeAt(d) != oo.sizeAt(d))
 				throw std::out_of_range("Matrixes do not have same size.");
-			std::memcpy(_arrayPtr.get(), oo._arrayPtr.get(), DopeVector<T, D>::size() * sizeof(T));
+			if (std::is_pod<T>::value)
+				std::memcpy(_arrayPtr.get(), oo._arrayPtr.get(), DopeVector<T, D>::size() * sizeof(T));
+			else
+			for (std::size_t i = 0; i < DopeVector<T, D>::size(); ++i)
+				_arrayPtr[i] = oo._arrayPtr[i];
 		} catch(std::bad_cast &bc) {
 			DopeVector<T, D>::import(o);
 		}
