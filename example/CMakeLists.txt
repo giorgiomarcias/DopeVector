@@ -5,11 +5,13 @@ project(DopeVector)
 # source files
 set(hdr_dir ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 set(src
+    ${hdr_dir}/Common/Common.hpp
     ${hdr_dir}/DopeVector/DopeVector.hpp
     ${hdr_dir}/DopeVector/inlines/DopeVector.inl
     ${hdr_dir}/DopeVector/DopeVectorExtent.hpp
     ${hdr_dir}/DopeVector/inlines/DopeVectorExtent.inl
     ${hdr_dir}/DopeVector/DopeVectors.hpp
+    ${hdr_dir}/Grid/Grid.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 )
 
