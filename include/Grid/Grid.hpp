@@ -80,10 +80,10 @@ public:
 
         inline self_type operator+(const SizeType n) const { self_type copy(*this); copy += n; return copy; }
         friend inline self_type operator+(const SizeType n, const self_type &it) { return (it + n); }
-        inline self_type operator+(const IndexD &n) const { return (*this + to_position(n, it._range)); }
+        inline self_type operator+(const IndexD &n) const { return (*this + Container::to_position(n, it._range)); }
         friend inline self_type operator+(const IndexD &n, const self_type &it) { return (it + n); }
         inline self_type operator-(const SizeType n) const { self_type copy(*this); copy -= n; return copy; }
-        inline self_type operator-(const IndexD &n) const { return (*this - to_position(n, _range)); }
+        inline self_type operator-(const IndexD &n) const { return (*this - Container::to_position(n, _range)); }
         inline difference_type operator-(const self_type &o) const { if(_range == o._range) return (_ptr - o._ptr); }
 
         inline bool operator<(const self_type &o) const { if(_range == o._range) return ((*this - o) > 0); return false; }
@@ -94,8 +94,8 @@ public:
         inline self_type& operator+=(const SizeType n) { _ptr += n; _i += n; return *this; }
         inline self_type& operator-=(const SizeType n) { _ptr -= n; _i -= n; return *this; }
 
-        inline self_type& operator+=(const IndexD &n) { return (*this += to_position(n, _size)); }
-        inline self_type& operator-=(const IndexD &n) { return (*this -= to_position(n, _size)); }
+        inline self_type& operator+=(const IndexD &n) { return (*this += Container::to_position(n, _size)); }
+        inline self_type& operator-=(const IndexD &n) { return (*this -= Container::to_position(n, _size)); }
 
         inline reference operator[](const SizeType n) const { return *(*this + n); }
         inline reference operator[](const IndexD &n) const { return *(*this + n); }
