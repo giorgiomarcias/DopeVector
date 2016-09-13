@@ -11,7 +11,7 @@ class Index : public std::array<SizeType, Dimension> {
 public:
     inline Index();
     inline Index(const std::array<SizeType, Dimension> &array);
-    inline Index(const SizeType value);
+    explicit inline Index(const SizeType value);
 
     inline Index(const Index &o) = default;
     inline Index(Index &&o) = default;
