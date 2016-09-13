@@ -3,7 +3,7 @@
 
 #include <cstdlib>
 
-namespace Container {
+namespace container {
 
 typedef std::size_t SizeType;
 

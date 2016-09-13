@@ -1,6 +1,10 @@
+<<<<<<< Updated upstream
 #include <DopeVector/DopeVectorExtent.hpp>
+=======
+namespace container {
+>>>>>>> Stashed changes
 
-namespace Container {
+namespace container {
 
     template < typename T, SizeType Dimesnion >
     inline DopeVectorExtent<T, Dimension>::DopeVectorExtent(const IndexD &size)

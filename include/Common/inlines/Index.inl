@@ -1,6 +1,6 @@
 #include <Common/Index.hpp>
 
-namespace Container {
+namespace container {
 
     template < SizeType Dimension >
     Index<Dimension>::Index() :

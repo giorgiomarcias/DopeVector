@@ -5,7 +5,7 @@
 #include <DopeVector/DopeVector.hpp>
 #include <Grid/GridIterator.hpp>
 
-namespace Container {
+namespace container {
 
 template < SizeType Dimension >
 static SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range);

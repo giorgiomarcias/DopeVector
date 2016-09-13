@@ -4,7 +4,7 @@
 #include <iterator>
 #include <Common/Index.hpp>
 
-namespace Container {
+namespace container {
 
 template < typename T, SizeType Dimension >
 class GridIterator : public std::iterator<std::random_access_iterator_tag, T>{

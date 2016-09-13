@@ -4,7 +4,7 @@
 #include <Common/Common.hpp>
 #include <array>
 
-namespace Container {
+namespace container {
 
 template < SizeType Dimension >
 class Index : public std::array<SizeType, Dimension> {

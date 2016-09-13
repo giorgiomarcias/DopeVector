@@ -12,7 +12,7 @@
 
 #include <DopeVector/DopeVectors.hpp>
 
-using namespace Container;
+using namespace container;
 
 int main(int argc, char *argv[])
 {

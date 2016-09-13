@@ -14,7 +14,7 @@
 #include <Common/Common.hpp>
 #include <Common/Index.hpp>
 
-namespace Container {
+namespace container {
 
 	/// The DopeVector class represents a D-dimensional dope vector
 	/// (https://en.wikipedia.org/wiki/Dope_vector) of scalar type T. Given an
@@ -160,6 +160,7 @@ namespace Container {
          */
         inline T & at(const IndexD &i);
 
+
 		/**
 		 *    @brief Gives access to the i-th sub-matrix in the first dimension,
 		 *           i.e. m[i][*]...[*].
@@ -190,7 +191,7 @@ namespace Container {
 		// REDUCTION METHODS
 		////////////////////////////////////////////////////////////////////////
 
-		/**
+        /**
 		 *    @brief Gives access to the i-th sub-matrix in the d-th dimension,
 		 *           i.e. m[*]...[i]...[*].
 		 *    @param d                  The dimension where to slice.
@@ -261,6 +262,12 @@ namespace Container {
 		 *    @return The size of this matrix at dimension d.
 		 */
         inline SizeType sizeAt(const SizeType d) const;
+
+		/**
+		 *    @brief Gives the sizes of this matrix.
+		 *    @param s                  The output array that will contain the sizes of this matrix.
+		 */
+        inline void allSizes(IndexD &s) const;
 
         /**
          *    @brief Gives the sizes of this matrix.
@@ -566,6 +573,12 @@ namespace Container {
 		 *    @return The size of this matrix at dimension d.
 		 */
         inline SizeType sizeAt(const SizeType d) const;
+
+		/**
+		 *    @brief Gives the size of this vector.
+		 *    @param s                  The output size of this vector.
+		 */
+        inline void allSizes(Index1 &s) const;
 
         /**
          *    @brief Gives the sizes of this matrix.

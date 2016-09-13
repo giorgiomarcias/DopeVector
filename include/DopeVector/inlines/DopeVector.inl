@@ -1,6 +1,6 @@
 #include <DopeVector/DopeVector.hpp>
 
-namespace Container {
+namespace container {
 
     ////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS

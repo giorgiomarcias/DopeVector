@@ -11,7 +11,7 @@
 #include <DopeVector/DopeVector.hpp>
 #include <memory>
 
-namespace Container {
+namespace container {
 
 	/// The DopeVectorExtent class is a wrapper of DopeVector providing a
 	/// built-in memory storage and management.
