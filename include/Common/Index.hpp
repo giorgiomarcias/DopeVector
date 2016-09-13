@@ -10,6 +10,7 @@ template < SizeType Dimension >
 class Index : public std::array<SizeType, Dimension> {
 public:
     inline Index();
+    inline Index(const std::array<SizeType, Dimension> &array);
     inline Index(const SizeType value);
 
     inline Index(const Index &o) = default;
@@ -20,9 +21,6 @@ public:
     static constexpr Index Zero();
     static constexpr Index Ones();
     static constexpr Index Constant(const SizeType value);
-
-    template < SizeType Value >
-    static constexpr Index Constant();
 
     inline void reset(const SizeType value = static_cast<SizeType>(0));
 
@@ -39,8 +37,13 @@ public:
     inline Index  operator/ (const SizeType n) const;
 };
 
-#include <Common/inlines/Index.inl>
+typedef Index<1> Index1;
+typedef Index<2> Index2;
+typedef Index<3> Index3;
+typedef Index<4> Index4;
 
 }
+
+#include <Common/inlines/Index.inl>
 
 #endif // Index_hpp

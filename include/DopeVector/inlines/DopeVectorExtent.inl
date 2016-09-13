@@ -1,69 +1,65 @@
-<<<<<<< Updated upstream
 #include <DopeVector/DopeVectorExtent.hpp>
-=======
-namespace container {
->>>>>>> Stashed changes
 
 namespace container {
 
-    template < typename T, SizeType Dimesnion >
-    inline DopeVectorExtent<T, Dimension>::DopeVectorExtent(const IndexD &size)
-		: DopeVector<T, D>()
+    template < typename T, SizeType Dimension >
+    inline DopeVectorExtent<T, Dimension>::DopeVectorExtent(const Index<Dimension> &size)
+        : DopeVector<T, Dimension>()
 		, _arrayPtr(nullptr)
 	{
 		resize(size);
 	}
 
-    template < typename T, SizeType Dimesnion >
-    inline DopeVectorExtent<T, D> & DopeVectorExtent<T, Dimension>::operator=(const DopeVectorExtent &other)
+    template < typename T, SizeType Dimension >
+    inline DopeVectorExtent<T, Dimension> & DopeVectorExtent<T, Dimension>::operator=(const DopeVectorExtent &other)
 	{
 		if (&other != this) {
-            IndexD size;
+            Index<Dimension> size;
 			other.allSizes(size);
 			resize(size);
-			std::memcpy(_arrayPtr.get(), other._arrayPtr.get(), DopeVector<T, D>::size() * sizeof(T));
+            std::memcpy(_arrayPtr.get(), other._arrayPtr.get(), DopeVector<T, Dimension>::size() * sizeof(T));
 		}
 		return *this;
 	}
 
-    template < typename T, SizeType Dimesnion >
+    template < typename T, SizeType Dimension >
     inline void DopeVectorExtent<T, Dimension>::import(const DopeVector<T, Dimension> &o)
 	{
 		if (&o == this)
 			return;
 		try {
-			const DopeVectorExtent<T, D> &oo = dynamic_cast<const DopeVectorExtent<T, D> &>(o);
-            for (SizeType d = 0; d < D; ++d)
-			if (DopeVector<T, D>::sizeAt(d) != oo.sizeAt(d))
+            const DopeVectorExtent<T, Dimension> &oo = dynamic_cast<const DopeVectorExtent<T, Dimension> &>(o);
+            for (SizeType d = 0; d < Dimension; ++d)
+            if (DopeVector<T, Dimension>::sizeAt(d) != oo.sizeAt(d))
 				throw std::out_of_range("Matrixes do not have same size.");
-			std::memcpy(_arrayPtr.get(), oo._arrayPtr.get(), DopeVector<T, D>::size() * sizeof(T));
+            std::memcpy(_arrayPtr.get(), oo._arrayPtr.get(), DopeVector<T, Dimension>::size() * sizeof(T));
 		} catch(std::bad_cast &bc) {
-			DopeVector<T, D>::import(o);
+            DopeVector<T, Dimension>::import(o);
 		}
 	}
 
 
 
-    template < typename T, SizeType Dimesnion >
-    inline void DopeVectorExtent<T, Dimension>::resize(const IndexD &size)
+    template < typename T, SizeType Dimension >
+    inline void DopeVectorExtent<T, Dimension>::resize(const Index<Dimension> &size)
 	{
         SizeType total = size[0];
-        for (SizeType i = 1; i < D; ++i)
+        for (SizeType i = 1; i < Dimension; ++i)
 			total *= size[i];
 		if (total > 0) {
-			if (total != DopeVector<T, D>::size())
+            if (total != DopeVector<T, Dimension>::size())
 				_arrayPtr.reset(new T[total]);		// Be aware: data is LOST!
-			DopeVector<T, D>::operator=(DopeVector<T, D>(_arrayPtr.get(), 0, size));
+            DopeVector<T, Dimension>::operator=(DopeVector<T, Dimension>(_arrayPtr.get(), 0, size));
 		} else {
 			clear();
 		}
 	}
 
-    template < typename T, SizeType Dimesnion >
+    template < typename T, SizeType Dimension >
     inline void DopeVectorExtent<T, Dimension>::clear()
 	{
 		_arrayPtr.reset(nullptr);
-		DopeVector<T, D>::operator=(DopeVector<T, D>());
+        DopeVector<T, Dimension>::operator=(DopeVector<T, Dimension>());
 	}
 
 }

@@ -30,7 +30,7 @@ namespace container {
         // CONSTANTS
         ////////////////////////////////////////////////////////////////////////
 
-        static const SizeType D = Dimension;
+        static constexpr SizeType D = Dimension;
 
         ////////////////////////////////////////////////////////////////////////
 
@@ -108,19 +108,19 @@ namespace container {
 		 *    @brief Copies all single elements from o to this matrix.
 		 *    @param o                  The matrix to copy from.
 		 */
-        virtual inline void import(const DopeVector<T, D, Args...> &o);
+        virtual inline void import(const DopeVector &o);
 
         /**
          *    @brief Swap this vector with vector o.
          *    @param o                  The DopeVector to swap with.
          */
-        virtual inline void swap(DopeVector<T, D, Args...> &o);
+        virtual inline void swap(DopeVector &o);
 
         /**
          *    @brief Swap vector v0 with vector v1.
          *    @param o                  The DopeVector to swap with.
          */
-        friend inline void swap(DopeVector<T, D, Args...> &v0, DopeVector<T, D, Args...> &v1);
+        friend inline void swap(DopeVector<T, Dimension, Args...> &v0, DopeVector<T, Dimension, Args...> &v1);
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -136,7 +136,7 @@ namespace container {
 		 *    @param i                  The i-th "row" of this matrix.
 		 *    @param s                  The output sub-matrix at i.
 		 */
-        inline void at(const SizeType i, DopeVector<T, D-1> &s) const;
+        inline void at(const SizeType i, DopeVector<T, Dimension-1, Args...> &s) const;
 
         /**
          *    @brief Gives access to the i-th sub-matrix in the first dimension,
@@ -144,7 +144,7 @@ namespace container {
          *    @param i                  The i-th "row" of this matrix.
          *    @return The output sub-matrix at i.
          */
-        inline DopeVector<T, D-1> at(const SizeType i) const;
+        inline DopeVector<T, Dimension-1, Args...> at(const SizeType i) const;
 
         /**
          *    @brief Gives access to the element at index i
@@ -167,7 +167,7 @@ namespace container {
 		 *    @param i                  The i-th "row" of this matrix.
 		 *    @return The output sub-matrix at i.
 		 */
-        inline DopeVector<T, D-1> operator[](const SizeType i) const;
+        inline DopeVector<T, Dimension-1, Args...> operator[](const SizeType i) const;
 
         /**
          *    @brief Gives access to the element at index i
@@ -199,7 +199,7 @@ namespace container {
 		 *    @param s                  The output sub-matrix at i in the d
 		 *                              dimension.
 		 */
-        inline void slice(const SizeType d, const SizeType i, DopeVector<T, D-1> &s) const;
+        inline void slice(const SizeType d, const SizeType i, DopeVector<T, Dimension-1, Args...> &s) const;
 
 		/**
 		 *    @brief Gives access to the i-th sub-matrix in the d-th dimension,
@@ -208,7 +208,7 @@ namespace container {
 		 *    @param i                  The i-th "row" of this matrix.
 		 *    @return The output sub-matrix at i in the d dimension.
 		 */
-        inline DopeVector<T, D-1> slice(const SizeType d, const SizeType i) const;
+        inline DopeVector<T, Dimension-1, Args...> slice(const SizeType d, const SizeType i) const;
 
 		/**
 		 *    @brief Reorders the sub-matrixes s.t. the one at 0 <= i < D goes 
@@ -222,7 +222,7 @@ namespace container {
          *                   SizeType trans_ord[2] = {1, 0};
 		 *                   m.permute(trans_ord, mt);
 		 */
-        inline void permute(const IndexD &order, DopeVector<T, D, Args...> &p) const;
+        inline void permute(const IndexD &order, DopeVector &p) const;
 
 		/**
 		 *    @brief Reorders the sub-matrixes s.t. the one at 0 <= i < D goes to 0 <= order[i] < D, i.e. m[*]..[*]_i...[*] swaps with m[*]...[i]...[*]_order[i]...[*].
@@ -230,7 +230,7 @@ namespace container {
 		 *    @return The output permuted matrix.
          *    @note Example: transpose a 2D matrix by swapping the access indices - DopeVector<T,2> m, mt; SizeType trans_ord[2] = {1, 0}; mt = m.permute(trans_ord);
 		 */
-        inline DopeVector<T, D, Args...> permute(const IndexD &order) const;
+        inline DopeVector permute(const IndexD &order) const;
 
 		/**
 		 *    @brief Extracts a D-dimensional window from this matrix.
@@ -238,7 +238,7 @@ namespace container {
 		 *    @param size               The sizes of the window.
 		 *    @param w                  The output sub-matrix.
 		 */
-        inline void window(const IndexD &start, IndexD &size, DopeVector<T, D, Args...> &w) const;
+        inline void window(const IndexD &start, IndexD &size, DopeVector &w) const;
 
 		/**
 		 *    @brief Extracts a D-dimensional window from this matrix.
@@ -246,7 +246,7 @@ namespace container {
 		 *    @param size               The sizes of the window.
 		 *    @return The output sub-matrix.
 		 */
-        inline DopeVector<T, D, Args...> window(const IndexD &start, const IndexD &size) const;
+        inline DopeVector window(const IndexD &start, const IndexD &size) const;
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -293,7 +293,7 @@ namespace container {
 
 
 	private:
-        friend class DopeVector<T, D+1, Args...>;
+        friend class DopeVector<T, Dimension+1, Args...>;
         T       *_array;                 ///< Pointer in memory to the first element of this matrix.
         SizeType _accumulatedOffset;     ///< Offset of the first element of this matrix from the beginning of the stored array.
         IndexD   _size;                  ///< Sizes of this matrix, for each dimension.
@@ -322,14 +322,6 @@ namespace container {
 
 
         ////////////////////////////////////////////////////////////////////////
-        // TYPEDEFS
-        ////////////////////////////////////////////////////////////////////////
-
-        typedef Index< 1 > Index1;
-
-        ////////////////////////////////////////////////////////////////////////
-
-		////////////////////////////////////////////////////////////////////////
 		// CONSTRUCTORS
 		////////////////////////////////////////////////////////////////////////
 

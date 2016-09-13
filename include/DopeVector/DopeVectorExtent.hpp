@@ -30,12 +30,12 @@ namespace container {
 		 *    @brief Initializer contructor.
 		 *    @param size               Sizes of the D-dimensional matrix.
 		 */
-        inline explicit DopeVectorExtent(const IndexD &size);
+        inline explicit DopeVectorExtent(const Index<Dimension> &size);
 
 		/**
 		 *    @brief Copy constructor.
 		 */
-		DopeVectorExtent(const DopeVectorExtent<T, D> &other) = default;
+        DopeVectorExtent(const DopeVectorExtent &other) = default;
 
 		/**
 		 *    @brief Move constructor.
@@ -56,7 +56,7 @@ namespace container {
 		 *    @brief Copies all single elements from o to this matrix.
 		 *    @param o                  The matrix to copy from.
 		 */
-		inline void import(const DopeVector<T, D> &o);
+        inline void import(const DopeVector<T, Dimension> &o);
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -68,7 +68,7 @@ namespace container {
 		 *    @brief Changes the sizes of this matrix.
 		 *    @param size               The new sizes.
 		 */
-        inline void resize(const IndexD &size);
+        inline void resize(const Index<Dimension> &size);
 
 		/**
 		 *    @brief Empties this array, making its size 0.

@@ -16,7 +16,7 @@ using namespace container;
 
 int main(int argc, char *argv[])
 {
-	std::array<std::size_t, 2> size({{10, 10}});
+    Index<2> size({10, 10});
     DopeVectorExtent<std::size_t, 2> f(size);
     for (std::size_t i = 0; i < size[0]; ++i)
         for (std::size_t j = 0; j < size[1]; ++j)
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 		std::cout << '\n';
 	}
 
-	std::array<std::size_t, 2> order = {{1, 0}};
+    Index<2> order = {{1, 0}};
 
 	std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
 		std::cout << '\n';
 	}
 
-	DopeVectorExtent<std::size_t, 10> f_big({{10}});
-	std::array<std::size_t, 10> new_order = {{1, 0, 2, 5, 4, 7, 3, 6, 9, 8}};
+    DopeVectorExtent<std::size_t, 10> f_big(Index<10>(10));
+    Index<10> new_order = {{1, 0, 2, 5, 4, 7, 3, 6, 9, 8}};
 
 	start = std::chrono::steady_clock::now();
 

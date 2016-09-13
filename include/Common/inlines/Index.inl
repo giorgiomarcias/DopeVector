@@ -7,6 +7,10 @@ namespace container {
         std::array<SizeType, Dimension>() {}
 
     template < SizeType Dimension >
+    Index<Dimension>::Index(const std::array<SizeType, Dimension> &array) :
+        std::array<SizeType, Dimension>(array) {}
+
+    template < SizeType Dimension >
     Index<Dimension>::Index(const SizeType value) :
         std::array<SizeType, Dimension>() {
         reset(value);
@@ -20,30 +24,25 @@ namespace container {
 
 
     template < SizeType Dimension >
-    static constexpr Index Index<Dimension>::Zero() {
+    constexpr Index<Dimension> Index<Dimension>::Zero() {
         return Index(static_cast<SizeType>(0));
     }
 
     template < SizeType Dimension >
-    static constexpr Index Index<Dimension>::Ones() {
+    constexpr Index<Dimension> Index<Dimension>::Ones() {
         return Index(static_cast<SizeType>(1));
     }
 
     template < SizeType Dimension >
-    static constexpr Index Index<Dimension>::Constant(const SizeType value) {
+    constexpr Index<Dimension> Index<Dimension>::Constant(const SizeType value) {
         return Index(value);
-    }
-
-    template < SizeType, Dimension, SizeType Value >
-    static constexpr Index Index<Dimension>::Constant() {
-        return Index(Value);
     }
 
 
 
     template < SizeType Dimension >
     inline void Index<Dimension>::reset(const SizeType value) {
-        fill(value);
+        this->fill(value);
     }
 
 
