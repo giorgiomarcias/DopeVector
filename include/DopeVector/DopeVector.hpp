@@ -12,6 +12,7 @@
 #include <stdexcept>
 #include <cstring>
 #include <Common/Common.hpp>
+#include <Common/Index.hpp>
 
 namespace Container {
 
@@ -24,16 +25,6 @@ namespace Container {
     template < typename T, SizeType Dimension, SizeType ... Args >
 	class DopeVector {
 	public:
-
-        ////////////////////////////////////////////////////////////////////////
-        // ASSERT
-        ////////////////////////////////////////////////////////////////////////
-
-        static_assert( ( Dimension != static_cast< SizeType >( 0 ) ), "DOPE_VECTOR_DIMENSION_CANNOT_BE_ZERO" );
-
-        ////////////////////////////////////////////////////////////////////////
-
-
 
         ////////////////////////////////////////////////////////////////////////
         // CONSTANTS
@@ -160,14 +151,14 @@ namespace Container {
          *    @param i                  The index of the element.
          *    @return The element at index i.
          */
-        inline const T & at(const IndexD i) const;
+        inline const T & at(const IndexD &i) const;
 
         /**
          *    @brief Gives access to the element at index i
          *    @param i                  The index of the element.
          *    @return The element at index i.
          */
-        inline T & at(const IndexD i);
+        inline T & at(const IndexD &i);
 
 		/**
 		 *    @brief Gives access to the i-th sub-matrix in the first dimension,
@@ -176,6 +167,20 @@ namespace Container {
 		 *    @return The output sub-matrix at i.
 		 */
         inline DopeVector<T, D-1> operator[](const SizeType i) const;
+
+        /**
+         *    @brief Gives access to the element at index i
+         *    @param i                  The index of the element.
+         *    @return The element at index i.
+         */
+        inline const T & operator[](const IndexD &i) const;
+
+        /**
+         *    @brief Gives access to the element at index i
+         *    @param i                  The index of the element.
+         *    @return The element at index i.
+         */
+        inline T & operator[](const IndexD &i);
 
 		////////////////////////////////////////////////////////////////////////
 

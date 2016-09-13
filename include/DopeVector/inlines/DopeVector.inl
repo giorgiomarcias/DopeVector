@@ -101,7 +101,7 @@ namespace Container {
     }
 
     template < typename T, SizeType Dimension, SizeType ... Args >
-    inline const T & DopeVector<T, Dimension, Args...>::at(const IndexD i) const
+    inline const T & DopeVector<T, Dimension, Args...>::at(const IndexD &i) const
     {
         SizeType offset = _accumulatedOffset;
         for(SizeType d = 0; d < D; ++d) {
@@ -111,7 +111,7 @@ namespace Container {
     }
 
     template < typename T, SizeType Dimension, SizeType ... Args >
-    inline T & DopeVector<T, Dimension, Args...>::at(const IndexD i)
+    inline T & DopeVector<T, Dimension, Args...>::at(const IndexD &i)
     {
         SizeType offset = _accumulatedOffset;
         for(SizeType d = 0; d < D; ++d) {
@@ -129,13 +129,13 @@ namespace Container {
 	}
 
     template < typename T, SizeType Dimension, SizeType ... Args >
-    inline const T & DopeVector<T, Dimension, Args...>::operator[](const IndexD i) const
+    inline const T & DopeVector<T, Dimension, Args...>::operator[](const IndexD &i) const
     {
         return at(i);
     }
 
     template < typename T, SizeType Dimension, SizeType ... Args >
-    inline T & DopeVector<T, Dimension, Args...>::operator[](const IndexD i)
+    inline T & DopeVector<T, Dimension, Args...>::operator[](const IndexD &i)
     {
         return at(i);
     }
