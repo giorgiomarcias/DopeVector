@@ -58,6 +58,19 @@ protected:
     Data _data;
 };
 
+
+
+template < typename T, SizeType Dimension >
+using StandardGrid = Gird<T, Dimension>;
+
+template < typename T, SizeType Dimension >
+using StandardGrid2D = Gird<T, static_cast<SizeType>(2)>;
+
+template < typename T, SizeType Dimension >
+using StandardGrid3D = Gird<T, static_cast<SizeType>(3)>;
+
+
+
 #include <Grid/inlines/Grid.inl>
 
 }

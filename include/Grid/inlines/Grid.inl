@@ -6,9 +6,10 @@ template < SizeType Dimension >
 static SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range) {
     SizeType pos = static_cast<SizeType>(0);
     SizeType dimProd = static_cast<SizeType>(1);
-    for(SizeType i = static_cast<SizeType>(0); i < Dimension; ++i) {
-        pos += index[i] * dimProd;
-        dimProd *= range[i];
+    for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
+        constexpr SizeType d = D - static_cast<SizeType>(1);
+        pos += index[d] * dimProd;
+        dimProd *= range[d];
     }
     return pos;
 }
