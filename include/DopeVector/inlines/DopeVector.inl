@@ -10,16 +10,16 @@ namespace container {
     inline DopeVector<T, Dimension, Args...>::DopeVector()
 		: _array(nullptr)
 		, _accumulatedOffset(0)
-        , _size(0)
-        , _offset(0)
+		, _size(0)
+		, _offset(0)
 	{ }
 
     template < typename T, SizeType Dimension, SizeType ... Args >
     inline DopeVector<T, Dimension, Args...>::DopeVector(T *array, const SizeType accumulatedOffset, const IndexD &size)
 		: _array(array)
 		, _accumulatedOffset(array ? accumulatedOffset : 0)
-        , _size(array ? size : IndexD(0))
-        , _offset(0)
+		, _size(array ? size : static_cast<const IndexD &>(IndexD(0)))
+		, _offset(0)
 	{
 		if (array) {
 			_offset[D-1] = 1;
@@ -315,24 +315,24 @@ namespace container {
     inline DopeVector<T, 1, Args...>::DopeVector()
 		: _array(nullptr)
 		, _accumulatedOffset(0)
-        , _size(0)
-        , _offset(0)
+		, _size(0)
+		, _offset(0)
 	{ }
 
     template < typename T, SizeType ... Args >
     inline DopeVector<T, 1, Args...>::DopeVector(const T *array, const SizeType accumulatedOffset, const SizeType size)
 		: _array(const_cast<T*>(array))
 		, _accumulatedOffset(accumulatedOffset)
-        , _size(size)
-        , _offset(0)
+		, _size(size)
+		, _offset(0)
 	{ }
 
     template < typename T, SizeType ... Args >
     inline DopeVector<T, 1, Args...>::DopeVector(const T *array, const SizeType accumulatedOffset, const SizeType size, const SizeType offset)
 		: _array(const_cast<T*>(array))
 		, _accumulatedOffset(accumulatedOffset)
-        , _size(size)
-        , _offset(offset)
+		, _size(size)
+		, _offset(offset)
 	{ }
 
     template < typename T, SizeType ... Args >
@@ -340,7 +340,7 @@ namespace container {
 		: _array(const_cast<T*>(array))
 		, _accumulatedOffset(accumulatedOffset)
 		, _size(size)
-        , _offset(0)
+		, _offset(0)
 	{ }
 
     template < typename T, SizeType ... Args >

@@ -2,7 +2,7 @@
 #define GridIterator_hpp
 
 #include <iterator>
-#include <Common/Index.hpp>
+#include <DopeVector/Common/Index.hpp>
 
 namespace container {
 

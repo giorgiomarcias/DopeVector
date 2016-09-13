@@ -5,7 +5,7 @@
 
 namespace container {
 
-typedef std::size_t SizeType;
+	typedef std::size_t SizeType;
 
 }
 

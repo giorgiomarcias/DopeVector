@@ -11,8 +11,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <cstring>
-#include <Common/Common.hpp>
-#include <Common/Index.hpp>
+#include <DopeVector/Common/Index.hpp>
 
 namespace container {
 

@@ -17,7 +17,7 @@ namespace container {
             Index<Dimension> size;
 			other.allSizes(size);
 			resize(size);
-            std::memcpy(_arrayPtr.get(), other._arrayPtr.get(), DopeVector<T, Dimension>::size() * sizeof(T));
+			std::copy(_arrayPtr.get(), _arrayPtr.get() + DopeVector<T, Dimension>::size(), other._arrayPtr.get());
 		}
 		return *this;
 	}
@@ -32,7 +32,7 @@ namespace container {
             for (SizeType d = 0; d < Dimension; ++d)
             if (DopeVector<T, Dimension>::sizeAt(d) != oo.sizeAt(d))
 				throw std::out_of_range("Matrixes do not have same size.");
-            std::memcpy(_arrayPtr.get(), oo._arrayPtr.get(), DopeVector<T, Dimension>::size() * sizeof(T));
+            std::copy(_arrayPtr.get(), _arrayPtr.get() + DopeVector<T, Dimension>::size(), oo._arrayPtr.get());
 		} catch(std::bad_cast &bc) {
             DopeVector<T, Dimension>::import(o);
 		}
