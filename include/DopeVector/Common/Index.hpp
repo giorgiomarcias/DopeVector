@@ -16,6 +16,8 @@ namespace container {
 		template < typename ... Sizes >
 		explicit inline Index(const SizeType size0, Sizes &&...sizes);
 
+		inline Index(const std::initializer_list<SizeType> &il);
+
 		template < class E >
 		inline Index(const internal::StaticArrayExpression<E, SizeType, Dimension> &e);
 

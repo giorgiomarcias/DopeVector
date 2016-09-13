@@ -29,8 +29,8 @@ int main(int argc, char *argv[])
 		std::cout << '\n';
 	}
 
-//	Index<2> order = {{1, 0}};      // Error
-	Index<2> order(1, 0);
+	Index<2> order = {{1, 0}};
+//	Index<2> order(1, 0);
 
 	std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
