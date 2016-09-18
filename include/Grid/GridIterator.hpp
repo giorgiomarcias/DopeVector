@@ -9,8 +9,12 @@ namespace container {
 template < typename T, SizeType Dimension >
 class GridIterator : public std::iterator<std::random_access_iterator_tag, T>{
 public:
+    typedef typename std::iterator<std::random_access_iterator_tag, T> Base;
     typedef Index<Dimension> IndexD;
     typedef GridIterator     self_type;
+    typedef typename Base::difference_type difference_type;
+    typedef typename Base::pointer pointer;
+    typedef typename Base::reference reference;
 
     inline GridIterator();
     inline GridIterator(pointer ptr, const IndexD &range, const SizeType i);
@@ -66,8 +70,8 @@ protected:
     SizeType _i;
 };
 
-#include <Grid/inlines/GridIterator.inl>
-
 }
+
+#include <Grid/inlines/GridIterator.inl>
 
 #endif // GridIterator_hpp

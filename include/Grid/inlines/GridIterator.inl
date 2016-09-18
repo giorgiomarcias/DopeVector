@@ -24,7 +24,7 @@ namespace container {
                                                     const IndexD &index) :
         _ptr(ptr),
         _range(range),
-        _i(container::to_position(index, range)) {}
+        _i(to_position(index, range)) {}
 
 
 
@@ -43,8 +43,8 @@ namespace container {
         IndexD id(static_cast<SizeType>(0));
         SizeType i = _i;
         for(SizeType d = static_cast<SizeType>(0); d < Dimension; ++d) {
-            id[d] = i % _size[d];
-            i = i / _size[d];
+            id[d] = i % _range[d];
+            i = i / _range[d];
         }
         return id;
     }
@@ -113,17 +113,17 @@ namespace container {
     }
 
     template < typename T, SizeType Dimension >
-    inline GridIterator<T, Dimension> operator+(const SizeType n, const self_type &it) {
+    inline GridIterator<T, Dimension> operator+(const SizeType n, const typename GridIterator<T, Dimension>::self_type &it) {
         return (it + n);
     }
 
     template < typename T, SizeType Dimension >
     inline GridIterator<T, Dimension> GridIterator<T, Dimension>::operator+(const IndexD &n) const {
-        return (*this + container::to_position(n, it._range));
+        return (*this + to_position(n, _range));
     }
 
     template < typename T, SizeType Dimension >
-    inline GridIterator<T, Dimension> operator+(const IndexD &n, const self_type &it) {
+    inline GridIterator<T, Dimension> operator+(const typename GridIterator<T, Dimension>::IndexD &n, const typename GridIterator<T, Dimension>::self_type &it) {
         return (it + n);
     }
 
@@ -136,7 +136,7 @@ namespace container {
 
     template < typename T, SizeType Dimension >
     inline GridIterator<T, Dimension> GridIterator<T, Dimension>::operator-(const IndexD &n) const {
-        return (*this - container::to_position(n, _range));
+        return (*this - to_position(n, _range));
     }
 
 
@@ -190,12 +190,12 @@ namespace container {
 
     template < typename T, SizeType Dimension >
     inline GridIterator<T, Dimension>& GridIterator<T, Dimension>::operator+=(const IndexD &n) {
-        return (*this += container::to_position(n, _size));
+        return (*this += to_position(n, _range));
     }
 
     template < typename T, SizeType Dimension >
     inline GridIterator<T, Dimension>& GridIterator<T, Dimension>::operator-=(const IndexD &n) {
-        return (*this -= container::to_position(n, _size));
+        return (*this -= to_position(n, _range));
     }
 
 
