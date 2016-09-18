@@ -1,6 +1,20 @@
 #ifndef Index_hpp
 #define Index_hpp
 
+#ifdef USE_EIGEN
+
+#include <DopeVector/Common/Common.hpp>
+#include <Eigen/Core>
+
+namespace container {
+
+template < SizeType Dimension >
+using Index = Eigen::Matrix<SizeType, Dimension, 1>;
+
+}
+
+#else
+
 #include <DopeVector/Common/Expression.hpp>
 #include <array>
 
@@ -38,6 +52,10 @@ namespace container {
 
 		template < class E >
 		inline Index& operator/=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e);
+
+        static constexpr Index Zero();
+        static constexpr Index Ones();
+        static constexpr Index Constant(const SizeType value);
 	};
 
 
@@ -50,5 +68,7 @@ namespace container {
 }
 
 #include <DopeVector/Common/inlines/Index.inl>
+
+#endif
 
 #endif // Index_hpp

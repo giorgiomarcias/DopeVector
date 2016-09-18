@@ -56,4 +56,19 @@ namespace container {
 		std::array<SizeType, Dimension>::operator[](i) /= e.getAt(i);
 	}
 
+    template < SizeType Dimension >
+    constexpr Index<Dimension> Index<Dimension>::Zero() {
+        return Index({{0}});
+    }
+
+    template < SizeType Dimension >
+    constexpr Index<Dimension> Index<Dimension>::Ones() {
+        return Index({{1}});
+    }
+
+    template < SizeType Dimension >
+    constexpr Index<Dimension> Index<Dimension>::Constant( const SizeType value ) {
+        return Index({{value}});
+    }
+
 }
