@@ -119,7 +119,7 @@ namespace container {
          *    @brief Swap vector v0 with vector v1.
          *    @param o                  The DopeVector to swap with.
          */
-        friend inline void swap(DopeVector<T, Dimension, Args...> &v0, DopeVector<T, Dimension, Args...> &v1);
+        friend inline void swap(DopeVector &v0, DopeVector &v1);
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -291,7 +291,7 @@ namespace container {
 
 
 
-	private:
+    protected:
         friend class DopeVector<T, Dimension+1, Args...>;
         T       *_array;                 ///< Pointer in memory to the first element of this matrix.
         SizeType _accumulatedOffset;     ///< Offset of the first element of this matrix from the beginning of the stored array.
@@ -399,19 +399,19 @@ namespace container {
 		 *    @brief Copies all single elements from o to this matrix.
 		 *    @param o                  The matrix to copy from.
 		 */
-        virtual inline void import(const DopeVector<T, 1, Args...> &o);
+        virtual inline void import(const DopeVector &o);
 
         /**
          *    @brief Swap this vector with DopeVector o.
          *    @param o                  The DopeVector to swap with.
          */
-        virtual inline void swap( DopeVector<T, 1, Args...> &o);
+        virtual inline void swap( DopeVector &o);
 
         /**
          *    @brief Swap vector v0 with vector v1.
          *    @param o                  The DopeVector to swap with.
          */
-        friend inline void swap(DopeVector<T, 1, Args...> &v0, DopeVector<T, 1, Args...> &v1);
+        friend inline void swap(DopeVector &v0, DopeVector &v1);
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -596,13 +596,15 @@ namespace container {
 
 
 
-	private:
+    protected:
         friend class DopeVector<T, 2, Args...>;
         T       *_array;                 ///< Pointer in memory to the first element of this vector.
         SizeType _accumulatedOffset;     ///< Offset of the first element of this vector from the beginning of the stored array.
         Index1   _size;                  ///< Sizes of this matrix, for each dimension.
         Index1   _offset;                ///< Jumps' offsets from the beginning of a "row" to the beginning of the next one, for each dimension.
 	};
+
+
 
     template < typename T, SizeType ... Args >
     using DopeVector1D = DopeVector<T, 1, Args...>;
