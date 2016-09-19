@@ -11,6 +11,7 @@
 #include <chrono>
 
 #include <DopeVector/DopeVectors.hpp>
+#include <Grid/Grid.hpp>
 
 using namespace container;
 
@@ -59,6 +60,8 @@ int main(int argc, char *argv[])
 	Index<3> b(1, 2, 3);
 	Index<3> res = (a + b) * b - (a - b);
 	std::cout << std::endl << "\n\nLazy evaluation: " <<  res[0] << ' ' << res[1] << ' ' << res[2] << std::endl;
+
+	Grid<double, 3> grid(10, 0.0);
 
     return 0;
 }

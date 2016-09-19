@@ -7,6 +7,9 @@
 
 namespace container {
 
+	template < SizeType Dimension >
+	static inline SizeType total_size(const Index<Dimension> &size);
+
 /**
  *     @brief Utility function used to convert a given index over a
  *            given range into a linear index of an array-like container.
@@ -59,7 +62,7 @@ public:
     /**
      *    @brief Default constructor.
      */
-    inline explicit Grid();
+    inline Grid() = default;
 
     /**
      *    @brief Initializer contructor.
@@ -285,6 +288,12 @@ public:
      */
     inline Grid & operator=(Grid &&o) = default;
 
+	/**
+	 *    @brief Copies all single elements from o to this matrix.
+	 *    @param o                  The matrix to copy from.
+	 */
+	inline void import(const DopeVector<T, Dimension, Args...> &o) override;
+
     /**
      *    @brief Swap this with a given grid.
      *
@@ -296,6 +305,10 @@ public:
 
 protected:
     Data _data;         ///< Elements of the grid.
+
+private:
+	// hyde some methods from DopeVector
+	using DopeVector<T, Dimension, Args...>::reset;
 };
 
 
@@ -308,13 +321,13 @@ using StandardGrid = Grid<T, Dimension>;
 /**
  *     @brief Alias for a 2D grid using the default allocator.
  */
-template < typename T, SizeType Dimension >
+template < typename T >
 using StandardGrid2D = Grid<T, static_cast<SizeType>(2)>;
 
 /**
  *     @brief Alias for a 3D grid using the default allocator.
  */
-template < typename T, SizeType Dimension >
+template < typename T >
 using StandardGrid3D = Grid<T, static_cast<SizeType>(3)>;
 
 

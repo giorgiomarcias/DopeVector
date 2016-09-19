@@ -2,6 +2,15 @@
 
 namespace container {
 
+	template < SizeType Dimension >
+	inline SizeType total_size(const Index<Dimension> &size)
+	{
+		SizeType total = static_cast<SizeType>(0);
+		for (SizeType i = static_cast<SizeType>(0); i < Dimension; ++i)
+		total *= size[i];
+		return total;
+	}
+
 template < SizeType Dimension >
 SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range) {
     SizeType pos = static_cast<SizeType>(0);
@@ -43,24 +52,18 @@ SizeType to_index(const SizeType position, const Index<Dimension> &range) {
     // CONSTRUCTORS
     ////////////////////////////////////////////////////////////////////////
 
-     template < typename T, SizeType Dimension, class Allocator, SizeType ... Args >
-    inline GRID_DOMAIN::Grid() :
-        DopeVector< T, Dimension, Args...>(nullptr, 0, IndexD::Zero()) {
-        this->_array = this->_data.data();
+    GRID_TEMPLATE
+    inline GRID_DOMAIN::Grid(const IndexD &size, const T & default_value)
+		: _data(total_size(size), default_value)
+	{
+		DopeVector<T, Dimension, Args...>::reset(_data.data(), static_cast<SizeType>(0), size);
     }
 
     GRID_TEMPLATE
-    inline GRID_DOMAIN::Grid(const IndexD &size, const T & default_value) :
-        DopeVector< T, Dimension, Args...>(nullptr, 0, size) {
-        this->_data.resize(this->size(), default_value);
-        this->_array = this->_data.data();
-    }
-
-    GRID_TEMPLATE
-    inline GRID_DOMAIN::Grid(const SizeType size, const T & default_value) :
-        DopeVector< T, Dimension, Args...>(nullptr, 0, IndexD::Constant(size)) {
-        this->_data.resize(this->size(), default_value);
-        this->_array = this->_data.data();
+    inline GRID_DOMAIN::Grid(const SizeType size, const T & default_value)
+		: _data(total_size(Index<Dimension>::Constant(size)), default_value)
+	{
+        DopeVector<T, Dimension, Args...>::reset(_data.data(), static_cast<SizeType>(0), Index<Dimension>::Constant(size));
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -177,7 +180,12 @@ SizeType to_index(const SizeType position, const Index<Dimension> &range) {
 
     GRID_TEMPLATE
     inline bool GRID_DOMAIN::operator==(const Grid &o) const {
-        return (this->_size == o._size) && (this->_data == o._data);
+		if (&o == this)
+			return true;
+		for (SizeType i = static_cast<SizeType>(0); i < Dimension; ++i)
+			if (DopeVector<T, Dimension, Args...>::sizeAt(i) != o.sizeAt(i))
+				return false;
+		return _data == o._data;
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -190,15 +198,15 @@ SizeType to_index(const SizeType position, const Index<Dimension> &range) {
 
     GRID_TEMPLATE
     inline void GRID_DOMAIN::clear() {
-        this->_data.clear();
-        this->_array = this->_data.data();
+        _data.clear();
+		DopeVector<T, Dimension, Args...>::reset(nullptr, static_cast<SizeType>(0), IndexD::Zero());
     }
 
     GRID_TEMPLATE
     inline void GRID_DOMAIN::reset(const T & default_value) {
-        this->_data.clear();
-        this->_data.resize(this->size(), default_value);
-        this->_array = this->_data.data();
+		IndexD size = DopeVector<T, Dimension, Args...>::allSizes();
+        _data.assign(total_size(size), default_value);
+		DopeVector<T, Dimension, Args...>::reset(_data.data(), static_cast<SizeType>(0), size);
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -209,10 +217,29 @@ SizeType to_index(const SizeType position, const Index<Dimension> &range) {
     // ASSIGNMENTS
     ////////////////////////////////////////////////////////////////////////
 
+	GRID_TEMPLATE
+	inline void GRID_DOMAIN::import(const DopeVector<T, Dimension, Args...> &o)
+	{
+		if (&o == this)
+			return;
+		try {
+			const GRID_DOMAIN &oo = dynamic_cast<const GRID_DOMAIN &>(o);
+			IndexD size = DopeVector<T, Dimension, Args...>::allSizes();
+			for (SizeType d = 0; d < Dimension; ++d)
+				if (size[d] != oo.sizeAt(d))
+					throw std::out_of_range("Matrixes do not have same size.");
+			_data = oo._data;
+			DopeVector<T, Dimension, Args...>::reset(_data.data(), static_cast<SizeType>(0), size); // could be unuseful
+		} catch(std::bad_cast &bc) {
+			DopeVector<T, Dimension, Args...>::import(o);
+		}
+	}
+
     GRID_TEMPLATE
     inline void GRID_DOMAIN::swap(Grid &o) {
-        DopeVector< T, Dimension, Args ... >::swap(o);
         this->_data.swap(o._data);
+		IndexD size = DopeVector<T, Dimension, Args...>::allSizes();
+		DopeVector<T, Dimension, Args...>::reset(_data.data(), static_cast<SizeType>(0), size);
     }
 
     ////////////////////////////////////////////////////////////////////////

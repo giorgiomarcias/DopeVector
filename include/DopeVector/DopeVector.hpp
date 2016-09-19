@@ -103,23 +103,34 @@ namespace container {
 		 */
 		DopeVector & operator=(DopeVector &&other) = default;
 
+		
+		/**
+		 *    @brief Resets this DopeVector to wrap another array in memory.
+		 *
+		 *    @param array              Pointer to (part of) an array in memory
+		 *                              to wrap.
+		 *    @param accumulatedOffset  Offset from the origin of the array.
+		 *    @param size               Sizes of the D-dimensional matrix.
+		 */
+		inline void reset(T *array, const SizeType accumulatedOffset, const IndexD &size);
+
+		/**
+		 *    @brief Resets this DopeVector to wrap another array in memory.
+		 *
+		 *    @param array              Pointer to (part of) an array in memory
+		 *                              to wrap.
+		 *    @param accumulatedOffset  Offset from the origin of the array.
+		 *    @param size               Sizes of the D-dimensional matrix.
+		 *    @param offset             Offsets in each dimension, i.e. jumps in
+		 *                              memory.
+		 */
+		inline void reset(T *array, const SizeType accumulatedOffset, const IndexD &size, const IndexD &offset);
+
 		/**
 		 *    @brief Copies all single elements from o to this matrix.
 		 *    @param o                  The matrix to copy from.
 		 */
         virtual inline void import(const DopeVector &o);
-
-        /**
-         *    @brief Swap this vector with vector o.
-         *    @param o                  The DopeVector to swap with.
-         */
-        virtual inline void swap(DopeVector &o);
-
-        /**
-         *    @brief Swap vector v0 with vector v1.
-         *    @param o                  The DopeVector to swap with.
-         */
-        friend inline void swap(DopeVector &v0, DopeVector &v1);
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -291,7 +302,7 @@ namespace container {
 
 
 
-    protected:
+    private:
         friend class DopeVector<T, Dimension+1, Args...>;
         T       *_array;                 ///< Pointer in memory to the first element of this matrix.
         SizeType _accumulatedOffset;     ///< Offset of the first element of this matrix from the beginning of the stored array.
@@ -335,7 +346,7 @@ namespace container {
 		 *    @param accumulatedOffset  Offset from the origin of the array.
 		 *    @param size               Size of the 1-dimensional matrix.
 		 */
-        inline DopeVector(const T *array, const SizeType accumulatedOffset, const SizeType size);
+        inline DopeVector(T *array, const SizeType accumulatedOffset, const SizeType size);
 
 		/**
 		 *    @brief Initializer contructor.
@@ -344,7 +355,7 @@ namespace container {
 		 *    @param size               Size of the 1-dimensional matrix.
 		 *    @param offset             Offset in memory from one element to the next one.
 		 */
-        inline DopeVector(const T *array, const SizeType accumulatedOffset, const SizeType size, const SizeType offset);
+        inline DopeVector(T *array, const SizeType accumulatedOffset, const SizeType size, const SizeType offset);
 
 		/**
 		 *    @brief Initializer contructor.
@@ -354,7 +365,7 @@ namespace container {
 		 *    @param accumulatedOffset  Offset from the origin of the array.
 		 *    @param size               Sizes of the 1-dimensional matrix.
 		 */
-        inline DopeVector(const T *array, const SizeType accumulatedOffset, const Index1 &size);
+        inline DopeVector(T *array, const SizeType accumulatedOffset, const Index1 &size);
 
 		/**
 		 *    @brief Initializer contructor.
@@ -365,7 +376,7 @@ namespace container {
 		 *    @param offset             Offsets in each dimension, i.e. jumps in
 		 *                              memory.
 		 */
-        inline DopeVector(const T *array, const SizeType accumulatedOffset, const Index1 &size, const Index1 &offset);
+        inline DopeVector(T *array, const SizeType accumulatedOffset, const Index1 &size, const Index1 &offset);
 
 		/**
 		 *    @brief Copy constructor.
@@ -386,6 +397,50 @@ namespace container {
 		////////////////////////////////////////////////////////////////////////
 
 		/**
+		 *    @brief Resets this DopeVector to wrap another array in memory.
+		 *
+		 *    @param array              Pointer to (part of) an array in memory
+		 *                              to wrap.
+		 *    @param accumulatedOffset  Offset from the origin of the array.
+		 *    @param size               Sizes of the D-dimensional matrix.
+		 */
+		inline void reset(T *array, const SizeType accumulatedOffset, const SizeType size);
+
+		/**
+		 *    @brief Resets this DopeVector to wrap another array in memory.
+		 *
+		 *    @param array              Pointer to (part of) an array in memory
+		 *                              to wrap.
+		 *    @param accumulatedOffset  Offset from the origin of the array.
+		 *    @param size               Sizes of the D-dimensional matrix.
+		 *    @param offset             Offsets in each dimension, i.e. jumps in
+		 *                              memory.
+		 */
+		inline void reset(T *array, const SizeType accumulatedOffset, const SizeType size, const SizeType offset);
+
+		/**
+		 *    @brief Resets this DopeVector to wrap another array in memory.
+		 *
+		 *    @param array              Pointer to (part of) an array in memory
+		 *                              to wrap.
+		 *    @param accumulatedOffset  Offset from the origin of the array.
+		 *    @param size               Sizes of the D-dimensional matrix.
+		 */
+		inline void reset(T *array, const SizeType accumulatedOffset, const Index1 &size);
+
+		/**
+		 *    @brief Resets this DopeVector to wrap another array in memory.
+		 *
+		 *    @param array              Pointer to (part of) an array in memory
+		 *                              to wrap.
+		 *    @param accumulatedOffset  Offset from the origin of the array.
+		 *    @param size               Sizes of the D-dimensional matrix.
+		 *    @param offset             Offsets in each dimension, i.e. jumps in
+		 *                              memory.
+		 */
+		inline void reset(T *array, const SizeType accumulatedOffset, const Index1 &size, const Index1 &offset);
+
+		/**
 		 *    @brief Copy assignment operator.
 		 */
 		DopeVector & operator=(const DopeVector &other) = default;
@@ -400,18 +455,6 @@ namespace container {
 		 *    @param o                  The matrix to copy from.
 		 */
         virtual inline void import(const DopeVector &o);
-
-        /**
-         *    @brief Swap this vector with DopeVector o.
-         *    @param o                  The DopeVector to swap with.
-         */
-        virtual inline void swap( DopeVector &o);
-
-        /**
-         *    @brief Swap vector v0 with vector v1.
-         *    @param o                  The DopeVector to swap with.
-         */
-        friend inline void swap(DopeVector &v0, DopeVector &v1);
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -596,7 +639,7 @@ namespace container {
 
 
 
-    protected:
+    private:
         friend class DopeVector<T, 2, Args...>;
         T       *_array;                 ///< Pointer in memory to the first element of this vector.
         SizeType _accumulatedOffset;     ///< Offset of the first element of this vector from the beginning of the stored array.
@@ -615,33 +658,6 @@ namespace container {
     template < typename T, SizeType ... Args >
     using DopeVector3D = DopeVector<T, 3, Args...>;
 
-    //////////////////////////////////////////////////////////////////////////
-    // TO DO
-    //////////////////////////////////////////////////////////////////////////
-    /*
-    template < typename T, SizeType Size >
-    class DopeVector< T, 1, Size > { };
-
-    template < T, SizeType Size >
-    using FixedDopeVector1D = DopeVector<T, 1, Size>;
-
-
-
-    template < typename T, SizeType SizeU, SizeType SizeV >
-    class DopeVector< T, 2, SizeU, SizeV > { };
-
-    template < typename T, SizeType SizeU, SizeType SizeV >
-    using FixedDopeVector2D = DopeVector<T, 2, SizeU, SizeV>;
-
-
-
-    template < typename T, SizeType SizeU, SizeType SizeV, SizeType SizeW >
-    class DopeVector< T, 3, SizeU, SizeV, SizeW > { };
-
-    template < typename T, SizeType SizeU, SizeType SizeV, SizeType SizeW >
-    using FixedDopeVector3D = DopeVector<T, 3, SizeU, SizeV, SizeW>;
-
-    */
 }
 
 #include <DopeVector/inlines/DopeVector.inl>

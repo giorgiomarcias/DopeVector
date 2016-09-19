@@ -10,16 +10,16 @@ namespace container {
     inline DopeVector<T, Dimension, Args...>::DopeVector()
 		: _array(nullptr)
 		, _accumulatedOffset(0)
-		, _size(0)
-		, _offset(0)
+		, _size(IndexD::Zero())
+		, _offset(IndexD::Zero())
 	{ }
 
     template < typename T, SizeType Dimension, SizeType ... Args >
     inline DopeVector<T, Dimension, Args...>::DopeVector(T *array, const SizeType accumulatedOffset, const IndexD &size)
 		: _array(array)
 		, _accumulatedOffset(array ? accumulatedOffset : 0)
-		, _size(array ? size : static_cast<const IndexD &>(IndexD(0)))
-		, _offset(0)
+		, _size(array ? size : static_cast<const IndexD &>(IndexD::Zero()))
+		, _offset(IndexD::Zero())
 	{
 		if (array) {
 			_offset[D-1] = 1;
@@ -32,8 +32,8 @@ namespace container {
     inline DopeVector<T, Dimension, Args...>::DopeVector(T *array, const SizeType accumulatedOffset, const IndexD &size, const IndexD &offset)
 		: _array(array)
 		, _accumulatedOffset(array ? accumulatedOffset : 0)
-        , _size(array ? size : IndexD({{0}}))
-        , _offset(array ? offset : IndexD({{0}}))
+        , _size(array ? size : static_cast<const IndexD &>(IndexD::Zero()))
+        , _offset(array ? offset : static_cast<const IndexD &>(IndexD::Zero()))
 	{ }
 
     ////////////////////////////////////////////////////////////////////////
@@ -43,6 +43,29 @@ namespace container {
     ////////////////////////////////////////////////////////////////////////
     // ASSIGNMENT OPERATORS
     ////////////////////////////////////////////////////////////////////////
+
+	template < typename T, SizeType Dimension, SizeType ... Args >
+	inline void DopeVector<T, Dimension, Args...>::reset(T *array, const SizeType accumulatedOffset, const IndexD &size)
+	{
+		_array = array;
+		_accumulatedOffset = _array ? accumulatedOffset : 0;
+		_size = _array ? size : static_cast<const IndexD &>(IndexD::Zero());
+		_offset = IndexD::Zero();
+		if (_array) {
+			_offset[D-1] = 1;
+			for (SizeType j = D-1; j > 0; --j)
+			_offset[j-1] = _size[j] * _offset[j];
+		}
+	}
+
+	template < typename T, SizeType Dimension, SizeType ... Args >
+	inline void DopeVector<T, Dimension, Args...>::reset(T *array, const SizeType accumulatedOffset, const IndexD &size, const IndexD &offset)
+	{
+		_array = array;
+		_accumulatedOffset = _array ? accumulatedOffset : 0;
+		_size = _array ? size : static_cast<const IndexD &>(IndexD::Zero());
+		_offset = _array ? offset : static_cast<const IndexD &>(IndexD::Zero());
+	}
 
     template < typename T, SizeType Dimension, SizeType ... Args >
     inline void DopeVector<T, Dimension, Args...>::import(const DopeVector &o)
@@ -54,19 +77,6 @@ namespace container {
         for (SizeType i = 0; i < _size[0]; ++i)
             operator[](i).import(o[i]);
 	}
-
-    template < typename T, SizeType Dimension, SizeType ... Args >
-    inline void DopeVector<T, Dimension, Args...>::swap(DopeVector &o) {
-        std::swap(_array, o._array);
-        std::swap(_accumulatedOffset, o._accumulatedOffset);
-        _size.swap(o._size);
-        _offset.swap(o._offset);
-    }
-
-    template < typename T, SizeType Dimension, SizeType ... Args >
-    inline void swap(DopeVector<T, Dimension, Args...> &v0, DopeVector<T, Dimension, Args...> &v1) {
-        v0.swap(v1);
-    }
 
     ////////////////////////////////////////////////////////////////////////
 
@@ -315,40 +325,40 @@ namespace container {
     inline DopeVector<T, 1, Args...>::DopeVector()
 		: _array(nullptr)
 		, _accumulatedOffset(0)
-		, _size(0)
-		, _offset(0)
+		, _size(Index1::Zero())
+		, _offset(Index1::Zero())
 	{ }
 
     template < typename T, SizeType ... Args >
-    inline DopeVector<T, 1, Args...>::DopeVector(const T *array, const SizeType accumulatedOffset, const SizeType size)
-		: _array(const_cast<T*>(array))
-		, _accumulatedOffset(accumulatedOffset)
-		, _size(size)
-		, _offset(0)
+    inline DopeVector<T, 1, Args...>::DopeVector(T *array, const SizeType accumulatedOffset, const SizeType size)
+		: _array(array)
+		, _accumulatedOffset(array ? accumulatedOffset : 0)
+		, _size(array ? Index1::Constant(size) : Index1::Zero())
+		, _offset(array ? Index1::Ones() : Index1::Zero())
 	{ }
 
     template < typename T, SizeType ... Args >
-    inline DopeVector<T, 1, Args...>::DopeVector(const T *array, const SizeType accumulatedOffset, const SizeType size, const SizeType offset)
-		: _array(const_cast<T*>(array))
-		, _accumulatedOffset(accumulatedOffset)
-		, _size(size)
-		, _offset(offset)
+    inline DopeVector<T, 1, Args...>::DopeVector(T *array, const SizeType accumulatedOffset, const SizeType size, const SizeType offset)
+		: _array(array)
+		, _accumulatedOffset(array ? accumulatedOffset : 0)
+		, _size(array ? Index1::Constant(size) : Index1::Zero())
+		, _offset(array ? Index1::Constant(offset) : Index1::Zero())
 	{ }
 
     template < typename T, SizeType ... Args >
-    inline DopeVector<T, 1, Args...>::DopeVector(const T *array, const SizeType accumulatedOffset, const Index1 &size)
-		: _array(const_cast<T*>(array))
-		, _accumulatedOffset(accumulatedOffset)
-		, _size(size)
-		, _offset(0)
+    inline DopeVector<T, 1, Args...>::DopeVector(T *array, const SizeType accumulatedOffset, const Index1 &size)
+		: _array(array)
+		, _accumulatedOffset(array ? accumulatedOffset : 0)
+		, _size(array ? size : static_cast<const Index1 &>(Index1::Zero()))
+		, _offset(array ? Index1::Ones() : Index1::Zero())
 	{ }
 
     template < typename T, SizeType ... Args >
-    inline DopeVector<T, 1, Args...>::DopeVector(const T *array, const SizeType accumulatedOffset, const Index1 &size, const Index1 &offset)
-		: _array(const_cast<T*>(array))
-		, _accumulatedOffset(accumulatedOffset)
-		, _size(size)
-		, _offset(offset)
+    inline DopeVector<T, 1, Args...>::DopeVector(T *array, const SizeType accumulatedOffset, const Index1 &size, const Index1 &offset)
+		: _array(array)
+		, _accumulatedOffset(array ? accumulatedOffset : 0)
+		, _size(array ? size : static_cast<const Index1 &>(Index1::Zero()))
+		, _offset(array ? offset : static_cast<const Index1 &>(Index1::Zero()))
 	{ }
 
     ////////////////////////////////////////////////////////////////////////
@@ -358,6 +368,42 @@ namespace container {
     ////////////////////////////////////////////////////////////////////////
     // ASSIGNMENT OPERATORS
     ////////////////////////////////////////////////////////////////////////
+
+	template < typename T, SizeType ... Args >
+	inline void DopeVector<T, 1, Args...>::reset(T *array, const SizeType accumulatedOffset, const SizeType size)
+	{
+		_array = array;
+		_accumulatedOffset = _array ? accumulatedOffset : 0;
+		_size = _array ? Index1::Constant(size) : Index1::Zero();
+		_offset = _array ? Index1::Ones() : Index1::Zero();
+	}
+
+	template < typename T, SizeType ... Args >
+	inline void DopeVector<T, 1, Args...>::reset(T *array, const SizeType accumulatedOffset, const SizeType size, const SizeType offset)
+	{
+		_array = array;
+		_accumulatedOffset = _array ? accumulatedOffset : 0;
+		_size = _array ? Index1::Constant(size) : Index1::Zero();
+		_offset = _array ? Index1::Constant(offset) : Index1::Zero();
+	}
+
+	template < typename T, SizeType ... Args >
+	inline void DopeVector<T, 1, Args...>::reset(T *array, const SizeType accumulatedOffset, const Index1 &size)
+	{
+		_array = array;
+		_accumulatedOffset = _array ? accumulatedOffset : 0;
+		_size = _array ? size : static_cast<const Index1 &>(Index1::Zero());
+		_offset = _array ? Index1::Ones() : Index1::Zero();
+	}
+
+	template < typename T, SizeType ... Args >
+	inline void DopeVector<T, 1, Args...>::reset(T *array, const SizeType accumulatedOffset, const Index1 &size, const Index1 &offset)
+	{
+		_array = array;
+		_accumulatedOffset = _array ? accumulatedOffset : 0;
+		_size = _array ? size : static_cast<const Index1 &>(Index1::Zero());
+		_offset = _array ? offset : static_cast<const Index1 &>(Index1::Zero());
+	}
 
     template < typename T, SizeType ... Args >
     inline void DopeVector<T, 1, Args...>::import(const DopeVector<T, 1, Args...> &o)
@@ -369,19 +415,6 @@ namespace container {
         for (SizeType i = 0; i < _size[0]; ++i)
 			operator[](i) = o[i];
 	}
-
-    template < typename T, SizeType ... Args >
-    inline void DopeVector<T, 1, Args...>::swap(DopeVector<T, 1, Args...> &o) {
-        std::swap(_array, o._array);
-        std::swap(_accumulatedOffset, o._accumulatedOffset);
-        _size.swap(o._size);
-        _offset.swap(o._offset);
-    }
-
-    template < typename T, SizeType ... Args >
-    inline void swap(DopeVector<T, 1, Args...> &v0, DopeVector<T, 1, Args...> &v1) {
-        v0.swap(v1);
-    }
 
     ////////////////////////////////////////////////////////////////////////
 
@@ -551,11 +584,11 @@ namespace container {
     template < typename T, SizeType ... Args >
     inline SizeType DopeVector<T, 1, Args...>::sizeAt(const SizeType d) const
 	{
-//		if (d >= 1) {
-//			std::stringstream stream;
-//			stream << "Index " << d << " is out of range [0, " << 0 << ']';
-//			throw std::out_of_range(stream.str());
-//		}
+		if (d >= 1) {
+			std::stringstream stream;
+			stream << "Index " << d << " is out of range [0, " << 0 << ']';
+			throw std::out_of_range(stream.str());
+		}
 		return _size[0];
 	}
 
