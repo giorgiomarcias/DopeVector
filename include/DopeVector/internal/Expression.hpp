@@ -1,7 +1,7 @@
 #ifndef Expression_hpp
 #define Expression_hpp
 
-#include <DopeVector/Common/Common.hpp>
+#include <DopeVector/internal/Common.hpp>
 #include <array>
 #include <functional>
 
@@ -111,6 +111,6 @@ namespace container {
 
 }
 
-#include <DopeVector/Common/inlines/Expression.inl>
+#include <DopeVector/internal/inlines/Expression.inl>
 
 #endif

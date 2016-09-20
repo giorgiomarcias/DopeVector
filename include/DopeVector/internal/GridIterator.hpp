@@ -2,7 +2,7 @@
 #define GridIterator_hpp
 
 #include <iterator>
-#include <DopeVector/Common/Index.hpp>
+#include <DopeVector/internal/Index.hpp>
 
 namespace container {
 
@@ -72,6 +72,6 @@ protected:
 
 }
 
-#include <Grid/inlines/GridIterator.inl>
+#include <DopeVector/internal/inlines/GridIterator.inl>
 
 #endif // GridIterator_hpp

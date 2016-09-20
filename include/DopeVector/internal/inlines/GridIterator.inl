@@ -1,4 +1,4 @@
-#include <Grid/GridIterator.hpp>
+#include <DopeVector/internal/GridIterator.hpp>
 
 #include <limits>
 
@@ -42,9 +42,9 @@ namespace container {
     inline typename GridIterator<T, Dimension>::IndexD GridIterator<T, Dimension>::to_index() const {
         IndexD id(static_cast<SizeType>(0));
         SizeType i = _i;
-        for(SizeType d = static_cast<SizeType>(0); d < Dimension; ++d) {
-            id[d] = i % _range[d];
-            i = i / _range[d];
+		for(SizeType d = Dimension; d > static_cast<SizeType>(0); --d) {
+            id[d-1] = i % _range[d-1];
+            i = i / _range[d-1];
         }
         return id;
     }

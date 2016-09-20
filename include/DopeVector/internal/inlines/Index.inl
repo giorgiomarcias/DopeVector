@@ -1,4 +1,4 @@
-#include <DopeVector/Common/Index.hpp>
+#include <DopeVector/internal/Index.hpp>
 
 namespace container {
 

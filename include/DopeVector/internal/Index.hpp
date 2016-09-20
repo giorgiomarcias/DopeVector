@@ -3,7 +3,7 @@
 
 #ifdef USE_EIGEN
 
-#include <DopeVector/Common/Common.hpp>
+#include <DopeVector/internal/Common.hpp>
 #include <Eigen/Core>
 
 namespace container {
@@ -15,7 +15,7 @@ using Index = Eigen::Matrix<SizeType, Dimension, 1>;
 
 #else
 
-#include <DopeVector/Common/Expression.hpp>
+#include <DopeVector/internal/Expression.hpp>
 #include <array>
 
 namespace container {
@@ -67,7 +67,7 @@ namespace container {
 	
 }
 
-#include <DopeVector/Common/inlines/Index.inl>
+#include <DopeVector/internal/inlines/Index.inl>
 
 #endif
 

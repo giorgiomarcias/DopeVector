@@ -11,7 +11,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <cstring>
-#include <DopeVector/Common/Index.hpp>
+#include <DopeVector/internal/Index.hpp>
 
 namespace container {
 
@@ -658,6 +658,6 @@ namespace container {
 
 }
 
-#include <DopeVector/inlines/DopeVector.inl>
+#include <DopeVector/internal/inlines/DopeVector.inl>
 
 #endif /* DopeVector_hpp */

@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <DopeVector/DopeVector.hpp>
-#include <Grid/GridIterator.hpp>
+#include <DopeVector/internal/GridIterator.hpp>
 
 namespace container {
 
@@ -150,6 +150,21 @@ public:
      *    @note   This is equal to begin() + size().
      */
     inline iterator end();
+
+	/**
+	 *    @brief Give access to the first element of the grid.
+	 *
+	 *    @return The const iterator to the first element of the grid.
+	 */
+	inline const_iterator begin() const;
+
+	/**
+	 *    @brief Give the upper bound of the grid memory.
+	 *
+	 *    @return The const iterator to the first memory outside the grid.
+	 *    @note   This is equal to begin() + size().
+	 */
+	inline const_iterator end() const;
 
     /**
      *    @brief Give access to the first element of the grid.
@@ -334,6 +349,6 @@ using StandardGrid3D = Grid<T, static_cast<SizeType>(3)>;
 
 }
 
-#include <Grid/inlines/Grid.inl>
+#include <DopeVector/internal/inlines/Grid.inl>
 
 #endif // Grid_hpp

@@ -1,11 +1,11 @@
-#include <Grid/Grid.hpp>
+#include <DopeVector/Grid.hpp>
 
 namespace container {
 
 	template < SizeType Dimension >
 	inline SizeType total_size(const Index<Dimension> &size)
 	{
-		SizeType total = static_cast<SizeType>(0);
+		SizeType total = static_cast<SizeType>(1);
 		for (SizeType i = static_cast<SizeType>(0); i < Dimension; ++i)
 		total *= size[i];
 		return total;
@@ -111,6 +111,16 @@ SizeType to_index(const SizeType position, const Index<Dimension> &range) {
     inline typename GRID_DOMAIN::iterator GRID_DOMAIN::end() {
         return GRID_DOMAIN::iterator( this->data(), this->_size, this->size() );
     }
+
+	GRID_TEMPLATE
+	inline typename GRID_DOMAIN::const_iterator GRID_DOMAIN::begin() const {
+		return GRID_DOMAIN::const_iterator( this->data(), this->_size, 0 );
+	}
+
+	GRID_TEMPLATE
+	inline typename GRID_DOMAIN::const_iterator GRID_DOMAIN::end() const {
+		return GRID_DOMAIN::const_iterator( this->data(), this->_size, this->size() );
+	}
 
     GRID_TEMPLATE
     inline typename GRID_DOMAIN::const_iterator GRID_DOMAIN::cbegin() const {
