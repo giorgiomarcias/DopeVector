@@ -94,12 +94,12 @@ namespace container {
 			stream << "Index " << i << " is out of range [0, " << _size[0]-1 << ']';
 			throw std::out_of_range(stream.str());
 		}
-		s._array = _array + _offset[0] * i;
-		s._accumulatedOffset = accumulatedOffset(i);
-        for (SizeType j = 1; j < D; ++j) {
-			s._size[j-1] = _size[j];
-			s._offset[j-1] = _offset[j];
+		Index<Dimension-1> new_size, new_offset;
+		for (SizeType j = 1; j < D; ++j) {
+			new_size[j-1] = _size[j];
+			new_offset[j-1] = _offset[j];
 		}
+		s.reset(_array + _offset[0] * i, accumulatedOffset(i), new_size, new_offset);
 	}
 
     template < typename T, SizeType Dimension, SizeType ... Args >
@@ -171,17 +171,17 @@ namespace container {
 			stream << "Index " << i << " is out of range [0, " << _size[d]-1 << ']';
 			throw std::out_of_range(stream.str());
 		}
-		s._array = _array + _offset[d] * i;
-		s._accumulatedOffset = accumulatedOffset(i, d);
-        SizeType k = 0;
-        for (SizeType j = 0; j < d; ++j, ++k) {
-			s._size[k] = _size[j];
-			s._offset[k] = _offset[j];
+		Index<Dimension-1> new_size, new_offset;
+		SizeType k = 0;
+		for (SizeType j = 0; j < d; ++j, ++k) {
+			new_size[k] = _size[j];
+			new_offset[k] = _offset[j];
 		}
-        for (SizeType j = d+1; j < D; ++j, ++k) {
-			s._size[k] = _size[j];
-			s._offset[k] = _offset[j];
+		for (SizeType j = d+1; j < D; ++j, ++k) {
+			new_size[k] = _size[j];
+			new_offset[k] = _offset[j];
 		}
+		s.reset(_array + _offset[d] * i, accumulatedOffset(i, d), new_size, new_offset);
 	}
 
     template < typename T, SizeType Dimension, SizeType ... Args >
@@ -209,15 +209,12 @@ namespace container {
 			}
 			included[order[d]] = true;
 		}
-		p._array = _array;
-		p._accumulatedOffset = _accumulatedOffset;
-        SizeType newSize[D], newOffset[D];
-        std::memcpy(newSize, _size.data(), D * sizeof(SizeType));
-        std::memcpy(newOffset, _offset.data(), D * sizeof(SizeType));
-        for (SizeType d = 0; d < D; ++d) {
-			p._size[d] = newSize[order[d]];
-			p._offset[d] = newOffset[order[d]];
+		IndexD new_size, new_offset;
+		for (SizeType d = 0; d < D; ++d) {
+			new_size[d] = _size[order[d]];
+			new_offset[d] = _offset[order[d]];
 		}
+		p.reset(_array, _accumulatedOffset, new_size, new_offset);
 	}
 
     template < typename T, SizeType Dimension, SizeType ... Args >
@@ -246,10 +243,7 @@ namespace container {
         SizeType newAccumulatedOffset = _accumulatedOffset;
         for (SizeType d = 0; d < D; ++d)
 			newAccumulatedOffset += _offset[d] * start[d];
-		w._array = _array + (newAccumulatedOffset - _accumulatedOffset);
-		w._accumulatedOffset = newAccumulatedOffset;
-		w._size = size;
-		w._offset = _offset;
+		w.reset(_array + (newAccumulatedOffset - _accumulatedOffset), newAccumulatedOffset, size, _offset);
 	}
 
     template < typename T, SizeType Dimension, SizeType ... Args >
@@ -413,7 +407,7 @@ namespace container {
 		if (_size[0] != o._size[0])
 			throw std::out_of_range("Matrixes do not have same size.");
         for (SizeType i = 0; i < _size[0]; ++i)
-			operator[](i) = o[i];
+			at(i) = o.at(i);
 	}
 
     ////////////////////////////////////////////////////////////////////////
@@ -493,13 +487,13 @@ namespace container {
     template < typename T, SizeType ... Args >
     inline const T & DopeVector<T, 1, Args...>::slice(const SizeType i) const
 	{
-		return *this[i];
+		return at(i);
 	}
 
     template < typename T, SizeType ... Args >
     inline T & DopeVector<T, 1, Args...>::slice(const SizeType i)
 	{
-		return *this[i];
+		return at(i);
 	}
 
     template < typename T, SizeType ... Args >
@@ -514,14 +508,12 @@ namespace container {
 		}
 		if (&p == this)
 			return;
-		p._array = _array;
-		p._accumulatedOffset = _accumulatedOffset;
-        SizeType newSize[1] = {_size[0]};
-        SizeType newOffset[1] = {_offset[0]};
-        for (SizeType d = 0; d < 1; ++d) {
-			p._size[d] = newSize[order[d]];
-			p._offset[d] = newOffset[order[d]];
+		Index1 new_size, new_offset;
+		for (SizeType d = 0; d < 1; ++d) {
+			new_size[d] = _size[order[d]];
+			new_offset[d] = _offset[order[d]];
 		}
+		p.reset(_array, _accumulatedOffset, new_size, new_offset);
 	}
 
     template < typename T, SizeType ... Args >
@@ -535,7 +527,18 @@ namespace container {
     template < typename T, SizeType ... Args >
     inline void DopeVector<T, 1, Args...>::window(const Index1 &start, const Index1 &size, DopeVector<T, 1, Args...> &w) const
 	{
-        return window(start[0], size[0], w);
+		if (start[0] >= _size[0]) {
+			std::stringstream stream;
+			stream << "Index " << start[0] << " is out of range [0, " << _size[0] << ']';
+			throw std::out_of_range(stream.str());
+		}
+		if (start[0] + size[0] > _size[0]) {
+			std::stringstream stream;
+			stream << "Window size " << size[0] << " is out of range [" << 0 << ", " << _size[0] - start[0] << ']';
+			throw std::out_of_range(stream.str());
+		}
+		SizeType accumulatedOffset = _accumulatedOffset + _offset[0] * start[0];
+		w.reset(_array + (accumulatedOffset - _accumulatedOffset), accumulatedOffset, size, _offset);
 	}
 
     template < typename T, SizeType ... Args >
@@ -549,20 +552,7 @@ namespace container {
     template < typename T, SizeType ... Args >
     inline void DopeVector<T, 1, Args...>::window(const SizeType start, const SizeType size, DopeVector<T, 1, Args...> &w) const
 	{
-		if (start >= _size[0]) {
-			std::stringstream stream;
-			stream << "Index " << start << " is out of range [0, " << _size[0] << ']';
-			throw std::out_of_range(stream.str());
-		}
-		if (start + size > _size[0]) {
-			std::stringstream stream;
-			stream << "Window size " << size << " is out of range [" << 0 << ", " << _size[0] - start << ']';
-			throw std::out_of_range(stream.str());
-		}
-		w._accumulatedOffset = _accumulatedOffset + _offset[0] * start;
-		w._array = _array + (w._accumulatedOffset - _accumulatedOffset);
-		w._size[0] = size;
-		w._offset[0] = _offset[0];
+		window(Index1::Constant(start), Index1::Constant(size), w);
 	}
 
     template < typename T, SizeType ... Args >

@@ -303,7 +303,6 @@ namespace container {
 
 
     private:
-        friend class DopeVector<T, Dimension+1, Args...>;
         T       *_array;                 ///< Pointer in memory to the first element of this matrix.
         SizeType _accumulatedOffset;     ///< Offset of the first element of this matrix from the beginning of the stored array.
         IndexD   _size;                  ///< Sizes of this matrix, for each dimension.
@@ -640,7 +639,6 @@ namespace container {
 
 
     private:
-        friend class DopeVector<T, 2, Args...>;
         T       *_array;                 ///< Pointer in memory to the first element of this vector.
         SizeType _accumulatedOffset;     ///< Offset of the first element of this vector from the beginning of the stored array.
         Index1   _size;                  ///< Sizes of this matrix, for each dimension.
