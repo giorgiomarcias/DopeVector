@@ -40,5 +40,11 @@ The library is header-only, just include the path `<path-to-where-downloaded-to>
     //or directly:
     //#include <DopeVector/Grid.hpp>
 
+If you use [CMAKE](https://cmake.org), you can import this project using `add_subdirectory`:
+
+    add_subdirectory("<path-to-where-downloaded-to>"" "${CMAKE_CURRENT_BINARY_DIR}/DopeVector")
+    ...
+    target_link_libraries(${PROJECT_NAME} INTERFACE DopeVector)
+
 ### License ###
 This software is subject to the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) License.
