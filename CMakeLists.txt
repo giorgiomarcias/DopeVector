@@ -28,7 +28,7 @@ set(hdr_main_files
 )
 source_group(headers FILES ${hdr_main_files})
 
-set(all_src ${hdr_internal_files} ${hdr_internal_inline_files} ${hdr_main_files})
+set(all_hdr ${hdr_internal_files} ${hdr_internal_inline_files} ${hdr_main_files})
 
 
 add_library(${PROJECT_NAME} INTERFACE)
@@ -57,5 +57,7 @@ set(required_cxx_features
 )
 
 target_compile_features(${PROJECT_NAME} INTERFACE ${required_cxx_features})
-target_include_directories(${PROJECT_NAME} INTERFACE ${hdr_dir})
-target_sources(${PROJECT_NAME} INTERFACE ${all_src})
+target_include_directories(${PROJECT_NAME} INTERFACE
+    $<BUILD_INTERFACE:${hdr_dir}>
+)
+target_sources(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${all_hdr}>)

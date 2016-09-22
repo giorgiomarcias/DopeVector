@@ -9,4 +9,4 @@ set(src
 )
 add_executable(${PROJECT_NAME} ${src})
 
-target_link_libraries(${PROJECT_NAME} INTERFACE DopeVector)
+target_link_libraries(${PROJECT_NAME} DopeVector)
