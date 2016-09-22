@@ -1,3 +1,13 @@
+// Copyright (c) 2016 Giorgio Marcias & Maurizio Kovacic
+//
+// This source code is part of DopeVector header library
+// and it is subject to Apache 2.0 License.
+//
+// Author: Giorgio Marcias
+// email: marcias.giorgio@gmail.com
+// Author: Maurizio Kovacic
+// email: maurizio.kovacic@gmail.com
+
 #ifndef Expression_hpp
 #define Expression_hpp
 
@@ -5,7 +15,7 @@
 #include <array>
 #include <functional>
 
-namespace container {
+namespace dope {
 
 	namespace internal {
 
@@ -108,7 +118,7 @@ namespace container {
 
 	template < class El, class Er, typename T, SizeType Dimension >
 	inline internal::StaticArrayQuot<El, Er, T, Dimension> operator/ (const internal::StaticArrayExpression<El, T, Dimension> &el, const internal::StaticArrayExpression<Er, T, Dimension> &er);
-
+	
 }
 
 #include <DopeVector/internal/inlines/Expression.inl>

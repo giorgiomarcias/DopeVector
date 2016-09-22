@@ -1,6 +1,16 @@
+// Copyright (c) 2016 Giorgio Marcias & Maurizio Kovacic
+//
+// This source code is part of DopeVector header library
+// and it is subject to Apache 2.0 License.
+//
+// Author: Giorgio Marcias
+// email: marcias.giorgio@gmail.com
+// Author: Maurizio Kovacic
+// email: maurizio.kovacic@gmail.com
+
 #include <DopeVector/internal/Expression.hpp>
 
-namespace container {
+namespace dope {
 
 	namespace internal {
 
@@ -127,5 +137,5 @@ namespace container {
 	{
 		return internal::StaticArrayQuot<El, Er, T, Dimension>(el, er);
 	}
-
+	
 }

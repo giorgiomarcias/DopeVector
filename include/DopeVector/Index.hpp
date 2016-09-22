@@ -1,3 +1,13 @@
+// Copyright (c) 2016 Giorgio Marcias & Maurizio Kovacic
+//
+// This source code is part of DopeVector header library
+// and it is subject to Apache 2.0 License.
+//
+// Author: Giorgio Marcias
+// email: marcias.giorgio@gmail.com
+// Author: Maurizio Kovacic
+// email: maurizio.kovacic@gmail.com
+
 #ifndef Index_hpp
 #define Index_hpp
 
@@ -6,10 +16,10 @@
 #include <DopeVector/internal/Common.hpp>
 #include <Eigen/Core>
 
-namespace container {
+namespace dope {
 
-template < SizeType Dimension >
-using Index = Eigen::Matrix<SizeType, Dimension, 1>;
+	template < SizeType Dimension >
+	using Index = Eigen::Matrix<SizeType, Dimension, 1>;
 
 }
 
@@ -18,7 +28,7 @@ using Index = Eigen::Matrix<SizeType, Dimension, 1>;
 #include <DopeVector/internal/Expression.hpp>
 #include <array>
 
-namespace container {
+namespace dope {
 
 	template < SizeType Dimension >
 	class Index : public std::array<SizeType, Dimension>, public internal::StaticArrayExpression<Index<Dimension>, SizeType, Dimension> {
@@ -53,9 +63,9 @@ namespace container {
 		template < class E >
 		inline Index& operator/=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e);
 
-        static constexpr Index Zero();
-        static constexpr Index Ones();
-        static constexpr Index Constant(const SizeType value);
+		static constexpr Index Zero();
+		static constexpr Index Ones();
+		static constexpr Index Constant(const SizeType value);
 	};
 
 
@@ -64,7 +74,7 @@ namespace container {
 	typedef Index<2>	    Index2;
 	typedef Index<3>	    Index3;
 	typedef Index<4>	    Index4;
-	
+
 }
 
 #include <DopeVector/internal/inlines/Index.inl>

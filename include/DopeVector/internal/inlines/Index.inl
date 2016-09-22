@@ -1,10 +1,20 @@
-#include <DopeVector/internal/Index.hpp>
+// Copyright (c) 2016 Giorgio Marcias & Maurizio Kovacic
+//
+// This source code is part of DopeVector header library
+// and it is subject to Apache 2.0 License.
+//
+// Author: Giorgio Marcias
+// email: marcias.giorgio@gmail.com
+// Author: Maurizio Kovacic
+// email: maurizio.kovacic@gmail.com
 
-namespace container {
+#include <DopeVector/Index.hpp>
+
+namespace dope {
 
 	template < SizeType Dimension > template < typename ... Sizes >
 	inline Index<Dimension>::Index(const SizeType size0,  Sizes &&...sizes)
-	: std::array<SizeType, Dimension>({{size0, static_cast<SizeType>(std::forward<SizeType>(sizes))...}})
+		: std::array<SizeType, Dimension>({{size0, static_cast<SizeType>(std::forward<SizeType>(sizes))...}})
 	{ }
 
 	template < SizeType Dimension >
@@ -18,57 +28,57 @@ namespace container {
 	inline Index<Dimension>::Index(const internal::StaticArrayExpression<E, SizeType, Dimension> &e)
 	{
 		for (SizeType i = 0; i < Dimension; ++i)
-		std::array<SizeType, Dimension>::operator[](i) = e.getAt(i);
+			std::array<SizeType, Dimension>::operator[](i) = e.getAt(i);
 	}
 
 	template < SizeType Dimension > template < class E >
 	inline Index<Dimension>& Index<Dimension>::operator=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e)
 	{
 		for (SizeType i = 0; i < Dimension; ++i)
-		std::array<SizeType, Dimension>::operator[](i) = e.getAt(i);
+			std::array<SizeType, Dimension>::operator[](i) = e.getAt(i);
 	}
 
 	template < SizeType Dimension > template < class E >
 	inline Index<Dimension>& Index<Dimension>::operator+=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e)
 	{
 		for (SizeType i = 0; i < Dimension; ++i)
-		std::array<SizeType, Dimension>::operator[](i) += e.getAt(i);
+			std::array<SizeType, Dimension>::operator[](i) += e.getAt(i);
 	}
 
 	template < SizeType Dimension > template < class E >
 	inline Index<Dimension>& Index<Dimension>::operator-=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e)
 	{
 		for (SizeType i = 0; i < Dimension; ++i)
-		std::array<SizeType, Dimension>::operator[](i) -= e.getAt(i);
+			std::array<SizeType, Dimension>::operator[](i) -= e.getAt(i);
 	}
 
 	template < SizeType Dimension > template < class E >
 	inline Index<Dimension>& Index<Dimension>::operator*=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e)
 	{
 		for (SizeType i = 0; i < Dimension; ++i)
-		std::array<SizeType, Dimension>::operator[](i) *= e.getAt(i);
+			std::array<SizeType, Dimension>::operator[](i) *= e.getAt(i);
 	}
 
 	template < SizeType Dimension > template < class E >
 	inline Index<Dimension>& Index<Dimension>::operator/=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e)
 	{
 		for (SizeType i = 0; i < Dimension; ++i)
-		std::array<SizeType, Dimension>::operator[](i) /= e.getAt(i);
+			std::array<SizeType, Dimension>::operator[](i) /= e.getAt(i);
 	}
 
-    template < SizeType Dimension >
-    constexpr Index<Dimension> Index<Dimension>::Zero() {
-        return Index({{0}});
-    }
+	template < SizeType Dimension >
+	constexpr Index<Dimension> Index<Dimension>::Zero() {
+		return Index({{0}});
+	}
 
-    template < SizeType Dimension >
-    constexpr Index<Dimension> Index<Dimension>::Ones() {
-        return Index({{1}});
-    }
+	template < SizeType Dimension >
+	constexpr Index<Dimension> Index<Dimension>::Ones() {
+		return Index({{1}});
+	}
 
-    template < SizeType Dimension >
-    constexpr Index<Dimension> Index<Dimension>::Constant( const SizeType value ) {
-        return Index({{value}});
-    }
-
+	template < SizeType Dimension >
+	constexpr Index<Dimension> Index<Dimension>::Constant( const SizeType value ) {
+		return Index({{value}});
+	}
+	
 }
