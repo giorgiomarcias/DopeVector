@@ -85,12 +85,14 @@ namespace dope {
 	////////////////////////////////////////////////////////////////////////////
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline const T * Grid<T, Dimension, Allocator>::data() const {
+	inline const T * Grid<T, Dimension, Allocator>::data() const
+	{
 		return _data.data();
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline T * Grid<T, Dimension, Allocator>::data() {
+	inline T * Grid<T, Dimension, Allocator>::data()
+	{
 		return _data.data();
 	}
 
@@ -109,27 +111,32 @@ namespace dope {
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::iterator Grid<T, Dimension, Allocator>::end() {
+	inline typename Grid<T, Dimension, Allocator>::iterator Grid<T, Dimension, Allocator>::end()
+	{
 		return Grid<T, Dimension, Allocator>::iterator(data(), DopeVector<T, Dimension>::allSizes(), DopeVector<T, Dimension>::size());
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::begin() const {
+	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::begin() const
+	{
 		return Grid<T, Dimension, Allocator>::const_iterator(data(), DopeVector<T, Dimension>::_size, 0);
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::end() const {
+	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::end() const
+	{
 		return Grid<T, Dimension, Allocator>::const_iterator(data(), DopeVector<T, Dimension>::allSizes(), DopeVector<T, Dimension>::size());
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::cbegin() const {
+	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::cbegin() const
+	{
 		return Grid<T, Dimension, Allocator>::const_iterator(data(), DopeVector<T, Dimension>::allSizes(), 0);
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::cend() const {
+	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::cend() const
+	{
 		return Grid<T, Dimension, Allocator>::const_iterator(data(), DopeVector<T, Dimension>::allSizes(), DopeVector<T, Dimension>::size());
 	}
 
@@ -142,37 +149,44 @@ namespace dope {
 	////////////////////////////////////////////////////////////////////////////
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::iterator Grid<T, Dimension, Allocator>::to_iterator(const SizeType i) const {
+	inline typename Grid<T, Dimension, Allocator>::iterator Grid<T, Dimension, Allocator>::to_iterator(const SizeType i) const
+	{
 		return (begin() + i);
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::iterator Grid<T, Dimension, Allocator>::to_iterator(const IndexD& i) const {
+	inline typename Grid<T, Dimension, Allocator>::iterator Grid<T, Dimension, Allocator>::to_iterator(const IndexD& i) const
+	{
 		return (begin() + position(i));
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::to_const_iterator(const SizeType i) const {
+	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::to_const_iterator(const SizeType i) const
+	{
 		return (cbegin() + i);
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::to_const_iterator(const IndexD& i) const {
+	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::to_const_iterator(const IndexD& i) const
+	{
 		return (cbegin() + position(i));
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline const typename Grid<T, Dimension, Allocator>::Data& Grid<T, Dimension, Allocator>::to_stdvector() const {
+	inline const typename Grid<T, Dimension, Allocator>::Data& Grid<T, Dimension, Allocator>::to_stdvector() const
+	{
 		return _data;
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::Data& Grid<T, Dimension, Allocator>::to_stdvector() {
+	inline typename Grid<T, Dimension, Allocator>::Data& Grid<T, Dimension, Allocator>::to_stdvector()
+	{
 		return _data;
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline Grid<T, Dimension, Allocator>::operator Data() const {
+	inline Grid<T, Dimension, Allocator>::operator Data() const
+	{
 		return _data;
 	}
 
@@ -185,12 +199,14 @@ namespace dope {
 	////////////////////////////////////////////////////////////////////////////
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline bool Grid<T, Dimension, Allocator>::empty() const {
+	inline bool Grid<T, Dimension, Allocator>::empty() const
+	{
 		return _data.empty();
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline bool Grid<T, Dimension, Allocator>::operator==(const Grid &o) const {
+	inline bool Grid<T, Dimension, Allocator>::operator==(const Grid &o) const
+	{
 		if (&o == this)
 			return true;
 		for (SizeType i = static_cast<SizeType>(0); i < Dimension; ++i)
@@ -208,13 +224,15 @@ namespace dope {
 	////////////////////////////////////////////////////////////////////////////
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline void Grid<T, Dimension, Allocator>::clear() {
+	inline void Grid<T, Dimension, Allocator>::clear()
+	{
 		_data.clear();
 		DopeVector<T, Dimension>::reset(nullptr, static_cast<SizeType>(0), IndexD::Zero());
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline void Grid<T, Dimension, Allocator>::reset(const T & default_value) {
+	inline void Grid<T, Dimension, Allocator>::reset(const T & default_value)
+	{
 		IndexD size = DopeVector<T, Dimension>::allSizes();
 		_data.assign(total_size(size), default_value);
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size);
@@ -247,7 +265,8 @@ namespace dope {
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline void Grid<T, Dimension, Allocator>::swap(Grid &o) {
+	inline void Grid<T, Dimension, Allocator>::swap(Grid &o)
+	{
 		_data.swap(o._data);
 		IndexD size = DopeVector<T, Dimension>::allSizes();
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size);
