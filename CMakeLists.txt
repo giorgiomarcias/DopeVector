@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.3)
 
 project(DopeVector)
 
@@ -9,7 +9,7 @@ set(hdr_internal_files
 	${hdr_dir}/DopeVector/internal/Expression.hpp
 	${hdr_dir}/DopeVector/internal/GridIterator.hpp
 )
-source_group(headers\\internal FILES ${hdr_internal_files})
+source_group("Header Files\\internal" FILES ${hdr_internal_files})
 
 set(hdr_internal_inline_files
 	${hdr_dir}/DopeVector/internal/inlines/Index.inl
@@ -19,14 +19,14 @@ set(hdr_internal_inline_files
 	${hdr_dir}/DopeVector/internal/inlines/Grid.inl
 )
 set_source_files_properties(${hdr_internal_inline_files} PROPERTIES XCODE_EXPLICIT_FILE_TYPE "sourcecode.cpp.h")
-source_group(headers\\internal\\inlines FILES ${hdr_internal_inline_files})
+source_group("Header Files\\internal\\inlines" FILES ${hdr_internal_inline_files})
 
 set(hdr_main_files
 	${hdr_dir}/DopeVector/DopeVector.hpp
 	${hdr_dir}/DopeVector/Grid.hpp
 	${hdr_dir}/DopeVector/Index.hpp
 )
-source_group(headers FILES ${hdr_main_files})
+source_group("Header Files" FILES ${hdr_main_files})
 
 set(all_hdr ${hdr_internal_files} ${hdr_internal_inline_files} ${hdr_main_files})
 
@@ -57,7 +57,5 @@ set(required_cxx_features
 )
 
 target_compile_features(${PROJECT_NAME} INTERFACE ${required_cxx_features})
-target_include_directories(${PROJECT_NAME} INTERFACE
-    $<BUILD_INTERFACE:${hdr_dir}>
-)
-target_sources(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${all_hdr}>)
+target_include_directories(${PROJECT_NAME} INTERFACE ${hdr_dir})
+target_sources(${PROJECT_NAME} INTERFACE ${all_hdr})

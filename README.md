@@ -46,5 +46,11 @@ If you use [CMAKE](https://cmake.org), you can import this project using `add_su
     ...
     target_link_libraries(${PROJECT_NAME} INTERFACE DopeVector)
 
+Note that, due to cmake's design of not exporting file properties of interface libraries (as of version 3.6.2), if you want to have DopeVector's header files in your IDE project tree just add the following:
+
+    target_link_libraries(${PROJECT_NAME} INTERFACE DopeVector)
+    set_dope_vector_source_files_properties()
+
+
 ### License ###
 This software is subject to the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) License.
