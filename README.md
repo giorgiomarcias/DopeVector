@@ -42,12 +42,15 @@ The library is header-only, just include the path `<path-to-where-downloaded-to>
 
 If you use [CMAKE](https://cmake.org), you can import this project using `add_subdirectory`:
 
-    add_subdirectory("<path-to-where-downloaded-to>"" "${CMAKE_CURRENT_BINARY_DIR}/DopeVector")
+    add_subdirectory("<path-to-where-downloaded-to>" "${CMAKE_CURRENT_BINARY_DIR}/DopeVector")
     ...
     target_link_libraries(${PROJECT_NAME} INTERFACE DopeVector)
 
 Note that, due to cmake's design of not exporting file properties of interface libraries (as of version 3.6.2), if you want to have DopeVector's header files in your IDE project tree just add the following:
 
+    add_subdirectory("<path-to-where-downloaded-to>" "${CMAKE_CURRENT_BINARY_DIR}/DopeVector")
+    include("<path-to-where-downloaded-to>/sources_properties.cmake")
+    ...
     target_link_libraries(${PROJECT_NAME} INTERFACE DopeVector)
     set_dope_vector_source_files_properties()
 
