@@ -67,6 +67,24 @@ namespace dope {
 	}
 
 	template < SizeType Dimension >
+	inline SizeType Index<Dimension>::sum() const
+	{
+		SizeType sum = static_cast<SizeType>(0);
+		for (SizeType i = static_cast<SizeType>(0); i < Dimension; ++i)
+			sum += std::array<SizeType, Dimension>::at(i);
+		return sum;
+	}
+
+	template < SizeType Dimension >
+	inline SizeType Index<Dimension>::prod() const
+	{
+		SizeType prod = static_cast<SizeType>(1);
+		for (SizeType i = static_cast<SizeType>(0); i < Dimension; ++i)
+			prod *= std::array<SizeType, Dimension>::at(i);
+		return prod;
+	}
+
+	template < SizeType Dimension >
 	constexpr Index<Dimension> Index<Dimension>::Zero() {
 		return Index({{0}});
 	}

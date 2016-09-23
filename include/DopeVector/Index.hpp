@@ -63,6 +63,10 @@ namespace dope {
 		template < class E >
 		inline Index& operator/=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e);
 
+		inline SizeType sum() const;
+
+		inline SizeType prod() const;
+
 		static constexpr Index Zero();
 		static constexpr Index Ones();
 		static constexpr Index Constant(const SizeType value);

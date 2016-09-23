@@ -17,25 +17,6 @@
 
 namespace dope {
 
-	template < SizeType Dimension >
-	static inline SizeType total_size(const Index<Dimension> &size);
-
-	/**
-	 *     @brief Utility function used to convert a given index over a
-	 *            given range into a linear index of an array-like container.
-	 */
-	template < SizeType Dimension >
-	static SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range);
-
-	/**
-	 *     @brief Utility function used to convert a given linear index over a
-	 *            given range into a index of an D-dimensional grid.
-	 */
-	template < SizeType Dimension >
-	static SizeType to_index(const SizeType position, const Index<Dimension> &range);
-
-
-
 	/**
 	 * @brief The Grid class describes a D-dimensional grid, containing elements
 	 *        of a specified type. Each element could be accessed by its regualr

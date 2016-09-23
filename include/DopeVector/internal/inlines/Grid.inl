@@ -12,55 +12,20 @@
 
 namespace dope {
 
-	template < SizeType Dimension >
-	inline SizeType total_size(const Index<Dimension> &size)
-	{
-		SizeType total = static_cast<SizeType>(1);
-		for (SizeType i = static_cast<SizeType>(0); i < Dimension; ++i)
-			total *= size[i];
-		return total;
-	}
-
-	template < SizeType Dimension >
-	SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range) {
-		SizeType pos = static_cast<SizeType>(0);
-		SizeType dimProd = static_cast<SizeType>(1);
-		for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
-			constexpr SizeType d = D - static_cast<SizeType>(1);
-			pos += index[d] * dimProd;
-			dimProd *= range[d];
-		}
-		return pos;
-	}
-
-	template < SizeType Dimension >
-	SizeType to_index(const SizeType position, const Index<Dimension> &range) {
-		Index<Dimension> result(static_cast<SizeType>(0));
-		SizeType i = position;
-		for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
-			constexpr SizeType d = D - static_cast<SizeType>(1);
-			result[d] = i % range[d];
-			i = i / range[d];
-		}
-		return result;
-	}
-
-
-
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTORS
 	////////////////////////////////////////////////////////////////////////////
 
 	template < typename T, SizeType Dimension, class Allocator >
 	inline Grid<T, Dimension, Allocator>::Grid(const IndexD &size, const T & default_value)
-		: _data(total_size(size), default_value)
+		: _data(size.prod(), default_value)
 	{
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size);
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
 	inline Grid<T, Dimension, Allocator>::Grid(const SizeType size, const T & default_value)
-		: _data(total_size(Index<Dimension>::Constant(size)), default_value)
+		: _data(Index<Dimension>::Constant(size).prod(), default_value)
 	{
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), Index<Dimension>::Constant(size));
 	}
@@ -234,7 +199,7 @@ namespace dope {
 	inline void Grid<T, Dimension, Allocator>::reset(const T & default_value)
 	{
 		IndexD size = DopeVector<T, Dimension>::allSizes();
-		_data.assign(total_size(size), default_value);
+		_data.assign(size.prod(), default_value);
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size);
 	}
 
