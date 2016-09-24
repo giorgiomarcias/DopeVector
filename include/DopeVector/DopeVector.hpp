@@ -132,8 +132,21 @@ namespace dope {
 		/**
 		 *    @brief Copies all single elements from o to this matrix.
 		 *    @param o                  The matrix to copy from.
+		 *    @note This does not guarantee consistency in case of (partial)
+		 *          memory overlap. If you can not garantee it yourself, then
+		 *          use safeImport.
 		 */
 		virtual inline void import(const DopeVector &o);
+
+		/**
+		 *    @brief Copies all single elements from o to this matrix in a
+		 *           consistent way.
+		 *    @param o                  The matrix to copy from.
+		 *    @note To garantee consistency, this method allocates temporary
+		 *          data to copy o's into, and then to copy this' from. So it is
+		 *          slower then import.
+		 */
+		inline void safeImport(const DopeVector &o);
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -257,7 +270,7 @@ namespace dope {
 		 *    @param size               The sizes of the window.
 		 *    @param w                  The output sub-matrix.
 		 */
-		inline void window(const IndexD &start, IndexD &size, DopeVector &w) const;
+		inline void window(const IndexD &start, const IndexD &size, DopeVector &w) const;
 
 		/**
 		 *    @brief Extracts a D-dimensional window from this matrix.
@@ -472,8 +485,21 @@ namespace dope {
 		/**
 		 *    @brief Copies all single elements from o to this matrix.
 		 *    @param o                  The matrix to copy from.
+		 *    @note This does not guarantee consistency in case of (partial)
+		 *          memory overlap. If you can not garantee it yourself, then
+		 *          use safeImport.
 		 */
 		virtual inline void import(const DopeVector &o);
+
+		/**
+		 *    @brief Copies all single elements from o to this matrix in a
+		 *           consistent way.
+		 *    @param o                  The matrix to copy from.
+		 *    @note To garantee consistency, this method allocates temporary
+		 *          data to copy o's into, and then to copy this' from. So it is
+		 *          slower then import.
+		 */
+		inline void safeImport(const DopeVector &o);
 
 		////////////////////////////////////////////////////////////////////////
 
