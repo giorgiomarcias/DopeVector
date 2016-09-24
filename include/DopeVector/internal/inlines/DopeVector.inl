@@ -81,11 +81,11 @@ namespace dope {
 	inline void DopeVector<T, Dimension>::import(const DopeVector &o)
 	{
 		if (&o == this)
-		return;
+			return;
 		if (_size[0] != o._size[0])
-		throw std::out_of_range("Matrixes do not have same size.");
+			throw std::out_of_range("Matrixes do not have same size.");
 		for (SizeType i = 0; i < _size[0]; ++i)
-		operator[](i).import(o[i]);
+			operator[](i).import(o[i]);
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -124,9 +124,8 @@ namespace dope {
 	inline const T & DopeVector<T, Dimension>::at(const IndexD &i) const
 	{
 		SizeType offset = _accumulatedOffset;
-		for(SizeType d = 0; d < D; ++d) {
+		for(SizeType d = 0; d < D; ++d)
 			offset += i[d] * _offset[d];
-		}
 		return *(_array + offset);
 	}
 
@@ -134,9 +133,8 @@ namespace dope {
 	inline T & DopeVector<T, Dimension>::at(const IndexD &i)
 	{
 		SizeType offset = _accumulatedOffset;
-		for(SizeType d = 0; d < D; ++d) {
+		for(SizeType d = 0; d < D; ++d)
 			offset += i[d] * _offset[d];
-		}
 		return *(_array + offset);
 	}
 
@@ -252,7 +250,7 @@ namespace dope {
 		}
 		SizeType newAccumulatedOffset = _accumulatedOffset;
 		for (SizeType d = 0; d < D; ++d)
-		newAccumulatedOffset += _offset[d] * start[d];
+			newAccumulatedOffset += _offset[d] * start[d];
 		w.reset(_array + (newAccumulatedOffset - _accumulatedOffset), newAccumulatedOffset, size, _offset);
 	}
 
@@ -294,7 +292,7 @@ namespace dope {
 	{
 		SizeType total = _size[0];
 		for (SizeType i = 1; i < D; ++i)
-		total *= _size[i];
+			total *= _size[i];
 		return total;
 	}
 
@@ -413,11 +411,11 @@ namespace dope {
 	inline void DopeVector<T, 1>::import(const DopeVector<T, 1> &o)
 	{
 		if (&o == this)
-		return;
+			return;
 		if (_size[0] != o._size[0])
-		throw std::out_of_range("Matrixes do not have same size.");
+			throw std::out_of_range("Matrixes do not have same size.");
 		for (SizeType i = 0; i < _size[0]; ++i)
-		at(i) = o.at(i);
+			at(i) = o.at(i);
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -517,7 +515,7 @@ namespace dope {
 			}
 		}
 		if (&p == this)
-		return;
+			return;
 		Index1 new_size, new_offset;
 		for (SizeType d = 0; d < 1; ++d) {
 			new_size[d] = _size[order[d]];
