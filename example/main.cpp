@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 		for (std::size_t j = 0; j < size[1]; ++j)
 			grid2_naive_transposition[j][i] = grid2D[i][j];
 
-	std::cout << "\nNaive transposition in " << std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count() << " ns." << std::endl;
+	std::cout << "\nNaive transposition in " << std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count() << " ns.\n";
 
 	std::cout << "Transposition (naive):\n";
 	for (std::size_t i = 0; i < size[0]; ++i) {
@@ -61,8 +61,9 @@ int main(int argc, char *argv[])
 
 	auto grid2D_permuted = grid2D.permute(order);
 
-	std::cout << "\nDope Transposition in " << std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count() << " ns." << std::endl;
+	std::cout << "\nDope Transposition in " << std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count() << " ns.\n";
 
+	std::cout << "Transposition (dope):\n";
 	for (std::size_t i = 0; i < size[0]; ++i) {
 		auto grid_row = grid2D_permuted[i];
 		for (std::size_t j = 0; j < size[1]; ++j)
@@ -80,6 +81,33 @@ int main(int argc, char *argv[])
 	big_grid.permute(new_order);
 
 	std::cout << "\nBig grid (10 side length X 10 dimensions) permuted in " << std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count() << " ns." << std::endl;
+
+
+	// safe import of overlapping window
+	auto upper_left_window = grid2D.window({0, 0}, {5, 5});
+	auto lower_right_window = grid2D.window({3, 3}, {5, 5});
+	lower_right_window.safeImport(upper_left_window);
+	std::cout << "\n\nUpper left 5x5 window safely imported into 5x5 window at (3,3):\n";
+	for (std::size_t i = 0; i < size[0]; ++i) {
+		auto grid_row = grid2D_permuted[i];
+		for (std::size_t j = 0; j < size[1]; ++j)
+			std::cout << grid_row[j] << '\t';
+		std::cout << '\n';
+	}
+	for (std::size_t i = 0; i < size[0]; ++i) {
+		DopeVector<std::size_t, 1> grid_row = grid2D[i];
+		for (std::size_t j = 0; j < size[1]; ++j)
+			grid_row[j] = i * size[0] + j;
+	}
+	lower_right_window.import(upper_left_window);
+	std::cout << "\nUpper left 5x5 window NON-safely imported into 5x5 window at (3,3):\n";
+	for (std::size_t i = 0; i < size[0]; ++i) {
+		auto grid_row = grid2D_permuted[i];
+		for (std::size_t j = 0; j < size[1]; ++j)
+			std::cout << grid_row[j] << '\t';
+		std::cout << '\n';
+	}
+	std::cout << "Compare elements at (6,6). This is due to the fact that dope vectors act on shared memory.\n" << std::endl;
 
 	return 0;
 }

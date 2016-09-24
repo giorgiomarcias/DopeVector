@@ -9,6 +9,7 @@
 // email: maurizio.kovacic@gmail.com
 
 #include <DopeVector/DopeVector.hpp>
+#include <memory>
 
 namespace dope {
 
@@ -78,7 +79,7 @@ namespace dope {
 	}
 
 	template < typename T, SizeType Dimension >
-	inline void DopeVector<T, Dimension>::import(const DopeVector &o)
+	inline void DopeVector<T, Dimension>::import(const DopeVector<T, Dimension> &o)
 	{
 		if (&o == this)
 			return;
@@ -86,6 +87,19 @@ namespace dope {
 			throw std::out_of_range("Matrixes do not have same size.");
 		for (SizeType i = 0; i < _size[0]; ++i)
 			operator[](i).import(o[i]);
+	}
+
+	template < typename T, SizeType Dimension >
+	inline void DopeVector<T, Dimension>::safeImport(const DopeVector<T, Dimension> &o)
+	{
+		if (&o == this)
+			return;
+		if (allSizes() != o.allSizes())
+			throw std::out_of_range("Matrixes do not have same size.");
+		std::unique_ptr<T[]> tempPtr(new T[o.size()]);
+		DopeVector<T, Dimension> tmpDopeVector(tempPtr.get(), 0, o.allSizes());
+		tmpDopeVector.import(o);
+		import(tmpDopeVector);
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -234,7 +248,7 @@ namespace dope {
 	}
 
 	template < typename T, SizeType Dimension >
-	inline void DopeVector<T, Dimension>::window(const IndexD &start, IndexD &size, DopeVector<T, Dimension> &w) const
+	inline void DopeVector<T, Dimension>::window(const IndexD &start, const IndexD &size, DopeVector<T, Dimension> &w) const
 	{
 		for (SizeType d = 0; d < D; ++d) {
 			if (start[d] >= _size[d]) {
@@ -416,6 +430,19 @@ namespace dope {
 			throw std::out_of_range("Matrixes do not have same size.");
 		for (SizeType i = 0; i < _size[0]; ++i)
 			at(i) = o.at(i);
+	}
+
+	template < typename T >
+	inline void DopeVector<T, 1>::safeImport(const DopeVector<T, 1> &o)
+	{
+		if (&o == this)
+			return;
+		if (sizeAt(0) != o.sizeAt(0))
+			throw std::out_of_range("Matrixes do not have same size.");
+		std::unique_ptr<T[]> tempPtr(new T[o.size()]);
+		DopeVector<T, 1> tmpDopeVector(tempPtr.get(), 0, o.allSizes());
+		tmpDopeVector.import(o);
+		import(tmpDopeVector);
 	}
 
 	////////////////////////////////////////////////////////////////////////
