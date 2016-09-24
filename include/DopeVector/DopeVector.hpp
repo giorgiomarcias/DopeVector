@@ -330,6 +330,15 @@ namespace dope {
 
 
 
+		////////////////////////////////////////////////////////////////////////
+		// RELATIONAL OPERATORS
+		////////////////////////////////////////////////////////////////////////
+
+		inline bool operator==(const DopeVector &r) const;
+		inline bool operator!=(const DopeVector &r) const;
+
+
+
 	private:
 		T       *_array;                 ///< Pointer in memory to the first element of this matrix.
 		SizeType _accumulatedOffset;     ///< Offset of the first element of this matrix from the beginning of the stored array.
@@ -683,6 +692,15 @@ namespace dope {
 		inline SizeType accumulatedOffset(const SizeType i = 0) const;
 
 		////////////////////////////////////////////////////////////////////////
+
+
+
+		////////////////////////////////////////////////////////////////////////
+		// RELATIONAL OPERATORS
+		////////////////////////////////////////////////////////////////////////
+
+		inline bool operator==(const DopeVector &r) const;
+		inline bool operator!=(const DopeVector &r) const;
 
 
 

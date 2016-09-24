@@ -330,6 +330,31 @@ namespace dope {
 
 
 
+	////////////////////////////////////////////////////////////////////////
+	// RELATIONAL OPERATORS
+	////////////////////////////////////////////////////////////////////////
+
+	template < typename T, SizeType Dimension >
+	inline bool DopeVector<T, Dimension>::operator==(const DopeVector<T, Dimension> &r) const
+	{
+		if (_array == r._array && _size == r._size && _offset == r._offset)
+			return true;
+		if (_size != r._size)
+			return false;
+		for (SizeType i = 0; i < _size[0]; ++i)
+			if (at(i) != r.at(i))
+				return false;
+		return true;
+	}
+
+	template < typename T, SizeType Dimension >
+	inline bool DopeVector<T, Dimension>::operator!=(const DopeVector<T, Dimension> &r) const
+	{
+		return !(*this == r);
+	}
+
+
+
 
 
 
@@ -641,5 +666,30 @@ namespace dope {
 	}
 
 	////////////////////////////////////////////////////////////////////////
+
+
+
+	////////////////////////////////////////////////////////////////////////
+	// RELATIONAL OPERATORS
+	////////////////////////////////////////////////////////////////////////
+
+	template < typename T >
+	inline bool DopeVector<T, 1>::operator==(const DopeVector<T, 1> &r) const
+	{
+		if (_array == r._array && _size == r._size && _offset == r._offset)
+			return true;
+		if (_size != r._size)
+			return false;
+		for (SizeType i = 0; i < _size[0]; ++i)
+			if (at(i) != r.at(i))
+				return false;
+		return true;
+	}
+
+	template < typename T >
+	inline bool DopeVector<T, 1>::operator!=(const DopeVector<T, 1> &r) const
+	{
+		return !(*this == r);
+	}
 
 }
