@@ -36,8 +36,8 @@ namespace dope {
 			////////////////////////////////////////////////////////////////////////
 
 			using difference_type   = std::make_signed<SizeType>::type;
-			using value_type        = typename std::conditional<Const, typename std::add_const<T>::type, typename std::remove_const<T>::type>::type;
-			using pointer           = typename std::add_pointer<typename std::conditional<Const, typename std::add_const<value_type>::type, typename std::remove_const<value_type>::type>::type>::type;
+			using value_type        = T;
+			using pointer           = typename std::conditional<Const, typename std::add_const<typename std::add_pointer<value_type>::type>::type, typename std::remove_const<typename std::add_pointer<value_type>::type>::type>::type;
 			using reference         = typename std::add_lvalue_reference<value_type>::type;
 			using iterator_category = typename std::conditional<Const, std::random_access_iterator_tag, output_random_access_iterator_tag>::type;
 
@@ -57,7 +57,7 @@ namespace dope {
 			/**
 			 * @brief Default constructor.
 			 */
-			explicit inline Iterator();
+			inline Iterator();
 
 			/**
 			 * @brief Constructor.
@@ -73,12 +73,12 @@ namespace dope {
 			/**
 			 * @brief Copy constructor.
 			 */
-			explicit inline Iterator(const Iterator& other ) = default;
+			inline Iterator(const Iterator& other ) = default;
 
 			/**
 			 * @brief Move constructor.
 			 */
-			explicit inline Iterator(Iterator&& other ) = default;
+			inline Iterator(Iterator&& other ) = default;
 
 			////////////////////////////////////////////////////////////////////////
 
