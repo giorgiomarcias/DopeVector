@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 	for (std::size_t i = 0; i < size[0]; ++i) {
 		DopeVector<std::size_t, 1> grid_row = grid2D[i];
 		for (std::size_t j = 0; j < size[1]; ++j)
-			grid_row[j] = i * size[0] + j;
+			grid_row[j] = i * size[1] + j;
 	}
 
 	std::cout << "Initial Grid values:\n";
@@ -98,14 +98,14 @@ int main(int argc, char *argv[])
 	for (std::size_t i = 0; i < size[0]; ++i) {
 		DopeVector<std::size_t, 1> grid_row = grid2D[i];
 		for (std::size_t j = 0; j < size[1]; ++j)
-			grid_row[j] = i * size[0] + j;
+			grid_row[j] = i * size[1] + j;
 	}
 	std::cout << "Lower right window != upper left window ? (should be true) " << std::boolalpha << (lower_right_window != upper_left_window) << std::endl;
 
 	lower_right_window.import(upper_left_window);
 	std::cout << "\nUpper left 6x6 window NON-safely imported into 6x6 window at (4,4):\n";
 	for (std::size_t i = 0; i < size[0]; ++i) {
-		auto grid_row = grid2D_permuted[i];
+		auto grid_row = grid2D[i];
 		for (std::size_t j = 0; j < size[1]; ++j)
 			std::cout << grid_row[j] << '\t';
 		std::cout << '\n';

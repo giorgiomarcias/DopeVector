@@ -137,7 +137,7 @@ namespace dope {
 	template < typename T, SizeType Dimension >
 	inline const T & DopeVector<T, Dimension>::at(const IndexD &i) const
 	{
-		SizeType offset = _accumulatedOffset;
+		SizeType offset = static_cast<SizeType>(0);
 		for(SizeType d = 0; d < Dimension; ++d)
 			offset += i[d] * _offset[d];
 		return *(_array + offset);
@@ -146,7 +146,7 @@ namespace dope {
 	template < typename T, SizeType Dimension >
 	inline T & DopeVector<T, Dimension>::at(const IndexD &i)
 	{
-		SizeType offset = _accumulatedOffset;
+		SizeType offset = static_cast<SizeType>(0);
 		for(SizeType d = 0; d < Dimension; ++d)
 			offset += i[d] * _offset[d];
 		return *(_array + offset);
