@@ -62,12 +62,12 @@ namespace dope {
 			/**
 			 * @brief Constructor.
 			 */
-			explicit inline Iterator(const DopeVectorRef &dope_vector, const SizeType i = static_cast<SizeType>(0));
+			explicit inline Iterator(DopeVectorType &dope_vector, const SizeType i = static_cast<SizeType>(0));
 
 			/**
 			 * @brief Constructor.
 			 */
-			explicit inline Iterator(const DopeVectorRef &dope_vector, const IndexD &index);
+			explicit inline Iterator(DopeVectorType &dope_vector, const IndexD &index);
 
 
 			/**

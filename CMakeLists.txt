@@ -7,7 +7,6 @@ set(hdr_dir ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(hdr_internal_files
 	${hdr_dir}/DopeVector/internal/Common.hpp
 	${hdr_dir}/DopeVector/internal/Expression.hpp
-	${hdr_dir}/DopeVector/internal/GridIterator.hpp
 	${hdr_dir}/DopeVector/internal/Iterator.hpp
 )
 source_group("Header Files\\DopeVector\\internal" FILES ${hdr_internal_files})
@@ -15,7 +14,6 @@ source_group("Header Files\\DopeVector\\internal" FILES ${hdr_internal_files})
 set(hdr_internal_inline_files
 	${hdr_dir}/DopeVector/internal/inlines/Index.inl
 	${hdr_dir}/DopeVector/internal/inlines/Expression.inl
-	${hdr_dir}/DopeVector/internal/inlines/GridIterator.inl
 	${hdr_dir}/DopeVector/internal/inlines/Iterator.inl
 	${hdr_dir}/DopeVector/internal/inlines/DopeVector.inl
 	${hdr_dir}/DopeVector/internal/inlines/Grid.inl

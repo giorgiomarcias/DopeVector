@@ -26,13 +26,13 @@ namespace dope {
 		{ }
 
 		template < typename T, SizeType Dimension, bool Const >
-		inline Iterator<T, Dimension, Const>::Iterator(const DopeVectorRef &dope_vector, const SizeType i)
+		inline Iterator<T, Dimension, Const>::Iterator(DopeVectorType &dope_vector, const SizeType i)
 			: _data(dope_vector)
-			, _currentIndex(IndexD::to_index(i, static_cast<DopeVectorType>(dope_vector).allSizes()))
+			, _currentIndex(IndexD::to_index(i, dope_vector.allSizes()))
 		{ }
 
 		template < typename T, SizeType Dimension, bool Const >
-		inline Iterator<T, Dimension, Const>::Iterator(const DopeVectorRef &dope_vector, const IndexD &index)
+		inline Iterator<T, Dimension, Const>::Iterator(DopeVectorType &dope_vector, const IndexD &index)
 			: _data(dope_vector)
 			, _currentIndex(index)
 		{ }
