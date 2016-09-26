@@ -626,18 +626,6 @@ namespace dope {
 	}
 
 	template < typename T >
-	inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::begin() const
-	{
-		return const_iterator(*this, 0, true);
-	}
-
-	template < typename T >
-	inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::end() const
-	{
-		return const_iterator(*this, 0, false);
-	}
-
-	template < typename T >
 	inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::cbegin() const
 	{
 		return const_iterator(*this, 0, true);
