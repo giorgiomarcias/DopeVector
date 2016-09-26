@@ -10,7 +10,6 @@
 
 #include <memory>
 #include <DopeVector/DopeVector.hpp>
-#include <DopeVector/internal/Iterator.hpp>
 
 namespace dope {
 
@@ -34,8 +33,8 @@ namespace dope {
 		, _offset(IndexD::Zero())
 	{
 		if (array) {
-			_offset[D-1] = 1;
-			for (SizeType j = D-1; j > 0; --j)
+			_offset[Dimension-1] = 1;
+			for (SizeType j = Dimension-1; j > 0; --j)
 			_offset[j-1] = _size[j] * _offset[j];
 		}
 	}
@@ -64,8 +63,8 @@ namespace dope {
 		_size = _array ? size : static_cast<const IndexD &>(IndexD::Zero());
 		_offset = IndexD::Zero();
 		if (_array) {
-			_offset[D-1] = 1;
-			for (SizeType j = D-1; j > 0; --j)
+			_offset[Dimension-1] = 1;
+			for (SizeType j = Dimension-1; j > 0; --j)
 			_offset[j-1] = _size[j] * _offset[j];
 		}
 	}
@@ -120,7 +119,7 @@ namespace dope {
 			throw std::out_of_range(stream.str());
 		}
 		Index<Dimension-1> new_size, new_offset;
-		for (SizeType j = 1; j < D; ++j) {
+		for (SizeType j = 1; j < Dimension; ++j) {
 			new_size[j-1] = _size[j];
 			new_offset[j-1] = _offset[j];
 		}
@@ -130,7 +129,7 @@ namespace dope {
 	template < typename T, SizeType Dimension >
 	inline DopeVector<T, Dimension-1> DopeVector<T, Dimension>::at(const SizeType i) const
 	{
-		DopeVector<T, D-1> s;
+		DopeVector<T, Dimension-1> s;
 		at(i, s);
 		return s;
 	}
@@ -139,7 +138,7 @@ namespace dope {
 	inline const T & DopeVector<T, Dimension>::at(const IndexD &i) const
 	{
 		SizeType offset = _accumulatedOffset;
-		for(SizeType d = 0; d < D; ++d)
+		for(SizeType d = 0; d < Dimension; ++d)
 			offset += i[d] * _offset[d];
 		return *(_array + offset);
 	}
@@ -148,7 +147,7 @@ namespace dope {
 	inline T & DopeVector<T, Dimension>::at(const IndexD &i)
 	{
 		SizeType offset = _accumulatedOffset;
-		for(SizeType d = 0; d < D; ++d)
+		for(SizeType d = 0; d < Dimension; ++d)
 			offset += i[d] * _offset[d];
 		return *(_array + offset);
 	}
@@ -156,7 +155,7 @@ namespace dope {
 	template < typename T, SizeType Dimension >
 	inline DopeVector<T, Dimension-1> DopeVector<T, Dimension>::operator[](const SizeType i) const
 	{
-		DopeVector<T, D-1> s;
+		DopeVector<T, Dimension-1> s;
 		at(i, s);
 		return s;
 	}
@@ -177,61 +176,69 @@ namespace dope {
 
 
 
-    ////////////////////////////////////////////////////////////////////////
-    // ITERATORS
-    ////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
+	// ITERATORS
+	////////////////////////////////////////////////////////////////////////
 
-    template < typename T, SizeType Dimension >
-    inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::begin() {
-        return iterator(*this, 0);
-    }
+	template < typename T, SizeType Dimension >
+	inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::begin()
+	{
+		return iterator(std::ref(*this), 0);
+	}
 
-    template < typename T, SizeType Dimension >
-    inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::end() {
-        return iterator(*this, size());
-    }
+	template < typename T, SizeType Dimension >
+	inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::end()
+	{
+		return iterator(std::ref(*this), size());
+	}
 
-    template < typename T, SizeType Dimension >
-    inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::begin() const {
-        return iterator(*this, 0);
-    }
+	template < typename T, SizeType Dimension >
+	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::begin() const
+	{
+		return const_iterator(std::cref(*this), 0);
+	}
 
-    template < typename T, SizeType Dimension >
-    inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::end() const {
-        return iterator(*this, size());
-    }
+	template < typename T, SizeType Dimension >
+	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::end() const
+	{
+		return const_iterator(std::cref(*this), size());
+	}
 
-    template < typename T, SizeType Dimension >
-    inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::cbegin() const {
-        return const_iterator(*this, 0);
-    }
+	template < typename T, SizeType Dimension >
+	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::cbegin() const
+	{
+		return const_iterator(std::cref(*this), 0);
+	}
 
-    template < typename T, SizeType Dimension >
-    inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::cend() const {
-        return const_iterator(*this, size());
-    }
+	template < typename T, SizeType Dimension >
+	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::cend() const
+	{
+		return const_iterator(std::cref(*this), size());
+	}
 
-    template < typename T, SizeType Dimension >
-    inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::to_iterator(const SizeType i) const {
-        return iterator(*this, i);
-    }
+	template < typename T, SizeType Dimension >
+	inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::to_iterator(const SizeType i)
+	{
+		return iterator(std::ref(*this), i);
+	}
 
-    template < typename T, SizeType Dimension >
-    inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::to_iterator(const IndexD &i) const {
-        return iterator(*this, i);
-    }
+	template < typename T, SizeType Dimension >
+	inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::to_iterator(const IndexD &i)
+	{
+		return iterator(std::ref(*this), i);
+	}
 
-    template < typename T, SizeType Dimension >
-    inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::to_const_iterator(const SizeType i) const {
-        return const_iterator(*this, i);
-    }
+	template < typename T, SizeType Dimension >
+	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::to_const_iterator(const SizeType i) const {
+		return const_iterator(std::cref(*this), i);
+	}
 
-    template < typename T, SizeType Dimension >
-    inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::to_const_iterator(const IndexD &i) const {
-        return const_iterator(*this, i);
-    }
+	template < typename T, SizeType Dimension >
+	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::to_const_iterator(const IndexD &i) const {
+		return const_iterator(std::cref(*this), i);
+	}
 
-    ////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 
 
 
@@ -242,9 +249,9 @@ namespace dope {
 	template < typename T, SizeType Dimension >
 	inline void DopeVector<T, Dimension>::slice(const SizeType d, const SizeType i, DopeVector<T, Dimension-1> &s) const
 	{
-		if (d >= D) {
+		if (d >= Dimension) {
 			std::stringstream stream;
-			stream << "Index " << d << " is out of range [0, " << D-1 << ']';
+			stream << "Index " << d << " is out of range [0, " << Dimension-1 << ']';
 			throw std::out_of_range(stream.str());
 		}
 		if (i >= _size[d]) {
@@ -258,7 +265,7 @@ namespace dope {
 			new_size[k] = _size[j];
 			new_offset[k] = _offset[j];
 		}
-		for (SizeType j = d+1; j < D; ++j, ++k) {
+		for (SizeType j = d+1; j < Dimension; ++j, ++k) {
 			new_size[k] = _size[j];
 			new_offset[k] = _offset[j];
 		}
@@ -268,7 +275,7 @@ namespace dope {
 	template < typename T, SizeType Dimension >
 	inline DopeVector<T, Dimension-1> DopeVector<T, Dimension>::slice(const SizeType d, const SizeType i) const
 	{
-		DopeVector<T, D-1> s;
+		DopeVector<T, Dimension-1> s;
 		slice(d, i, s);
 		return s;
 	}
@@ -276,11 +283,11 @@ namespace dope {
 	template < typename T, SizeType Dimension >
 	inline void DopeVector<T, Dimension>::permute(const IndexD &order, DopeVector &p) const
 	{
-		std::array<bool, D> included = {{false}};
-		for (SizeType d = 0; d < D; ++d) {
-			if (order[d] >= D) {
+		std::array<bool, Dimension> included = {{false}};
+		for (SizeType d = 0; d < Dimension; ++d) {
+			if (order[d] >= Dimension) {
 				std::stringstream stream;
-				stream << "Index " << order[d] << " is out of range [0, " << D-1 << ']';
+				stream << "Index " << order[d] << " is out of range [0, " << Dimension-1 << ']';
 				throw std::out_of_range(stream.str());
 			}
 			if (included[order[d]]) {
@@ -291,7 +298,7 @@ namespace dope {
 			included[order[d]] = true;
 		}
 		IndexD new_size, new_offset;
-		for (SizeType d = 0; d < D; ++d) {
+		for (SizeType d = 0; d < Dimension; ++d) {
 			new_size[d] = _size[order[d]];
 			new_offset[d] = _offset[order[d]];
 		}
@@ -309,7 +316,7 @@ namespace dope {
 	template < typename T, SizeType Dimension >
 	inline void DopeVector<T, Dimension>::window(const IndexD &start, const IndexD &size, DopeVector<T, Dimension> &w) const
 	{
-		for (SizeType d = 0; d < D; ++d) {
+		for (SizeType d = 0; d < Dimension; ++d) {
 			if (start[d] >= _size[d]) {
 				std::stringstream stream;
 				stream << "Index " << start[d] << " is out of range [0, " << _size[d] << ']';
@@ -322,7 +329,7 @@ namespace dope {
 			}
 		}
 		SizeType newAccumulatedOffset = _accumulatedOffset;
-		for (SizeType d = 0; d < D; ++d)
+		for (SizeType d = 0; d < Dimension; ++d)
 			newAccumulatedOffset += _offset[d] * start[d];
 		w.reset(_array + (newAccumulatedOffset - _accumulatedOffset), newAccumulatedOffset, size, _offset);
 	}
@@ -346,9 +353,9 @@ namespace dope {
 	template < typename T, SizeType Dimension >
 	inline SizeType DopeVector<T, Dimension>::sizeAt(const SizeType d) const
 	{
-		if (d >= D) {
+		if (d >= Dimension) {
 			std::stringstream stream;
-			stream << "Index " << d << " is out of range [0, " << D-1 << ']';
+			stream << "Index " << d << " is out of range [0, " << Dimension-1 << ']';
 			throw std::out_of_range(stream.str());
 		}
 		return _size[d];
@@ -364,7 +371,7 @@ namespace dope {
 	inline SizeType DopeVector<T, Dimension>::size() const
 	{
 		SizeType total = _size[0];
-		for (SizeType i = 1; i < D; ++i)
+		for (SizeType i = 1; i < Dimension; ++i)
 			total *= _size[i];
 		return total;
 	}
@@ -372,9 +379,9 @@ namespace dope {
 	template < typename T, SizeType Dimension >
 	inline SizeType DopeVector<T, Dimension>::accumulatedOffset(const SizeType i, const SizeType d) const
 	{
-		if (d >= D) {
+		if (d >= Dimension) {
 			std::stringstream stream;
-			stream << "Index " << d << " is out of range [0, " << D-1 << ']';
+			stream << "Index " << d << " is out of range [0, " << Dimension-1 << ']';
 			throw std::out_of_range(stream.str());
 		}
 		if (i >= _size[d]) {
@@ -383,6 +390,21 @@ namespace dope {
 			throw std::out_of_range(stream.str());
 		}
 		return  _accumulatedOffset + _offset[d] * i;
+	}
+
+	template < typename T, SizeType Dimension >
+	inline SizeType DopeVector<T, Dimension>::accumulatedOffset(const IndexD &index) const
+	{
+		SizeType accumulatedOffset = _accumulatedOffset;
+		for (SizeType d = 0; d < Dimension; ++d) {
+			if (d >= _size[d]) {
+				std::stringstream stream;
+				stream << "Index " << d << " is out of range [0, " << _size[d]-1 << ']';
+				throw std::out_of_range(stream.str());
+			}
+			accumulatedOffset += index[d] * _offset[d];
+		}
+		return accumulatedOffset;
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -599,61 +621,71 @@ namespace dope {
 
 
 
-    ////////////////////////////////////////////////////////////////////////
-    // ITERATORS
-    ////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
+	// ITERATORS
+	////////////////////////////////////////////////////////////////////////
 
-    template < typename T >
-    inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::begin() {
-        return iterator(*this, 0);
-    }
+	template < typename T >
+	inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::begin()
+	{
+		return iterator(std::ref(*this), 0);
+	}
 
-    template < typename T >
-    inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::end() {
-        return iterator(*this, size());
-    }
+	template < typename T >
+	inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::end()
+	{
+		return iterator(std::ref(*this), size());
+	}
 
-    template < typename T >
-    inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::begin() const {
-        return iterator(*this, 0);
-    }
+	template < typename T >
+	inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::begin() const
+	{
+		return const_iterator(std::cref(*this), 0);
+	}
 
-    template < typename T >
-    inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::end() const {
-        return iterator(*this, size());
-    }
+	template < typename T >
+	inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::end() const
+	{
+		return const_iterator(std::cref(*this), size());
+	}
 
-    template < typename T >
-    inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::cbegin() const {
-        return const_iterator(*this, 0);
-    }
+	template < typename T >
+	inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::cbegin() const
+	{
+		return const_iterator(std::cref(*this), 0);
+	}
 
-    template < typename T >
-    inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::cend() const {
-        return const_iterator(*this, size());
-    }
+	template < typename T >
+	inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::cend() const
+	{
+		return const_iterator(std::cref(*this), size());
+	}
 
-    template < typename T >
-    inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::to_iterator(const SizeType i) const {
-        return iterator(*this, i);
-    }
+	template < typename T >
+	inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::to_iterator(const SizeType i)
+	{
+		return iterator(std::ref(*this), i);
+	}
 
-    template < typename T >
-    inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::to_iterator(const Index1 &i) const {
-        return iterator(*this, i);
-    }
+	template < typename T >
+	inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::to_iterator(const Index1 &i)
+	{
+		return iterator(std::ref(*this), i);
+	}
 
-    template < typename T >
-    inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::to_const_iterator(const SizeType i) const {
-        return const_iterator(*this, i);
-    }
+	template < typename T >
+	inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::to_const_iterator(const SizeType i) const
+	{
+		return const_iterator(std::cref(*this), i);
+	}
 
-    template < typename T >
-    inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::to_const_iterator(const Index1 &i) const {
-        return const_iterator(*this, i);
-    }
+	template < typename T >
+	inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::to_const_iterator(const Index1 &i) const
+	{
+		return const_iterator(std::cref(*this), i);
+	}
 
-    ////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 
 
 
@@ -780,6 +812,12 @@ namespace dope {
 			throw std::out_of_range(stream.str());
 		}
 		return _accumulatedOffset + _offset[0] * i;
+	}
+
+	template < typename T >
+	inline SizeType DopeVector<T, 1>::accumulatedOffset(const Index1 &index) const
+	{
+		return accumulatedOffset(index[0]);
 	}
 
 	////////////////////////////////////////////////////////////////////////

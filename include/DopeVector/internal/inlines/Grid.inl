@@ -82,7 +82,7 @@ namespace dope {
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-    inline Grid<T, Dimension, Allocator>::operator Data&() const
+	inline Grid<T, Dimension, Allocator>::operator Data&()
 	{
 		return _data;
 	}

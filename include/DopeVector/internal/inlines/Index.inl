@@ -9,6 +9,7 @@
 // email: maurizio.kovacic@gmail.com
 
 #include <DopeVector/Index.hpp>
+#include <stdexcept>
 
 namespace dope {
 
@@ -85,54 +86,64 @@ namespace dope {
 	}
 
 	template < SizeType Dimension >
-	constexpr Index<Dimension> Index<Dimension>::Zero() {
+	inline constexpr Index<Dimension> Index<Dimension>::Zero()
+	{
 		return Index({{0}});
 	}
 
 	template < SizeType Dimension >
-	constexpr Index<Dimension> Index<Dimension>::Ones() {
+	inline constexpr Index<Dimension> Index<Dimension>::Ones()
+	{
 		return Index({{1}});
 	}
 
 	template < SizeType Dimension >
-	constexpr Index<Dimension> Index<Dimension>::Constant( const SizeType value ) {
+	inline constexpr Index<Dimension> Index<Dimension>::Constant( const SizeType value )
+	{
 		return Index({{value}});
 	}
 
-    template < SizeType Dimension >
-    SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range) {
-        SizeType result = static_cast<SizeType>(0);
-        SizeType dimProd = static_cast<SizeType>(1);
-        for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
-            constexpr SizeType d = D - static_cast<SizeType>(1);
-            result += index[d] * dimProd;
-            dimProd *= range[d];
-        }
-        return result;
-    }
 
-    template < SizeType Dimension >
-    SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range, const Index<Dimension> &offset) {
-        SizeType result = static_cast<SizeType>(0);
-        SizeType dimProd = static_cast<SizeType>(1);
-        for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
-            constexpr SizeType d = D - static_cast<SizeType>(1);
-            result += index[d] * dimProd;
-            dimProd *= range[d] * offset[d];
-        }
-        return result;
-    }
 
-    template < SizeType Dimension >
-    SizeType to_index(const SizeType position, const Index<Dimension> &range) {
-        Index<Dimension> result(static_cast<SizeType>(0));
-        SizeType i = position;
-        for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
-            constexpr SizeType d = D - static_cast<SizeType>(1);
-            result[d] = i % range[d];
-            i = i / range[d];
-        }
-        return result;
-    }
-	
+	template < SizeType Dimension >
+	inline SizeType Index<Dimension>::to_position(const Index &index, const Index &range)
+	{
+		SizeType result = static_cast<SizeType>(0);
+		SizeType dimProd = static_cast<SizeType>(1);
+		for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
+			SizeType d = D - static_cast<SizeType>(1);
+			result += index[d] * dimProd;
+			dimProd *= range[d];
+		}
+		return result;
+	}
+
+	template < SizeType Dimension >
+	inline SizeType Index<Dimension>::to_position(const Index &index, const Index &range, const Index &offset)
+	{
+		SizeType result = static_cast<SizeType>(0);
+		SizeType dimProd = static_cast<SizeType>(1);
+		for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
+			SizeType d = D - static_cast<SizeType>(1);
+			result += index[d] * dimProd;
+			dimProd *= range[d] * offset[d];
+		}
+		return result;
+	}
+
+	template < SizeType Dimension >
+	inline Index<Dimension> Index<Dimension>::to_index(const SizeType position, const Index &range)
+	{
+		Index<Dimension> result(static_cast<SizeType>(0));
+		SizeType i = position;
+		for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
+			SizeType d = D - static_cast<SizeType>(1);
+			if (range[d] == static_cast<SizeType>(0))
+				throw std::overflow_error("Divide by zero exception");
+			result[d] = i % range[d];
+			i = i / range[d];
+		}
+		return result;
+	}
+
 }

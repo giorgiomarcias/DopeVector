@@ -114,5 +114,13 @@ int main(int argc, char *argv[])
 
 	std::cout << "Compare elements at (8,8). This is due to the fact that dope vectors act on shared memory.\n" << std::endl;
 
+
+
+	std::cout << "Showing linear iterator:\n";
+	Grid<std::size_t, 2>::iterator it = grid2D.begin();
+	while (it != grid2D.end())
+		std::cout << *it++ << ' ';
+	std::cout << std::endl;
+
 	return 0;
 }

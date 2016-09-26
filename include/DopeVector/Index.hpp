@@ -67,9 +67,15 @@ namespace dope {
 
 		inline SizeType prod() const;
 
-		static constexpr Index Zero();
-		static constexpr Index Ones();
-		static constexpr Index Constant(const SizeType value);
+		static inline constexpr Index Zero();
+		static inline constexpr Index Ones();
+		static inline constexpr Index Constant(const SizeType value);
+
+
+
+		static inline SizeType to_position(const Index &index, const Index &range);
+		static inline SizeType to_position(const Index &index, const Index &range, const Index &offset);
+		static inline Index<Dimension> to_index(const SizeType position, const Index &range);
 	};
 
 
@@ -79,15 +85,6 @@ namespace dope {
 	typedef Index<3>	    Index3;
 	typedef Index<4>	    Index4;
 
-
-    template < SizeType Dimension >
-    static SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range);
-
-    template < SizeType Dimension >
-    static SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range, const Index<Dimension> &offset);
-
-    template < SizeType Dimension >
-    static SizeType to_index(const SizeType position, const Index<Dimension> &range);
 }
 
 #include <DopeVector/internal/inlines/Index.inl>

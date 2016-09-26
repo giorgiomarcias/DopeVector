@@ -37,8 +37,8 @@ namespace dope {
 		// TYPEDEFS
 		////////////////////////////////////////////////////////////////////////
 
-        typedef typename DopeVector<T, Dimension>::IndexD IndexD;
-        typedef std::vector<T, Allocator>	              Data;
+		typedef typename DopeVector<T, Dimension>::IndexD IndexD;
+		typedef std::vector<T, Allocator>	              Data;
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -144,7 +144,7 @@ namespace dope {
 		 *
 		 *    @return A std::vector< T, Allocator > being a copy of the grid.
 		 */
-        inline operator Data&() const;
+		inline operator Data&();
 
 
 
@@ -246,8 +246,6 @@ namespace dope {
 	 */
 	template < typename T >
 	using StandardGrid3D = Grid<T, static_cast<SizeType>(3)>;
-
-
 
 }
 
