@@ -224,20 +224,6 @@ namespace dope {
 		inline iterator end();
 
 		/**
-		 * @brief Returns the iterator pointing the first element.
-		 * @return A iterator to the element at position 0.
-		 */
-		inline const_iterator begin() const;
-
-		/**
-		 * @brief Returns the iterator pointing the end of the DopeVector
-		 *        memory.
-		 * @return A iterator to the end of the memory of \p this.
-		 * @note It is equal to begin() + size().
-		 */
-		inline const_iterator end() const;
-
-		/**
 		 * @brief Returns the const iterator pointing the first element.
 		 * @return A const iterator to the element at position 0.
 		 */

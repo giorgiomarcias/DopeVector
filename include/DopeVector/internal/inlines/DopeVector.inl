@@ -193,18 +193,6 @@ namespace dope {
 	}
 
 	template < typename T, SizeType Dimension >
-	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::begin() const
-	{
-		return const_iterator(*this, 0, true);
-	}
-
-	template < typename T, SizeType Dimension >
-	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::end() const
-	{
-		return const_iterator(*this, 0, false);
-	}
-
-	template < typename T, SizeType Dimension >
 	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::cbegin() const
 	{
 		return const_iterator(*this, 0, true);
