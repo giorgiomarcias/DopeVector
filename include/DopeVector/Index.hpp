@@ -11,25 +11,20 @@
 #ifndef Index_hpp
 #define Index_hpp
 
-#ifdef USE_EIGEN
-
+#ifdef DOPE_USE_EIGEN_INDEX
 #include <DopeVector/internal/Common.hpp>
-#include <Eigen/Core>
-
-namespace dope {
-
-	template < SizeType Dimension >
-	using Index = Eigen::Matrix<SizeType, Dimension, 1>;
-
-}
-
+#include <eigen3/Eigen/Core>
 #else
-
 #include <DopeVector/internal/Expression.hpp>
 #include <array>
+#endif
 
 namespace dope {
 
+#ifdef DOPE_USE_EIGEN_INDEX
+    template < SizeType Dimension >
+    using Index = Eigen::Matrix<SizeType, Dimension, 1>;
+#else
 	template < SizeType Dimension >
 	class Index : public std::array<SizeType, Dimension>, public internal::StaticArrayExpression<Index<Dimension>, SizeType, Dimension> {
 	public:
@@ -72,7 +67,7 @@ namespace dope {
 		static inline constexpr Index Constant(const SizeType value);
 
 	};
-
+#endif
 
 
 	typedef Index<1>	    Index1;
@@ -89,12 +84,10 @@ namespace dope {
 	static inline SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range, const Index<Dimension> &offset);
 
 	template < SizeType Dimension >
-	static inline Index<Dimension> to_index(const SizeType position, const Index<Dimension> &range);
+    static inline Index<Dimension> to_index(const SizeType position, const Index<Dimension> &range);
 
 }
 
 #include <DopeVector/internal/inlines/Index.inl>
-
-#endif
 
 #endif // Index_hpp

@@ -13,6 +13,8 @@
 
 namespace dope {
 
+#ifndef DOPE_USE_EIGEN_INDEX
+
 	template < SizeType Dimension > template < typename ... Sizes >
 	inline Index<Dimension>::Index(const SizeType size0,  Sizes &&...sizes)
 		: std::array<SizeType, Dimension>({{size0, static_cast<SizeType>(std::forward<SizeType>(sizes))...}})
@@ -103,7 +105,7 @@ namespace dope {
 		return Index({{value}});
 	}
 
-
+#endif
 
 	template < SizeType Dimension >
 	inline SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range)
@@ -134,7 +136,7 @@ namespace dope {
 	template < SizeType Dimension >
 	inline Index<Dimension> to_index(const SizeType position, const Index<Dimension> &range)
 	{
-		Index<Dimension> result(static_cast<SizeType>(0));
+        Index<Dimension> result = Index<Dimension>::Constant(static_cast<SizeType>(0));
 		SizeType i = position;
 		for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
 			SizeType d = D - static_cast<SizeType>(1);

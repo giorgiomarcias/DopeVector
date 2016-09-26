@@ -8,6 +8,7 @@
 // Author: Maurizio Kovacic
 // email: maurizio.kovacic@gmail.com
 
+#ifndef DOPE_USE_EIGEN_INDEX
 #include <DopeVector/internal/Expression.hpp>
 
 namespace dope {
@@ -139,3 +140,5 @@ namespace dope {
 	}
 	
 }
+
+#endif

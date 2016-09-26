@@ -54,8 +54,11 @@ int main(int argc, char *argv[])
 	}
 
 
-
+#ifdef DOPE_USE_EIGEN_INDEX
+    Index2 order = {1, 0};
+#else
 	Index2 order = {{1, 0}};
+#endif
 
 	start = std::chrono::steady_clock::now();
 
@@ -74,7 +77,12 @@ int main(int argc, char *argv[])
 
 
 	Grid<std::size_t, 10> big_grid(Index<10>(10));
-	Index<10> new_order(1, 0, 2, 5, 4, 7, 3, 6, 9, 8);
+#ifdef DOPE_USE_EIGEN_INDEX
+    Index<10> new_order;
+    new_order << 1, 0, 2, 5, 4, 7, 3, 6, 9, 8;
+#else
+    Index<10> new_order(1, 0, 2, 5, 4, 7, 3, 6, 9, 8);
+#endif
 
 	start = std::chrono::steady_clock::now();
 

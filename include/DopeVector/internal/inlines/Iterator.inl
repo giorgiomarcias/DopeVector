@@ -28,7 +28,7 @@ namespace dope {
 		template < typename T, SizeType Dimension, bool Const >
 		inline Iterator<T, Dimension, Const>::Iterator(DopeVectorType &dope_vector, const SizeType i, const bool valid)
 			: _data(dope_vector)
-			, _currentIndex(valid ? dope::to_index(i, dope_vector.allSizes()) : IndexD::Zero())
+            , _currentIndex(valid ? dope::to_index<Dimension>(i, dope_vector.allSizes()) : IndexD::Zero())
 			, _valid(valid)
 		{
 			if (_valid && i >= _data.get().size()) {
@@ -171,6 +171,34 @@ namespace dope {
 			return copy;
 		}
 
+#ifdef DOPE_USE_EIGEN_INDEX
+        template < typename T, SizeType Dimension, bool Const >
+        inline typename Iterator<T, Dimension, Const>::self_type & Iterator<T, Dimension, Const>::operator+=(const Index<Dimension> &n)
+        {
+            if (!_valid)
+                return *this;
+            Index<Dimension> size = _data.get().allSizes();
+            SizeType tmp_val, carry = static_cast<SizeType>(0);
+            for (SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
+                SizeType d = D - static_cast<SizeType>(1);
+                tmp_val = _currentIndex[d] + n[d] + carry;
+                carry = tmp_val / size[d];
+                _currentIndex[d] = tmp_val % size[d];
+            }
+            if (carry != static_cast<SizeType>(0)) {
+                _currentIndex = IndexD::Zero();
+                _valid = false;
+            }
+            return *this;
+        }
+
+        template < typename T, SizeType Dimension, bool Const >
+        inline typename Iterator<T, Dimension, Const>::self_type Iterator<T, Dimension, Const>::operator+ (const Index<Dimension> &n) const {
+            self_type copy(*this);
+            copy += n;
+            return copy;
+        }
+#else
 		template < typename T, SizeType Dimension, bool Const > template < class E >
 		inline typename Iterator<T, Dimension, Const>::self_type & Iterator<T, Dimension, Const>::operator+=(const internal::StaticArrayExpression<E, SizeType, Dimension> &n)
 		{
@@ -197,6 +225,7 @@ namespace dope {
 			copy += n;
 			return copy;
 		}
+#endif
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -250,6 +279,39 @@ namespace dope {
 			return copy;
 		}
 
+#ifdef DOPE_USE_EIGEN_INDEX
+        template < typename T, SizeType Dimension, bool Const >
+        inline typename Iterator<T, Dimension, Const>::self_type & Iterator<T, Dimension, Const>::operator-=(const Index<Dimension> &n)
+        {
+            if (!_valid)
+                throw std::range_error("Iterator not valid.");
+            Index<Dimension> size = _data.get().allSizes();
+            difference_type tmp_val, loan, carry = static_cast<difference_type>(0);
+            for (SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
+                SizeType d = D - static_cast<SizeType>(1);
+                tmp_val = static_cast<difference_type>(_currentIndex[d]) + carry - static_cast<difference_type>(n[d]);
+                loan = static_cast<difference_type>(0);
+                if (tmp_val < static_cast<difference_type>(0))
+                    loan = std::abs(tmp_val) / static_cast<difference_type>(size[d]) + (std::abs(tmp_val) % static_cast<difference_type>(size[d]) != static_cast<SizeType>(0) ? static_cast<difference_type>(1) : static_cast<difference_type>(0));
+                tmp_val += loan * static_cast<difference_type>(size[d]);
+                carry = tmp_val / static_cast<difference_type>(size[d]) - loan;
+                _currentIndex[d] = static_cast<SizeType>(tmp_val) % size[d];
+            }
+            if (carry != static_cast<difference_type>(0)) {
+                _currentIndex = IndexD::Zero();
+                _valid = false;
+            }
+            return *this;
+        }
+
+        template < typename T, SizeType Dimension, bool Const >
+        inline typename Iterator<T, Dimension, Const>::self_type Iterator<T, Dimension, Const>::operator-(const Index<Dimension> &n) const
+        {
+            self_type copy(*this);
+            copy -= n;
+            return copy;
+        }
+#else
 		template < typename T, SizeType Dimension, bool Const > template < class E >
 		inline typename Iterator<T, Dimension, Const>::self_type & Iterator<T, Dimension, Const>::operator-=(const internal::StaticArrayExpression<E, SizeType, Dimension> &n)
 		{
@@ -281,6 +343,7 @@ namespace dope {
 			copy -= n;
 			return copy;
 		}
+#endif
 
 		template < typename T, SizeType Dimension, bool Const >
 		inline typename Iterator<T, Dimension, Const>::difference_type Iterator<T, Dimension, Const>::operator- (const self_type &o) const
@@ -303,7 +366,11 @@ namespace dope {
 		template < typename T, SizeType Dimension, bool Const >
 		inline bool Iterator<T, Dimension, Const>::operator==(const self_type &o) const
 		{
+            #ifdef DOPE_USE_EIGEN_INDEX
+            return (&_data.get() == &o._data.get()) && ((!_valid && !o._valid) || (_valid && o._valid && _currentIndex.isApprox(o._currentIndex)));
+            #else
 			return &_data.get() == &o._data.get() && ((!_valid && !o._valid) || (_valid && o._valid && _currentIndex == o._currentIndex));
+            #endif
 		}
 
 		template < typename T, SizeType Dimension, bool Const >
