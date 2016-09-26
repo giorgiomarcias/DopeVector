@@ -422,6 +422,7 @@ namespace dope {
 		return !(*this == r);
 	}
 
+    ////////////////////////////////////////////////////////////////////////
 
 
 
@@ -684,20 +685,16 @@ namespace dope {
 	template < typename T >
 	inline void DopeVector<T, 1>::permute(const Index1 &order, DopeVector<T, 1> &p) const
 	{
-		for (SizeType d = 0; d < 1; ++d) {
-			if (order[d] >= 1) {
-				std::stringstream stream;
-				stream << "Index " << order[d] << " is out of range [0, 0]";
-				throw std::out_of_range(stream.str());
-			}
-		}
+        if (order[0] >= 1) {
+            std::stringstream stream;
+            stream << "Index " << order[0] << " is out of range [0, 0]";
+            throw std::out_of_range(stream.str());
+        }
 		if (&p == this)
 			return;
 		Index1 new_size, new_offset;
-		for (SizeType d = 0; d < 1; ++d) {
-			new_size[d] = _size[order[d]];
-			new_offset[d] = _offset[order[d]];
-		}
+        new_size[0] = _size[order[0]];
+        new_offset[0] = _offset[order[0]];
 		p.reset(_array, _accumulatedOffset, new_size, new_offset);
 	}
 
