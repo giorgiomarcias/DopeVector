@@ -116,9 +116,18 @@ int main(int argc, char *argv[])
 
 
 
-	std::cout << "Showing linear iterator:\n";
+	std::cout << "Linear iterator:\n";
 	Grid<std::size_t, 2>::iterator it = grid2D.begin();
+	it += grid2D.sizeAt(1);
+	std::cout << "First element of second row: " << *it++ << '\n';
+	std::cout << "Other elements:\n";
 	while (it != grid2D.end())
+		std::cout << *it++ << ' ';
+	std::cout << std::endl;
+
+	std::cout << "\nLinear iterator on lower right window:\n";
+	it = lower_right_window.begin();
+	while (it != lower_right_window.end())
 		std::cout << *it++ << ' ';
 	std::cout << std::endl;
 

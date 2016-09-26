@@ -71,11 +71,6 @@ namespace dope {
 		static inline constexpr Index Ones();
 		static inline constexpr Index Constant(const SizeType value);
 
-
-
-		static inline SizeType to_position(const Index &index, const Index &range);
-		static inline SizeType to_position(const Index &index, const Index &range, const Index &offset);
-		static inline Index<Dimension> to_index(const SizeType position, const Index &range);
 	};
 
 
@@ -84,6 +79,17 @@ namespace dope {
 	typedef Index<2>	    Index2;
 	typedef Index<3>	    Index3;
 	typedef Index<4>	    Index4;
+
+
+
+	template < SizeType Dimension >
+	static inline SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range);
+
+	template < SizeType Dimension >
+	static inline SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range, const Index<Dimension> &offset);
+
+	template < SizeType Dimension >
+	static inline Index<Dimension> to_index(const SizeType position, const Index<Dimension> &range);
 
 }
 

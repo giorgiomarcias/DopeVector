@@ -106,7 +106,7 @@ namespace dope {
 
 
 	template < SizeType Dimension >
-	inline SizeType Index<Dimension>::to_position(const Index &index, const Index &range)
+	inline SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range)
 	{
 		SizeType result = static_cast<SizeType>(0);
 		SizeType dimProd = static_cast<SizeType>(1);
@@ -119,7 +119,7 @@ namespace dope {
 	}
 
 	template < SizeType Dimension >
-	inline SizeType Index<Dimension>::to_position(const Index &index, const Index &range, const Index &offset)
+	inline SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range, const Index<Dimension> &offset)
 	{
 		SizeType result = static_cast<SizeType>(0);
 		SizeType dimProd = static_cast<SizeType>(1);
@@ -132,7 +132,7 @@ namespace dope {
 	}
 
 	template < SizeType Dimension >
-	inline Index<Dimension> Index<Dimension>::to_index(const SizeType position, const Index &range)
+	inline Index<Dimension> to_index(const SizeType position, const Index<Dimension> &range)
 	{
 		Index<Dimension> result(static_cast<SizeType>(0));
 		SizeType i = position;

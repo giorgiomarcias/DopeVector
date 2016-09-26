@@ -62,12 +62,12 @@ namespace dope {
 			/**
 			 * @brief Constructor.
 			 */
-			explicit inline Iterator(DopeVectorType &dope_vector, const SizeType i = static_cast<SizeType>(0));
+			explicit inline Iterator(DopeVectorType &dope_vector, const SizeType i = static_cast<SizeType>(0), const bool valid = true);
 
 			/**
 			 * @brief Constructor.
 			 */
-			explicit inline Iterator(DopeVectorType &dope_vector, const IndexD &index);
+			explicit inline Iterator(DopeVectorType &dope_vector, const IndexD &index, const bool valid = true);
 
 
 			/**
@@ -173,6 +173,7 @@ namespace dope {
 		private:
 			DopeVectorRef       _data;          ///< A reference to the pointed DopeVector.
 			IndexD              _currentIndex;  ///< The current position.
+			bool                _valid;         ///< Tells if this iterator is valid, e.g. it is not at the end.
 		};
 	}
 

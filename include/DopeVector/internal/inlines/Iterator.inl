@@ -21,21 +21,38 @@ namespace dope {
 
 		template < typename T, SizeType Dimension, bool Const >
 		inline Iterator<T, Dimension, Const>::Iterator()
-			: _data()
-			, _currentIndex(IndexD::Constant(std::numeric_limits<SizeType>::max()))
+			: _currentIndex(IndexD::Zero())
+			, _valid(false)
 		{ }
 
 		template < typename T, SizeType Dimension, bool Const >
-		inline Iterator<T, Dimension, Const>::Iterator(DopeVectorType &dope_vector, const SizeType i)
+		inline Iterator<T, Dimension, Const>::Iterator(DopeVectorType &dope_vector, const SizeType i, const bool valid)
 			: _data(dope_vector)
-			, _currentIndex(IndexD::to_index(i, dope_vector.allSizes()))
-		{ }
+			, _currentIndex(valid ? dope::to_index(i, dope_vector.allSizes()) : IndexD::Zero())
+			, _valid(valid)
+		{
+			if (_valid && i >= _data.get().size()) {
+				_currentIndex = IndexD::Zero();
+				_valid = false;
+			}
+		}
 
 		template < typename T, SizeType Dimension, bool Const >
-		inline Iterator<T, Dimension, Const>::Iterator(DopeVectorType &dope_vector, const IndexD &index)
+		inline Iterator<T, Dimension, Const>::Iterator(DopeVectorType &dope_vector, const IndexD &index, const bool valid)
 			: _data(dope_vector)
-			, _currentIndex(index)
-		{ }
+			, _currentIndex(valid ? index : IndexD::Zero())
+			, _valid(valid)
+		{
+			if (_valid) {
+				IndexD size = _data.get().allSizes();
+				for (SizeType d = 0; d < Dimension; ++d)
+					if (_currentIndex[d] >= size[d]) {
+						_currentIndex = IndexD::Zero();
+						_valid = false;
+						break;
+					}
+			}
+		}
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -48,18 +65,24 @@ namespace dope {
 		template < typename T, SizeType Dimension, bool Const >
 		inline SizeType Iterator<T, Dimension, Const>::to_original() const
 		{
-			return _data.accumulatedOffset(_currentIndex);
+			if (!_valid)
+				throw std::range_error("Iterator not valid.");
+			return _data.get().accumulatedOffset(_currentIndex);
 		}
 
 		template < typename T, SizeType Dimension, bool Const >
 		inline SizeType Iterator<T, Dimension, Const>::to_position() const
 		{
-			return IndexD::to_position(_currentIndex, _data.allSizes());
+			if (!_valid)
+				throw std::range_error("Iterator not valid.");
+			return dope::to_position(_currentIndex, _data.get().allSizes());
 		}
 
 		template < typename T, SizeType Dimension, bool Const >
 		inline const typename Iterator<T, Dimension, Const>::IndexD & Iterator<T, Dimension, Const>::to_index() const
 		{
+			if (!_valid)
+				throw std::range_error("Iterator not valid.");
 			return _currentIndex;
 		}
 
@@ -74,13 +97,17 @@ namespace dope {
 		template < typename T, SizeType Dimension, bool Const >
 		inline typename Iterator<T, Dimension, Const>::reference Iterator<T, Dimension, Const>::operator*()
 		{
-			return static_cast<DopeVectorType>(_data).at(_currentIndex);
+			if (!_valid)
+				throw std::range_error("Iterator not valid.");
+			return _data.get().at(_currentIndex);
 		}
 
 		template < typename T, SizeType Dimension, bool Const >
 		inline typename Iterator<T, Dimension, Const>::pointer Iterator<T, Dimension, Const>::operator->()
 		{
-			return &static_cast<DopeVectorType>(_data).at(_currentIndex);
+			if (!_valid)
+				throw std::range_error("Iterator not valid.");
+			return &_data.get().at(_currentIndex);
 		}
 
 		template < typename T, SizeType Dimension, bool Const >
@@ -120,7 +147,9 @@ namespace dope {
 		template < typename T, SizeType Dimension, bool Const >
 		inline typename Iterator<T, Dimension, Const>::self_type & Iterator<T, Dimension, Const>::operator+=(const SizeType n)
 		{
-			Index<Dimension> size = static_cast<DopeVectorType>(_data).allSizes();
+			if (!_valid)
+				return *this;
+			Index<Dimension> size = _data.get().allSizes();
 			SizeType tmp_val, carry = n;
 			for (SizeType D = Dimension; D > 0 && carry != static_cast<SizeType>(0); --D) {
 				SizeType d = D - static_cast<SizeType>(1);
@@ -128,8 +157,10 @@ namespace dope {
 				carry = tmp_val / size[d];
 				_currentIndex[d] = tmp_val % size[d];
 			}
-			if (carry != static_cast<SizeType>(0))
-				_currentIndex = IndexD::to_index(static_cast<DopeVectorType>(_data).size(), size);
+			if (carry != static_cast<SizeType>(0)) {
+				_currentIndex = IndexD::Zero();
+				_valid = false;
+			}
 			return *this;
 		}
 
@@ -143,7 +174,9 @@ namespace dope {
 		template < typename T, SizeType Dimension, bool Const > template < class E >
 		inline typename Iterator<T, Dimension, Const>::self_type & Iterator<T, Dimension, Const>::operator+=(const internal::StaticArrayExpression<E, SizeType, Dimension> &n)
 		{
-			Index<Dimension> size = static_cast<DopeVectorType>(_data).allSizes();
+			if (!_valid)
+				return *this;
+			Index<Dimension> size = _data.get().allSizes();
 			SizeType tmp_val, carry = static_cast<SizeType>(0);
 			for (SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
 				SizeType d = D - static_cast<SizeType>(1);
@@ -151,8 +184,10 @@ namespace dope {
 				carry = tmp_val / size[d];
 				_currentIndex[d] = tmp_val % size[d];
 			}
-			if (carry != static_cast<SizeType>(0))
-				_currentIndex = IndexD::to_index(static_cast<DopeVectorType>(_data).size(), size);
+			if (carry != static_cast<SizeType>(0)) {
+				_currentIndex = IndexD::Zero();
+				_valid = false;
+			}
 			return *this;
 		}
 
@@ -186,7 +221,9 @@ namespace dope {
 		template < typename T, SizeType Dimension, bool Const >
 		inline typename Iterator<T, Dimension, Const>::self_type & Iterator<T, Dimension, Const>::operator-=(const SizeType n)
 		{
-			Index<Dimension> size = static_cast<DopeVectorType>(_data).allSizes();
+			if (!_valid)
+				return *this;
+			Index<Dimension> size = _data.get().allSizes();
 			difference_type tmp_val, loan, carry = -static_cast<difference_type>(n);
 			for (SizeType D = Dimension; D > static_cast<SizeType>(0) && carry != static_cast<difference_type>(0); --D) {
 				SizeType d = D - static_cast<SizeType>(1);
@@ -198,8 +235,10 @@ namespace dope {
 				carry = tmp_val / static_cast<difference_type>(size[d]) - loan;
 				_currentIndex[d] = static_cast<SizeType>(tmp_val) % size[d];
 			}
-			if (carry != static_cast<difference_type>(0))
-				_currentIndex = IndexD::to_index(static_cast<DopeVectorType>(_data).size(), size);
+			if (carry != static_cast<difference_type>(0)) {
+				_currentIndex = IndexD::Zero();
+				_valid = false;
+			}
 			return *this;
 		}
 
@@ -214,7 +253,9 @@ namespace dope {
 		template < typename T, SizeType Dimension, bool Const > template < class E >
 		inline typename Iterator<T, Dimension, Const>::self_type & Iterator<T, Dimension, Const>::operator-=(const internal::StaticArrayExpression<E, SizeType, Dimension> &n)
 		{
-			Index<Dimension> size = static_cast<DopeVectorType>(_data).allSizes();
+			if (!_valid)
+				throw std::range_error("Iterator not valid.");
+			Index<Dimension> size = _data.get().allSizes();
 			difference_type tmp_val, loan, carry = static_cast<difference_type>(0);
 			for (SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
 				SizeType d = D - static_cast<SizeType>(1);
@@ -226,8 +267,10 @@ namespace dope {
 				carry = tmp_val / static_cast<difference_type>(size[d]) - loan;
 				_currentIndex[d] = static_cast<SizeType>(tmp_val) % size[d];
 			}
-			if (carry != static_cast<difference_type>(0))
-				_currentIndex = IndexD::to_index(static_cast<DopeVectorType>(_data).size(), size);
+			if (carry != static_cast<difference_type>(0)) {
+				_currentIndex = IndexD::Zero();
+				_valid = false;
+			}
 			return *this;
 		}
 
@@ -242,7 +285,9 @@ namespace dope {
 		template < typename T, SizeType Dimension, bool Const >
 		inline typename Iterator<T, Dimension, Const>::difference_type Iterator<T, Dimension, Const>::operator- (const self_type &o) const
 		{
-			if(_data == o._data)
+			if (!_valid || !o._valid)
+				throw std::range_error("Iterator not valid.");
+			if(&_data.get() == &o._data.get())
 				return static_cast<difference_type>(o.to_position()) - static_cast<difference_type>(to_position());
 			return std::numeric_limits<difference_type>::max();
 		}
@@ -258,37 +303,39 @@ namespace dope {
 		template < typename T, SizeType Dimension, bool Const >
 		inline bool Iterator<T, Dimension, Const>::operator==(const self_type &o) const
 		{
-			return static_cast<DopeVectorType>(_data) == static_cast<DopeVectorType>(o._data) && _currentIndex == o._currentIndex;
+			return &_data.get() == &o._data.get() && ((!_valid && !o._valid) || (_valid && o._valid && _currentIndex == o._currentIndex));
 		}
 
 		template < typename T, SizeType Dimension, bool Const >
 		inline bool Iterator<T, Dimension, Const>::operator!=(const self_type &o) const
 		{
-			return static_cast<DopeVectorType>(_data) == static_cast<DopeVectorType>(o._data) && _currentIndex != o._currentIndex;
+			return !(*this == o);
 		}
 
 		template < typename T, SizeType Dimension, bool Const >
 		inline bool Iterator<T, Dimension, Const>::operator< (const self_type &o) const
 		{
-			return static_cast<DopeVectorType>(_data) == static_cast<DopeVectorType>(o._data) && to_position() < o.to_position();
+			if (&_data.get() != &o._data.get())
+				throw std::logic_error("Iterators on different dope vectors is undefined.");
+			return (_valid && !o._valid) || (_valid && o._valid && to_position() < o.to_position());
 		}
 
 		template < typename T, SizeType Dimension, bool Const >
 		inline bool Iterator<T, Dimension, Const>::operator<=(const self_type &o) const
 		{
-			return static_cast<DopeVectorType>(_data) == static_cast<DopeVectorType>(o._data) && to_position() <= o.to_position();
+			return !(o < *this);
 		}
 
 		template < typename T, SizeType Dimension, bool Const >
 		inline bool Iterator<T, Dimension, Const>::operator> (const self_type &o) const
 		{
-			return static_cast<DopeVectorType>(_data) == static_cast<DopeVectorType>(o._data) && to_position() > o.to_position();
+			return o < *this;
 		}
 
 		template < typename T, SizeType Dimension, bool Const >
 		inline bool Iterator<T, Dimension, Const>::operator>=(const self_type &o) const
 		{
-			return static_cast<DopeVectorType>(_data) == static_cast<DopeVectorType>(o._data) && to_position() >= o.to_position();
+			return !(*this < o);
 		}
 
 		////////////////////////////////////////////////////////////////////////
