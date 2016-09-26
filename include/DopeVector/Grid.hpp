@@ -13,7 +13,6 @@
 
 #include <vector>
 #include <DopeVector/DopeVector.hpp>
-#include <DopeVector/internal/GridIterator.hpp>
 
 namespace dope {
 
@@ -37,10 +36,9 @@ namespace dope {
 		////////////////////////////////////////////////////////////////////////
 		// TYPEDEFS
 		////////////////////////////////////////////////////////////////////////
-		typedef typename DopeVector<T, Dimension>::IndexD       IndexD;
-		typedef std::vector<T, Allocator>	                    Data;
-		typedef internal::GridIterator<T, Dimension>            iterator;
-		typedef internal::GridIterator<const T, Dimension>      const_iterator;
+
+        typedef typename DopeVector<T, Dimension>::IndexD IndexD;
+        typedef std::vector<T, Allocator>	              Data;
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -124,94 +122,8 @@ namespace dope {
 
 
 		////////////////////////////////////////////////////////////////////////
-		// ITERATORS
-		////////////////////////////////////////////////////////////////////////
-
-		/**
-		 *    @brief Give access to the first element of the grid.
-		 *
-		 *    @return The iterator to the first element of the grid.
-		 */
-		inline iterator begin();
-
-		/**
-		 *    @brief Give the upper bound of the grid memory.
-		 *
-		 *    @return The iterator to the first memory outside the grid.
-		 *    @note   This is equal to begin() + size().
-		 */
-		inline iterator end();
-
-		/**
-		 *    @brief Give access to the first element of the grid.
-		 *
-		 *    @return The const iterator to the first element of the grid.
-		 */
-		inline const_iterator begin() const;
-
-		/**
-		 *    @brief Give the upper bound of the grid memory.
-		 *
-		 *    @return The const iterator to the first memory outside the grid.
-		 *    @note   This is equal to begin() + size().
-		 */
-		inline const_iterator end() const;
-
-		/**
-		 *    @brief Give access to the first element of the grid.
-		 *
-		 *    @return The const iterator to the first element of the grid.
-		 */
-		inline const_iterator cbegin() const;
-
-		/**
-		 *    @brief Give the upper bound of the grid memory.
-		 *
-		 *    @return The const iterator to the first memory outside the grid.
-		 *    @note   This is equal to cbegin() + size().
-		 */
-		inline const_iterator cend() const;
-
-		////////////////////////////////////////////////////////////////////////
-
-
-
-		////////////////////////////////////////////////////////////////////////
 		// CONVERSIONS
 		////////////////////////////////////////////////////////////////////////
-
-		/**
-		 *    @brief Convert a given linear index to an iterator.
-		 *
-		 *    @param i      The linear index of an element in the grid.
-		 *    @return The iterator to the i-th element of the grid.
-		 */
-		inline iterator to_iterator(const SizeType i) const;
-
-		/**
-		 *    @brief Convert a given index to an iterator.
-		 *
-		 *    @param i      The index of an element in the grid.
-		 *    @return The iterator to the element of the grid at given index.
-		 */
-		inline iterator to_iterator(const IndexD &i) const;
-
-		/**
-		 *    @brief Convert a given linear index to a const iterator.
-		 *
-		 *    @param i      The linear index of an element in the grid.
-		 *    @return The const iterator to the i-th element of the grid.
-		 */
-		inline const_iterator to_const_iterator(const SizeType i) const;
-
-		/**
-		 *    @brief Convert a given index to an iterator.
-		 *
-		 *    @param i      The index of an element in the grid.
-		 *    @return The const iterator to the element of the grid at
-		 *            given index.
-		 */
-		inline const_iterator to_const_iterator(const IndexD &i) const;
 
 		/**
 		 *    @brief Convert the grid to a std::vector< T, Allocator >.
@@ -231,9 +143,8 @@ namespace dope {
 		 *    @brief Cast the grid to a std::vectot< T, Allocator >.
 		 *
 		 *    @return A std::vector< T, Allocator > being a copy of the grid.
-		 *    @note It is a slow process. Avoid if possible.
 		 */
-		inline operator Data() const;
+        inline operator Data&() const;
 
 
 

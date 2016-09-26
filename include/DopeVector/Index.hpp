@@ -79,6 +79,15 @@ namespace dope {
 	typedef Index<3>	    Index3;
 	typedef Index<4>	    Index4;
 
+
+    template < SizeType Dimension >
+    static SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range);
+
+    template < SizeType Dimension >
+    static SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range, const Index<Dimension> &offset);
+
+    template < SizeType Dimension >
+    static SizeType to_index(const SizeType position, const Index<Dimension> &range);
 }
 
 #include <DopeVector/internal/inlines/Index.inl>

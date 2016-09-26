@@ -98,5 +98,41 @@ namespace dope {
 	constexpr Index<Dimension> Index<Dimension>::Constant( const SizeType value ) {
 		return Index({{value}});
 	}
+
+    template < SizeType Dimension >
+    SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range) {
+        SizeType result = static_cast<SizeType>(0);
+        SizeType dimProd = static_cast<SizeType>(1);
+        for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
+            constexpr SizeType d = D - static_cast<SizeType>(1);
+            result += index[d] * dimProd;
+            dimProd *= range[d];
+        }
+        return result;
+    }
+
+    template < SizeType Dimension >
+    SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range, const Index<Dimension> &offset) {
+        SizeType result = static_cast<SizeType>(0);
+        SizeType dimProd = static_cast<SizeType>(1);
+        for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
+            constexpr SizeType d = D - static_cast<SizeType>(1);
+            result += index[d] * dimProd;
+            dimProd *= range[d] * offset[d];
+        }
+        return result;
+    }
+
+    template < SizeType Dimension >
+    SizeType to_index(const SizeType position, const Index<Dimension> &range) {
+        Index<Dimension> result(static_cast<SizeType>(0));
+        SizeType i = position;
+        for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
+            constexpr SizeType d = D - static_cast<SizeType>(1);
+            result[d] = i % range[d];
+            i = i / range[d];
+        }
+        return result;
+    }
 	
 }

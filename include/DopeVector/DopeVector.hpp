@@ -18,6 +18,12 @@
 
 namespace dope {
 
+    namespace internal {
+        template< typename T, SizeType Dimension, bool Const >
+        class Iterator;
+    }
+    using internal::Iterator;
+
 	/// The DopeVector class represents a D-dimensional dope vector
 	/// (https://en.wikipedia.org/wiki/Dope_vector) of scalar type T. Given an
 	/// array stored sequentially in memory, this class wraps it provinding a
@@ -42,7 +48,9 @@ namespace dope {
 		// TYPEDEFS
 		////////////////////////////////////////////////////////////////////////
 
-		typedef Index< D > IndexD;
+        typedef Index<D> IndexD;
+        typedef Iterator<T, Dimension, false> iterator;
+        typedef Iterator<T, Dimension, true>  const_iterator;
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -213,6 +221,86 @@ namespace dope {
 
 
 
+        ////////////////////////////////////////////////////////////////////////
+        // ITERATORS
+        ////////////////////////////////////////////////////////////////////////
+
+        /**
+         * @brief Returns the iterator pointing the first element.
+         * @return A iterator to the element at position 0.
+         */
+        inline iterator begin();
+
+        /**
+         * @brief Returns the iterator pointing the end of the DopeVector
+         *        memory.
+         * @return A iterator to the end of the memory of \p this.
+         * @note It is equal to begin() + size().
+         */
+        inline iterator end();
+
+        /**
+         * @brief Returns the iterator pointing the first element.
+         * @return A iterator to the element at position 0.
+         */
+        inline iterator begin() const;
+
+        /**
+         * @brief Returns the iterator pointing the end of the DopeVector
+         *        memory.
+         * @return A iterator to the end of the memory of \p this.
+         * @note It is equal to begin() + size().
+         */
+        inline iterator end() const;
+
+        /**
+         * @brief Returns the const iterator pointing the first element.
+         * @return A const iterator to the element at position 0.
+         */
+        inline const_iterator cbegin() const;
+
+        /**
+         * @brief Returns the const iterator pointing the end of the DopeVector
+         *        memory.
+         * @return A const iterator to the end of the memory of \p this.
+         * @note It is equal to cbegin() + size().
+         */
+        inline const_iterator cend() const;
+
+        /**
+         *    @brief Convert a given linear index to an iterator.
+         *    @param i      The linear index of an element in the grid.
+         *    @return The iterator to the i-th element of the grid.
+         */
+        inline iterator to_iterator(const SizeType i) const;
+
+        /**
+         *    @brief Convert a given index to an iterator.
+         *    @param i      The index of an element in the grid.
+         *    @return The iterator to the element of the grid at given index.
+         */
+        inline iterator to_iterator(const IndexD &i) const;
+
+        /**
+         *    @brief Convert a given linear index to a const iterator.
+         *    @param i      The linear index of an element in the grid.
+         *    @return The const iterator to the i-th element of the grid.
+         */
+        inline const_iterator to_const_iterator(const SizeType i) const;
+
+        /**
+         *    @brief Convert a given index to an iterator.
+         *    @param i      The index of an element in the grid.
+         *    @return The const iterator to the element of the grid at
+         *            given index.
+         */
+        inline const_iterator to_const_iterator(const IndexD &i) const;
+
+
+        ////////////////////////////////////////////////////////////////////////
+
+
+
 		////////////////////////////////////////////////////////////////////////
 		// REDUCTION METHODS
 		////////////////////////////////////////////////////////////////////////
@@ -340,6 +428,8 @@ namespace dope {
 
 
 	private:
+        friend class Iterator<T,Dimension, false>;
+        friend class Iterator<T,Dimension, true>;
 		T       *_array;                 ///< Pointer in memory to the first element of this matrix.
 		SizeType _accumulatedOffset;     ///< Offset of the first element of this matrix from the beginning of the stored array.
 		IndexD   _size;                  ///< Sizes of this matrix, for each dimension.
@@ -366,6 +456,17 @@ namespace dope {
 		static const SizeType D = 1;
 
 		////////////////////////////////////////////////////////////////////////
+
+
+
+        ////////////////////////////////////////////////////////////////////////
+        // TYPEDEFS
+        ////////////////////////////////////////////////////////////////////////
+
+        typedef Iterator<T, 1, false> iterator;
+        typedef Iterator<T, 1, true>  const_iterator;
+
+        ////////////////////////////////////////////////////////////////////////
 
 
 
@@ -578,6 +679,85 @@ namespace dope {
 
 
 
+        ////////////////////////////////////////////////////////////////////////
+        // ITERATORS
+        ////////////////////////////////////////////////////////////////////////
+
+        /**
+         * @brief Returns the iterator pointing the first element.
+         * @return A iterator to the element at position 0.
+         */
+        inline iterator begin();
+
+        /**
+         * @brief Returns the iterator pointing the end of the DopeVector
+         *        memory.
+         * @return A iterator to the end of the memory of \p this.
+         * @note It is equal to begin() + size().
+         */
+        inline iterator end();
+
+        /**
+         * @brief Returns the iterator pointing the first element.
+         * @return A iterator to the element at position 0.
+         */
+        inline iterator begin() const;
+
+        /**
+         * @brief Returns the iterator pointing the end of the DopeVector
+         *        memory.
+         * @return A iterator to the end of the memory of \p this.
+         * @note It is equal to begin() + size().
+         */
+        inline iterator end() const;
+
+        /**
+         * @brief Returns the const iterator pointing the first element.
+         * @return A const iterator to the element at position 0.
+         */
+        inline const_iterator cbegin() const;
+
+        /**
+         * @brief Returns the const iterator pointing the end of the DopeVector
+         *        memory.
+         * @return A const iterator to the end of the memory of \p this.
+         * @note It is equal to cbegin() + size().
+         */
+        inline const_iterator cend() const;
+
+        /**
+         *    @brief Convert a given linear index to an iterator.
+         *    @param i      The linear index of an element in the grid.
+         *    @return The iterator to the i-th element of the grid.
+         */
+        inline iterator to_iterator(const SizeType i) const;
+
+        /**
+         *    @brief Convert a given index to an iterator.
+         *    @param i      The index of an element in the grid.
+         *    @return The iterator to the element of the grid at given index.
+         */
+        inline iterator to_iterator(const Index1 &i) const;
+
+        /**
+         *    @brief Convert a given linear index to a const iterator.
+         *    @param i      The linear index of an element in the grid.
+         *    @return The const iterator to the i-th element of the grid.
+         */
+        inline const_iterator to_const_iterator(const SizeType i) const;
+
+        /**
+         *    @brief Convert a given index to an iterator.
+         *    @param i      The index of an element in the grid.
+         *    @return The const iterator to the element of the grid at
+         *            given index.
+         */
+        inline const_iterator to_const_iterator(const Index1 &i) const;
+
+        ////////////////////////////////////////////////////////////////////////
+
+
+
 		////////////////////////////////////////////////////////////////////////
 		// REDUCTION METHODS
 		////////////////////////////////////////////////////////////////////////
@@ -705,6 +885,8 @@ namespace dope {
 
 
 	private:
+        friend class Iterator<T, 1, false>;
+        friend class Iterator<T, 1, true>;
 		T       *_array;                 ///< Pointer in memory to the first element of this vector.
 		SizeType _accumulatedOffset;     ///< Offset of the first element of this vector from the beginning of the stored array.
 		Index1   _size;                  ///< Sizes of this matrix, for each dimension.

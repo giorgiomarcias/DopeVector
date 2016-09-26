@@ -8,8 +8,9 @@
 // Author: Maurizio Kovacic
 // email: maurizio.kovacic@gmail.com
 
-#include <DopeVector/DopeVector.hpp>
 #include <memory>
+#include <DopeVector/DopeVector.hpp>
+#include <DopeVector/internal/Iterator.hpp>
 
 namespace dope {
 
@@ -173,6 +174,64 @@ namespace dope {
 	}
 
 	////////////////////////////////////////////////////////////////////////
+
+
+
+    ////////////////////////////////////////////////////////////////////////
+    // ITERATORS
+    ////////////////////////////////////////////////////////////////////////
+
+    template < typename T, SizeType Dimension >
+    inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::begin() {
+        return iterator(*this, 0);
+    }
+
+    template < typename T, SizeType Dimension >
+    inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::end() {
+        return iterator(*this, size());
+    }
+
+    template < typename T, SizeType Dimension >
+    inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::begin() const {
+        return iterator(*this, 0);
+    }
+
+    template < typename T, SizeType Dimension >
+    inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::end() const {
+        return iterator(*this, size());
+    }
+
+    template < typename T, SizeType Dimension >
+    inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::cbegin() const {
+        return const_iterator(*this, 0);
+    }
+
+    template < typename T, SizeType Dimension >
+    inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::cend() const {
+        return const_iterator(*this, size());
+    }
+
+    template < typename T, SizeType Dimension >
+    inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::to_iterator(const SizeType i) const {
+        return iterator(*this, i);
+    }
+
+    template < typename T, SizeType Dimension >
+    inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::to_iterator(const IndexD &i) const {
+        return iterator(*this, i);
+    }
+
+    template < typename T, SizeType Dimension >
+    inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::to_const_iterator(const SizeType i) const {
+        return const_iterator(*this, i);
+    }
+
+    template < typename T, SizeType Dimension >
+    inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::to_const_iterator(const IndexD &i) const {
+        return const_iterator(*this, i);
+    }
+
+    ////////////////////////////////////////////////////////////////////////
 
 
 
@@ -537,6 +596,64 @@ namespace dope {
 	}
 
 	////////////////////////////////////////////////////////////////////////
+
+
+
+    ////////////////////////////////////////////////////////////////////////
+    // ITERATORS
+    ////////////////////////////////////////////////////////////////////////
+
+    template < typename T >
+    inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::begin() {
+        return iterator(*this, 0);
+    }
+
+    template < typename T >
+    inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::end() {
+        return iterator(*this, size());
+    }
+
+    template < typename T >
+    inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::begin() const {
+        return iterator(*this, 0);
+    }
+
+    template < typename T >
+    inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::end() const {
+        return iterator(*this, size());
+    }
+
+    template < typename T >
+    inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::cbegin() const {
+        return const_iterator(*this, 0);
+    }
+
+    template < typename T >
+    inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::cend() const {
+        return const_iterator(*this, size());
+    }
+
+    template < typename T >
+    inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::to_iterator(const SizeType i) const {
+        return iterator(*this, i);
+    }
+
+    template < typename T >
+    inline typename DopeVector<T, 1>::iterator DopeVector<T, 1>::to_iterator(const Index1 &i) const {
+        return iterator(*this, i);
+    }
+
+    template < typename T >
+    inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::to_const_iterator(const SizeType i) const {
+        return const_iterator(*this, i);
+    }
+
+    template < typename T >
+    inline typename DopeVector<T, 1>::const_iterator DopeVector<T, 1>::to_const_iterator(const Index1 &i) const {
+        return const_iterator(*this, i);
+    }
+
+    ////////////////////////////////////////////////////////////////////////
 
 
 
