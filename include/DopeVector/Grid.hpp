@@ -23,7 +23,6 @@ namespace dope {
 	 *        be accessed by their index and through iterator.
 	 *        It is possible also to extract slices, windows and such from the
 	 *        grid using its functions.
-	 *
 	 * @param T             Type of the data to be stored.
 	 * @param Dimension     Dimension of the grid.
 	 * @param Allocator     Allocator to be used to store the data.
@@ -33,6 +32,7 @@ namespace dope {
 	template < typename T, SizeType Dimension, class Allocator = std::allocator< T > >
 	class Grid : public DopeVector< T, Dimension > {
 	public:
+
 		////////////////////////////////////////////////////////////////////////
 		// TYPEDEFS
 		////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,6 @@ namespace dope {
 
 		/**
 		 *    @brief Initializer contructor.
-		 *
 		 *    @param size               Sizes of the D-dimensional grid.
 		 *    @param default_value      Default value assigned to the grid
 		 *                              elements.
@@ -64,7 +63,6 @@ namespace dope {
 
 		/**
 		 *    @brief Initializer contructor.
-		 *
 		 *    @param size               Sizes of the D-dimensional grid. The
 		 *                              grid will be an hypercube.
 		 *    @param default_value      Default value assigned to the grid
@@ -105,14 +103,12 @@ namespace dope {
 
 		/**
 		 *    @brief Give access to the first element of the grid.
-		 *
 		 *    @return The const pointer to the first element of the grid.
 		 */
 		inline const T * data() const;
 
 		/**
 		 *    @brief Give access to the first element of the grid.
-		 *
 		 *    @return The pointer to the first element of the grid.
 		 */
 		inline T * data();
@@ -127,21 +123,18 @@ namespace dope {
 
 		/**
 		 *    @brief Convert the grid to a std::vector< T, Allocator >.
-		 *
 		 *    @return A const reference to the underneath data of the grid.
 		 */
 		inline const Data & to_stdvector() const;
 
 		/**
 		 *    @brief Convert the grid to a std::vector< T, Allocator >.
-		 *
 		 *    @return A reference to the underneath data of the grid.
 		 */
 		inline Data & to_stdvector();
 
 		/**
 		 *    @brief Cast the grid to a std::vectot< T, Allocator >.
-		 *
 		 *    @return A std::vector< T, Allocator > being a copy of the grid.
 		 */
 		inline operator Data&();
@@ -154,14 +147,12 @@ namespace dope {
 
 		/**
 		 *    @brief Check the number of elements in the grid.
-		 *
 		 *    @return true if the grid has no elements. false otherwise.
 		 */
 		inline bool empty() const;
 
 		/**
 		 *    @brief Check if a given grid is equal to this.
-		 *
 		 *    @return true if the grids are equal. false otherwise.
 		 *    @note Grid sizes must match as well.
 		 */
@@ -182,7 +173,6 @@ namespace dope {
 
 		/**
 		 *    @brief Set all the grid elements to a given value.
-		 *
 		 *    @param default_value      The value all the elements are set to.
 		 */
 		inline void reset(const T & default_value = T());
@@ -213,7 +203,6 @@ namespace dope {
 
 		/**
 		 *    @brief Swap this with a given grid.
-		 *
 		 *    @note Swap operation is performend in O( 1 ).
 		 */
 		virtual inline void swap(Grid &o);
