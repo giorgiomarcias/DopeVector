@@ -17,7 +17,7 @@ namespace dope {
 
 	template < SizeType Dimension > template < typename ... Sizes >
 	inline Index<Dimension>::Index(const SizeType size0,  Sizes &&...sizes)
-		: std::array<SizeType, Dimension>({{size0, static_cast<SizeType>(std::forward<SizeType>(sizes))...}})
+	    : std::array<SizeType, Dimension>({{size0, static_cast<SizeType>(std::forward<SizeType>(sizes))...}})
 	{ }
 
 	template < SizeType Dimension >
@@ -32,6 +32,12 @@ namespace dope {
 	{
 		for (SizeType i = 0; i < Dimension; ++i)
 			std::array<SizeType, Dimension>::operator[](i) = e.getAt(i);
+	}
+
+	template < SizeType Dimension >
+	inline bool Index<Dimension>::isApprox(const Index<Dimension> &o) const
+	{
+		return *this == o;
 	}
 
 	template < SizeType Dimension > template < class E >
@@ -136,7 +142,7 @@ namespace dope {
 	template < SizeType Dimension >
 	inline Index<Dimension> to_index(const SizeType position, const Index<Dimension> &range)
 	{
-        Index<Dimension> result = Index<Dimension>::Constant(static_cast<SizeType>(0));
+		Index<Dimension> result = Index<Dimension>::Constant(static_cast<SizeType>(0));
 		SizeType i = position;
 		for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
 			SizeType d = D - static_cast<SizeType>(1);

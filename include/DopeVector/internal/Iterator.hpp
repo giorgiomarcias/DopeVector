@@ -128,15 +128,8 @@ namespace dope {
 			inline self_type   operator++(int);
 			inline self_type & operator+=(const SizeType n);
 			inline self_type   operator+ (const SizeType n) const;
-            #ifdef DOPE_USE_EIGEN_INDEX
-            inline self_type & operator+=(const Index<Dimension> &n);
-            inline self_type   operator+ (const Index<Dimension> &n) const;
-            #else
-			template < class E >
-			inline self_type & operator+=(const internal::StaticArrayExpression<E, SizeType, Dimension> &n);
-			template < class E >
-			inline self_type   operator+ (const internal::StaticArrayExpression<E, SizeType, Dimension> &n) const;
-            #endif
+			inline self_type & operator+=(const Index<Dimension> &n);
+			inline self_type   operator+ (const Index<Dimension> &n) const;
 
 			////////////////////////////////////////////////////////////////////////
 
@@ -150,15 +143,8 @@ namespace dope {
 			inline self_type        operator--(int);
 			inline self_type &      operator-=(const SizeType n);
 			inline self_type        operator- (const SizeType n) const;
-            #ifdef DOPE_USE_EIGEN_INDEX
-            inline self_type & operator-=(const Index<Dimension> &n);
-            inline self_type   operator- (const Index<Dimension> &n) const;
-            #else
-			template < class E >
-			inline self_type &      operator-=(const internal::StaticArrayExpression<E, SizeType, Dimension> &n);
-			template < class E >
-			inline self_type        operator- (const internal::StaticArrayExpression<E, SizeType, Dimension> &n) const;
-            #endif
+			inline self_type & operator-=(const Index<Dimension> &n);
+			inline self_type   operator- (const Index<Dimension> &n) const;
 			inline difference_type  operator- (const self_type &o) const;
 
 			////////////////////////////////////////////////////////////////////////

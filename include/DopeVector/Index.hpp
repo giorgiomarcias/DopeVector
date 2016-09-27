@@ -13,7 +13,7 @@
 
 #ifdef DOPE_USE_EIGEN_INDEX
 #include <DopeVector/internal/Common.hpp>
-#include <eigen3/Eigen/Core>
+#include <Eigen/Core>
 #else
 #include <DopeVector/internal/Expression.hpp>
 #include <array>
@@ -22,8 +22,10 @@
 namespace dope {
 
 #ifdef DOPE_USE_EIGEN_INDEX
-    template < SizeType Dimension >
-    using Index = Eigen::Matrix<SizeType, Dimension, 1>;
+
+	template < SizeType Dimension >
+	using Index = Eigen::Matrix<SizeType, Dimension, 1>;
+
 #else
 	template < SizeType Dimension >
 	class Index : public std::array<SizeType, Dimension>, public internal::StaticArrayExpression<Index<Dimension>, SizeType, Dimension> {
@@ -42,6 +44,8 @@ namespace dope {
 
 		Index & operator= (const Index &) = default;
 		Index & operator= (Index &&) = default;
+
+		inline bool isApprox(const Index &o) const;
 
 		template < class E >
 		inline Index& operator=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e);
@@ -84,7 +88,7 @@ namespace dope {
 	static inline SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range, const Index<Dimension> &offset);
 
 	template < SizeType Dimension >
-    static inline Index<Dimension> to_index(const SizeType position, const Index<Dimension> &range);
+	static inline Index<Dimension> to_index(const SizeType position, const Index<Dimension> &range);
 
 }
 

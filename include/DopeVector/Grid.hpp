@@ -63,12 +63,35 @@ namespace dope {
 
 		/**
 		 *    @brief Initializer contructor.
+		 *    @param size               Sizes of the D-dimensional grid.
+		 *    @param order              A permutation of the matrix indices that
+		 *                              allows the use of different access (e.g.
+		 *                              grid[x][y][z] instead of grid[z][y][x]).
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 */
+		inline explicit Grid(const IndexD &size, const IndexD &order, const T & default_value = T());
+
+		/**
+		 *    @brief Initializer contructor.
 		 *    @param size               Sizes of the D-dimensional grid. The
 		 *                              grid will be an hypercube.
 		 *    @param default_value      Default value assigned to the grid
 		 *                              elements.
 		 */
 		inline explicit Grid(const SizeType size, const T & default_value = T());
+
+		/**
+		 *    @brief Initializer contructor.
+		 *    @param size               Sizes of the D-dimensional grid. The
+		 *                              grid will be an hypercube.
+		 *    @param order              A permutation of the matrix indices that
+		 *                              allows the use of different access (e.g.
+		 *                              grid[x][y][z] instead of grid[z][y][x])
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 */
+		inline explicit Grid(const SizeType size, const IndexD &order, const T & default_value = T());
 
 		/**
 		 *    @brief Copy constructor.

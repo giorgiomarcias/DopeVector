@@ -54,11 +54,8 @@ int main(int argc, char *argv[])
 	}
 
 
-#ifdef DOPE_USE_EIGEN_INDEX
-    Index2 order = {1, 0};
-#else
-	Index2 order = {{1, 0}};
-#endif
+
+	Index2 order = {1, 0};
 
 	start = std::chrono::steady_clock::now();
 

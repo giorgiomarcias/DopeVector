@@ -18,16 +18,56 @@ namespace dope {
 
 	template < typename T, SizeType Dimension, class Allocator >
 	inline Grid<T, Dimension, Allocator>::Grid(const IndexD &size, const T & default_value)
-		: _data(size.prod(), default_value)
+	    : _data(size.prod(), default_value)
 	{
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size);
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
+	inline Grid<T, Dimension, Allocator>::Grid(const IndexD &size, const IndexD &order, const T & default_value)
+	    : _data(size.prod(), default_value)
+	{
+		IndexD original_offset;
+		original_offset[Dimension-1] = 1;
+		for (SizeType d = Dimension-1; d > 0; --d)
+			original_offset[d-1] = size[d] * original_offset[d];
+		IndexD offset;
+		for (SizeType d = static_cast<SizeType>(0); d < Dimension; ++d) {
+			if (order[d] >= Dimension) {
+				std::stringstream stream;
+				stream << "Index " << order[d] << " is out of range [0, " << Dimension-1 << ']';
+				throw std::out_of_range(stream.str());
+			}
+			offset[d-1] = original_offset[order[d]];
+		}
+		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size, offset);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
 	inline Grid<T, Dimension, Allocator>::Grid(const SizeType size, const T & default_value)
-		: _data(Index<Dimension>::Constant(size).prod(), default_value)
+	    : _data(Index<Dimension>::Constant(size).prod(), default_value)
 	{
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), Index<Dimension>::Constant(size));
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline Grid<T, Dimension, Allocator>::Grid(const SizeType size, const IndexD &order, const T & default_value)
+	    : _data(Index<Dimension>::Constant(size).prod(), default_value)
+	{
+		IndexD original_offset;
+		original_offset[Dimension-1] = 1;
+		for (SizeType d = Dimension-1; d > 0; --d)
+			original_offset[d-1] = size * original_offset[d];
+		IndexD offset;
+		for (SizeType d = static_cast<SizeType>(0); d < Dimension; ++d) {
+			if (order[d] >= Dimension) {
+				std::stringstream stream;
+				stream << "Index " << order[d] << " is out of range [0, " << Dimension-1 << ']';
+				throw std::out_of_range(stream.str());
+			}
+			offset[d-1] = original_offset[order[d]];
+		}
+		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), Index<Dimension>::Constant(size), offset);
 	}
 
 	////////////////////////////////////////////////////////////////////////////
