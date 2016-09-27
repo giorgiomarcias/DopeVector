@@ -91,6 +91,7 @@ namespace dope {
 			inline SizeType         to_original() const;
 			inline SizeType         to_position() const;
 			inline const IndexD &   to_index()    const;
+                        inline bool             valid()       const;
 
 			////////////////////////////////////////////////////////////////////////
 
@@ -111,7 +112,7 @@ namespace dope {
 			// DATA ACCESS METHODS
 			////////////////////////////////////////////////////////////////////////
 
-			inline reference operator* ();
+                        inline reference operator* ();
 			inline pointer   operator->();
 			inline reference operator[](const SizeType n) const;
 			inline reference operator[](const IndexD  &n) const;

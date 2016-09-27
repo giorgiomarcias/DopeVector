@@ -75,7 +75,7 @@ namespace dope {
 		{
 			if (!_valid)
 				throw std::range_error("Iterator not valid.");
-			return dope::to_position(_currentIndex, _data.get().allSizes());
+                        return dope::to_position< Dimension >(_currentIndex, _data.get().allSizes());
 		}
 
 		template < typename T, SizeType Dimension, bool Const >
@@ -85,6 +85,12 @@ namespace dope {
 				throw std::range_error("Iterator not valid.");
 			return _currentIndex;
 		}
+
+                template < typename T, SizeType Dimension, bool Const >
+                inline bool Iterator<T, Dimension, Const>::valid() const
+                {
+                        return _valid;
+                }
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -100,7 +106,7 @@ namespace dope {
 			if (!_valid)
 				throw std::range_error("Iterator not valid.");
 			return _data.get().at(_currentIndex);
-		}
+                }
 
 		template < typename T, SizeType Dimension, bool Const >
 		inline typename Iterator<T, Dimension, Const>::pointer Iterator<T, Dimension, Const>::operator->()
