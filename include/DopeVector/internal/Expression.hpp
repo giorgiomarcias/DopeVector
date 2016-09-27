@@ -11,6 +11,7 @@
 #ifndef Expression_hpp
 #define Expression_hpp
 
+#ifndef DOPE_USE_EIGEN_INDEX
 #include <DopeVector/internal/Common.hpp>
 #include <array>
 #include <functional>
@@ -122,5 +123,7 @@ namespace dope {
 }
 
 #include <DopeVector/internal/inlines/Expression.inl>
+
+#endif
 
 #endif

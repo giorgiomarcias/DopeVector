@@ -8,6 +8,7 @@
 // Author: Maurizio Kovacic
 // email: maurizio.kovacic@gmail.com
 
+#ifndef DOPE_USE_EIGEN_INDEX
 #include <DopeVector/internal/Expression.hpp>
 
 namespace dope {
@@ -44,7 +45,7 @@ namespace dope {
 
 		template < class El, class Er, typename T, SizeType Dimension >
 		inline StaticArraySum<El, Er, T, Dimension>::StaticArraySum(const El &el, const Er &er)
-			: _el(el), _er(er)
+		    : _el(el), _er(er)
 		{ }
 
 		template < class El, class Er, typename T, SizeType Dimension >
@@ -61,7 +62,7 @@ namespace dope {
 
 		template < class El, class Er, typename T, SizeType Dimension >
 		inline StaticArraySub<El, Er, T, Dimension>::StaticArraySub(const El &el, const Er &er)
-			: _el(el), _er(er)
+		    : _el(el), _er(er)
 		{ }
 
 		template < class El, class Er, typename T, SizeType Dimension >
@@ -78,7 +79,7 @@ namespace dope {
 
 		template < class El, class Er, typename T, SizeType Dimension >
 		inline StaticArrayProd<El, Er, T, Dimension>::StaticArrayProd(const El &el, const Er &er)
-			: _el(el), _er(er)
+		    : _el(el), _er(er)
 		{ }
 
 		template < class El, class Er, typename T, SizeType Dimension >
@@ -95,7 +96,7 @@ namespace dope {
 
 		template < class El, class Er, typename T, SizeType Dimension >
 		inline StaticArrayQuot<El, Er, T, Dimension>::StaticArrayQuot(const El &el, const Er &er)
-			: _el(el), _er(er)
+		    : _el(el), _er(er)
 		{ }
 
 		template < class El, class Er, typename T, SizeType Dimension >
@@ -139,3 +140,5 @@ namespace dope {
 	}
 	
 }
+
+#endif

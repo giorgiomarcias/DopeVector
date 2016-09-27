@@ -55,5 +55,14 @@ Note that, due to cmake's design of not exporting file properties of interface l
     set_dope_vector_source_files_properties()
 
 
+It is also possible to use [Eigen](http://eigen.tuxfamily.org) vectors instead of DopeVector's own Index.
+Just include the path where Eigen is located and define `DOPE_USE_EIGEN_INDEX` in your code.
+If you use cmake to import DopeVector, it is possible to set the option
+
+    option(WITH_EIGEN "Build DopeVector with Index<Dimension> as Eigen Matrix (if present) or not." OFF)
+
+or compile with `cmake -DUSE_EIGEN=ON <path-to-where-downloaded-to>`.
+
+
 ### License ###
 This software is subject to the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) License.

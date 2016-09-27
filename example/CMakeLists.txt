@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.3)
 
 project(DopeVector_example)
 
+
+
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR}/lib_dope_vector)
 include(${CMAKE_CURRENT_SOURCE_DIR}/../sources_properties.cmake)
 

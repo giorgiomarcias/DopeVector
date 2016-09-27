@@ -14,7 +14,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <cstring>
-#include <DopeVector/Index.hpp>
+#include <DopeVector/internal/Iterator.hpp>
 
 namespace dope {
 
@@ -29,20 +29,12 @@ namespace dope {
 	public:
 
 		////////////////////////////////////////////////////////////////////////
-		// CONSTANTS
-		////////////////////////////////////////////////////////////////////////
-
-		static constexpr SizeType D = Dimension;
-
-		////////////////////////////////////////////////////////////////////////
-
-
-
-		////////////////////////////////////////////////////////////////////////
 		// TYPEDEFS
 		////////////////////////////////////////////////////////////////////////
 
-		typedef Index< D > IndexD;
+		typedef Index<Dimension> IndexD;
+		typedef internal::Iterator<T, Dimension, false> iterator;
+		typedef internal::Iterator<T, Dimension, true>  const_iterator;
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -214,6 +206,86 @@ namespace dope {
 
 
 		////////////////////////////////////////////////////////////////////////
+		// ITERATORS
+		////////////////////////////////////////////////////////////////////////
+
+		/**
+		 * @brief Returns the iterator pointing the first element.
+		 * @return A iterator to the element at position 0.
+		 */
+		inline iterator begin();
+
+		/**
+		 * @brief Returns the iterator pointing the end of the DopeVector
+		 *        memory.
+		 * @return A iterator to the end of the memory of \p this.
+		 * @note It is equal to begin() + size().
+		 */
+		inline iterator end();
+
+		/**
+		 * @brief Returns the const iterator pointing the first element.
+		 * @return A const iterator to the element at position 0.
+		 */
+		inline const_iterator begin() const;
+
+		/**
+		 * @brief Returns the const iterator pointing the end of the DopeVector
+		 *        memory.
+		 * @return A const iterator to the end of the memory of \p this.
+		 * @note It is equal to cbegin() + size().
+		 */
+		inline const_iterator end() const;
+
+		/**
+		 * @brief Returns the const iterator pointing the first element.
+		 * @return A const iterator to the element at position 0.
+		 */
+		inline const_iterator cbegin() const;
+
+		/**
+		 * @brief Returns the const iterator pointing the end of the DopeVector
+		 *        memory.
+		 * @return A const iterator to the end of the memory of \p this.
+		 * @note It is equal to cbegin() + size().
+		 */
+		inline const_iterator cend() const;
+
+		/**
+		 *    @brief Convert a given linear index to an iterator.
+		 *    @param i      The linear index of an element in the grid.
+		 *    @return The iterator to the i-th element of the grid.
+		 */
+		inline iterator to_iterator(const SizeType i);
+
+		/**
+		 *    @brief Convert a given index to an iterator.
+		 *    @param i      The index of an element in the grid.
+		 *    @return The iterator to the element of the grid at given index.
+		 */
+		inline iterator to_iterator(const IndexD &i);
+
+		/**
+		 *    @brief Convert a given linear index to a const iterator.
+		 *    @param i      The linear index of an element in the grid.
+		 *    @return The const iterator to the i-th element of the grid.
+		 */
+		inline const_iterator to_const_iterator(const SizeType i) const;
+
+		/**
+		 *    @brief Convert a given index to an iterator.
+		 *    @param i      The index of an element in the grid.
+		 *    @return The const iterator to the element of the grid at
+		 *            given index.
+		 */
+		inline const_iterator to_const_iterator(const IndexD &i) const;
+
+
+		////////////////////////////////////////////////////////////////////////
+
+
+
+		////////////////////////////////////////////////////////////////////////
 		// REDUCTION METHODS
 		////////////////////////////////////////////////////////////////////////
 
@@ -326,6 +398,15 @@ namespace dope {
 		 */
 		inline SizeType accumulatedOffset(const SizeType i, const SizeType d = 0) const;
 
+		/**
+		 *    @brief Gives the total offset, from the beginning of the stored
+		 *           array, of the element at position index.
+		 *    @param index              The element whose offset is requested.
+		 *    @return The total offset from the beggining of the stored array of
+		 *            the element at position index.
+		 */
+		inline SizeType accumulatedOffset(const IndexD &index) const;
+
 		////////////////////////////////////////////////////////////////////////
 
 
@@ -354,16 +435,17 @@ namespace dope {
 	/// multi-dimensional matrix interface. It is possible to take slices,
 	/// windows or even permutations without actually transferring data
 	/// no element hence gets moved.
-	/// This is the basis of the recursive class DopeVector<T, D> above.
+	/// This is the basis of the recursive class DopeVector<T, Dimension> above.
 	template < typename T >
 	class DopeVector<T, 1> {
 	public:
 
 		////////////////////////////////////////////////////////////////////////
-		// CONSTANTS
+		// TYPEDEFS
 		////////////////////////////////////////////////////////////////////////
 
-		static const SizeType D = 1;
+		typedef internal::Iterator<T, 1, false> iterator;
+		typedef internal::Iterator<T, 1, true>  const_iterator;
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -579,6 +661,85 @@ namespace dope {
 
 
 		////////////////////////////////////////////////////////////////////////
+		// ITERATORS
+		////////////////////////////////////////////////////////////////////////
+
+		/**
+		 * @brief Returns the iterator pointing the first element.
+		 * @return A iterator to the element at position 0.
+		 */
+		inline iterator begin();
+
+		/**
+		 * @brief Returns the iterator pointing the end of the DopeVector
+		 *        memory.
+		 * @return A iterator to the end of the memory of \p this.
+		 * @note It is equal to begin() + size().
+		 */
+		inline iterator end();
+
+		/**
+		 * @brief Returns the const iterator pointing the first element.
+		 * @return A const iterator to the element at position 0.
+		 */
+		inline const_iterator begin() const;
+
+		/**
+		 * @brief Returns the const iterator pointing the end of the DopeVector
+		 *        memory.
+		 * @return A const iterator to the end of the memory of \p this.
+		 * @note It is equal to cbegin() + size().
+		 */
+		inline const_iterator end() const;
+
+		/**
+		 * @brief Returns the const iterator pointing the first element.
+		 * @return A const iterator to the element at position 0.
+		 */
+		inline const_iterator cbegin() const;
+
+		/**
+		 * @brief Returns the const iterator pointing the end of the DopeVector
+		 *        memory.
+		 * @return A const iterator to the end of the memory of \p this.
+		 * @note It is equal to cbegin() + size().
+		 */
+		inline const_iterator cend() const;
+
+		/**
+		 *    @brief Convert a given linear index to an iterator.
+		 *    @param i      The linear index of an element in the grid.
+		 *    @return The iterator to the i-th element of the grid.
+		 */
+		inline iterator to_iterator(const SizeType i);
+
+		/**
+		 *    @brief Convert a given index to an iterator.
+		 *    @param i      The index of an element in the grid.
+		 *    @return The iterator to the element of the grid at given index.
+		 */
+		inline iterator to_iterator(const Index1 &i);
+
+		/**
+		 *    @brief Convert a given linear index to a const iterator.
+		 *    @param i      The linear index of an element in the grid.
+		 *    @return The const iterator to the i-th element of the grid.
+		 */
+		inline const_iterator to_const_iterator(const SizeType i) const;
+
+		/**
+		 *    @brief Convert a given index to an iterator.
+		 *    @param i      The index of an element in the grid.
+		 *    @return The const iterator to the element of the grid at
+		 *            given index.
+		 */
+		inline const_iterator to_const_iterator(const Index1 &i) const;
+
+		////////////////////////////////////////////////////////////////////////
+
+
+
+		////////////////////////////////////////////////////////////////////////
 		// REDUCTION METHODS
 		////////////////////////////////////////////////////////////////////////
 
@@ -690,6 +851,15 @@ namespace dope {
 		 *            the i-th element.
 		 */
 		inline SizeType accumulatedOffset(const SizeType i = 0) const;
+
+		/**
+		 *    @brief Gives the total offset, from the beginning of the stored
+		 *           array, of the element at position index.
+		 *    @param index              The element whose offset is requested.
+		 *    @return The total offset from the beggining of the stored array of
+		 *            the element at position index.
+		 */
+		inline SizeType accumulatedOffset(const Index1 &index) const;
 
 		////////////////////////////////////////////////////////////////////////
 

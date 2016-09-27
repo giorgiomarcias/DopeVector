@@ -11,25 +11,22 @@
 #ifndef Index_hpp
 #define Index_hpp
 
-#ifdef USE_EIGEN
-
+#ifdef DOPE_USE_EIGEN_INDEX
 #include <DopeVector/internal/Common.hpp>
 #include <Eigen/Core>
+#else
+#include <DopeVector/internal/Expression.hpp>
+#include <array>
+#endif
 
 namespace dope {
+
+#ifdef DOPE_USE_EIGEN_INDEX
 
 	template < SizeType Dimension >
 	using Index = Eigen::Matrix<SizeType, Dimension, 1>;
 
-}
-
 #else
-
-#include <DopeVector/internal/Expression.hpp>
-#include <array>
-
-namespace dope {
-
 	template < SizeType Dimension >
 	class Index : public std::array<SizeType, Dimension>, public internal::StaticArrayExpression<Index<Dimension>, SizeType, Dimension> {
 	public:
@@ -47,6 +44,8 @@ namespace dope {
 
 		Index & operator= (const Index &) = default;
 		Index & operator= (Index &&) = default;
+
+		inline bool isApprox(const Index &o) const;
 
 		template < class E >
 		inline Index& operator=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e);
@@ -67,11 +66,12 @@ namespace dope {
 
 		inline SizeType prod() const;
 
-		static constexpr Index Zero();
-		static constexpr Index Ones();
-		static constexpr Index Constant(const SizeType value);
-	};
+		static inline constexpr Index Zero();
+		static inline constexpr Index Ones();
+		static inline constexpr Index Constant(const SizeType value);
 
+	};
+#endif
 
 
 	typedef Index<1>	    Index1;
@@ -79,10 +79,19 @@ namespace dope {
 	typedef Index<3>	    Index3;
 	typedef Index<4>	    Index4;
 
+
+
+	template < SizeType Dimension >
+	static inline SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range);
+
+	template < SizeType Dimension >
+	static inline SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range, const Index<Dimension> &offset);
+
+	template < SizeType Dimension >
+	static inline Index<Dimension> to_index(const SizeType position, const Index<Dimension> &range);
+
 }
 
 #include <DopeVector/internal/inlines/Index.inl>
-
-#endif
 
 #endif // Index_hpp

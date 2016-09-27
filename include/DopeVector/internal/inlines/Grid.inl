@@ -18,16 +18,56 @@ namespace dope {
 
 	template < typename T, SizeType Dimension, class Allocator >
 	inline Grid<T, Dimension, Allocator>::Grid(const IndexD &size, const T & default_value)
-		: _data(size.prod(), default_value)
+	    : _data(size.prod(), default_value)
 	{
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size);
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
+	inline Grid<T, Dimension, Allocator>::Grid(const IndexD &size, const IndexD &order, const T & default_value)
+	    : _data(size.prod(), default_value)
+	{
+		IndexD original_offset;
+		original_offset[Dimension-1] = 1;
+		for (SizeType d = Dimension-1; d > 0; --d)
+			original_offset[d-1] = size[d] * original_offset[d];
+		IndexD offset;
+		for (SizeType d = static_cast<SizeType>(0); d < Dimension; ++d) {
+			if (order[d] >= Dimension) {
+				std::stringstream stream;
+				stream << "Index " << order[d] << " is out of range [0, " << Dimension-1 << ']';
+				throw std::out_of_range(stream.str());
+			}
+			offset[d-1] = original_offset[order[d]];
+		}
+		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size, offset);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
 	inline Grid<T, Dimension, Allocator>::Grid(const SizeType size, const T & default_value)
-		: _data(Index<Dimension>::Constant(size).prod(), default_value)
+	    : _data(Index<Dimension>::Constant(size).prod(), default_value)
 	{
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), Index<Dimension>::Constant(size));
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline Grid<T, Dimension, Allocator>::Grid(const SizeType size, const IndexD &order, const T & default_value)
+	    : _data(Index<Dimension>::Constant(size).prod(), default_value)
+	{
+		IndexD original_offset;
+		original_offset[Dimension-1] = 1;
+		for (SizeType d = Dimension-1; d > 0; --d)
+			original_offset[d-1] = size * original_offset[d];
+		IndexD offset;
+		for (SizeType d = static_cast<SizeType>(0); d < Dimension; ++d) {
+			if (order[d] >= Dimension) {
+				std::stringstream stream;
+				stream << "Index " << order[d] << " is out of range [0, " << Dimension-1 << ']';
+				throw std::out_of_range(stream.str());
+			}
+			offset[d-1] = original_offset[order[d]];
+		}
+		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), Index<Dimension>::Constant(size), offset);
 	}
 
 	////////////////////////////////////////////////////////////////////////////
@@ -66,76 +106,8 @@ namespace dope {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// ITERATORS
-	////////////////////////////////////////////////////////////////////////////
-
-	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::iterator Grid<T, Dimension, Allocator>::begin()
-	{
-		return Grid<T, Dimension, Allocator>::iterator(data(), DopeVector<T, Dimension>::allSizes(), 0);
-	}
-
-	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::iterator Grid<T, Dimension, Allocator>::end()
-	{
-		return Grid<T, Dimension, Allocator>::iterator(data(), DopeVector<T, Dimension>::allSizes(), DopeVector<T, Dimension>::size());
-	}
-
-	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::begin() const
-	{
-		return Grid<T, Dimension, Allocator>::const_iterator(data(), DopeVector<T, Dimension>::_size, 0);
-	}
-
-	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::end() const
-	{
-		return Grid<T, Dimension, Allocator>::const_iterator(data(), DopeVector<T, Dimension>::allSizes(), DopeVector<T, Dimension>::size());
-	}
-
-	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::cbegin() const
-	{
-		return Grid<T, Dimension, Allocator>::const_iterator(data(), DopeVector<T, Dimension>::allSizes(), 0);
-	}
-
-	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::cend() const
-	{
-		return Grid<T, Dimension, Allocator>::const_iterator(data(), DopeVector<T, Dimension>::allSizes(), DopeVector<T, Dimension>::size());
-	}
-
-	////////////////////////////////////////////////////////////////////////////
-
-
-
-	////////////////////////////////////////////////////////////////////////////
 	// CONVERSIONS
 	////////////////////////////////////////////////////////////////////////////
-
-	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::iterator Grid<T, Dimension, Allocator>::to_iterator(const SizeType i) const
-	{
-		return (begin() + i);
-	}
-
-	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::iterator Grid<T, Dimension, Allocator>::to_iterator(const IndexD& i) const
-	{
-		return (begin() + position(i));
-	}
-
-	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::to_const_iterator(const SizeType i) const
-	{
-		return (cbegin() + i);
-	}
-
-	template < typename T, SizeType Dimension, class Allocator >
-	inline typename Grid<T, Dimension, Allocator>::const_iterator Grid<T, Dimension, Allocator>::to_const_iterator(const IndexD& i) const
-	{
-		return (cbegin() + position(i));
-	}
 
 	template < typename T, SizeType Dimension, class Allocator >
 	inline const typename Grid<T, Dimension, Allocator>::Data& Grid<T, Dimension, Allocator>::to_stdvector() const
@@ -150,7 +122,7 @@ namespace dope {
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline Grid<T, Dimension, Allocator>::operator Data() const
+	inline Grid<T, Dimension, Allocator>::operator Data&()
 	{
 		return _data;
 	}

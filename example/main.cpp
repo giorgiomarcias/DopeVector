@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 	for (std::size_t i = 0; i < size[0]; ++i) {
 		DopeVector<std::size_t, 1> grid_row = grid2D[i];
 		for (std::size_t j = 0; j < size[1]; ++j)
-			grid_row[j] = i * size[0] + j;
+			grid_row[j] = i * size[1] + j;
 	}
 
 	std::cout << "Initial Grid values:\n";
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
 
 
-	Index2 order = {{1, 0}};
+	Index2 order = {1, 0};
 
 	start = std::chrono::steady_clock::now();
 
@@ -74,7 +74,12 @@ int main(int argc, char *argv[])
 
 
 	Grid<std::size_t, 10> big_grid(Index<10>(10));
-	Index<10> new_order(1, 0, 2, 5, 4, 7, 3, 6, 9, 8);
+#ifdef DOPE_USE_EIGEN_INDEX
+    Index<10> new_order;
+    new_order << 1, 0, 2, 5, 4, 7, 3, 6, 9, 8;
+#else
+    Index<10> new_order(1, 0, 2, 5, 4, 7, 3, 6, 9, 8);
+#endif
 
 	start = std::chrono::steady_clock::now();
 
@@ -98,14 +103,14 @@ int main(int argc, char *argv[])
 	for (std::size_t i = 0; i < size[0]; ++i) {
 		DopeVector<std::size_t, 1> grid_row = grid2D[i];
 		for (std::size_t j = 0; j < size[1]; ++j)
-			grid_row[j] = i * size[0] + j;
+			grid_row[j] = i * size[1] + j;
 	}
 	std::cout << "Lower right window != upper left window ? (should be true) " << std::boolalpha << (lower_right_window != upper_left_window) << std::endl;
 
 	lower_right_window.import(upper_left_window);
 	std::cout << "\nUpper left 6x6 window NON-safely imported into 6x6 window at (4,4):\n";
 	for (std::size_t i = 0; i < size[0]; ++i) {
-		auto grid_row = grid2D_permuted[i];
+		auto grid_row = grid2D[i];
 		for (std::size_t j = 0; j < size[1]; ++j)
 			std::cout << grid_row[j] << '\t';
 		std::cout << '\n';
@@ -113,6 +118,23 @@ int main(int argc, char *argv[])
 	std::cout << "Lower right window != upper left window ? (should be true) " << std::boolalpha << (lower_right_window != upper_left_window) << std::endl;
 
 	std::cout << "Compare elements at (8,8). This is due to the fact that dope vectors act on shared memory.\n" << std::endl;
+
+
+
+	std::cout << "Linear iterator:\n";
+	Grid<std::size_t, 2>::iterator it = grid2D.begin();
+	it += grid2D.sizeAt(1);
+	std::cout << "First element of second row: " << *it++ << '\n';
+	std::cout << "Other elements:\n";
+	while (it != grid2D.end())
+		std::cout << *it++ << ' ';
+	std::cout << std::endl;
+
+	std::cout << "\nLinear iterator on lower right window:\n";
+	it = lower_right_window.begin();
+	while (it != lower_right_window.end())
+		std::cout << *it++ << ' ';
+	std::cout << std::endl;
 
 	return 0;
 }
