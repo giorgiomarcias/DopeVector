@@ -48,6 +48,7 @@ If you use [CMAKE](https://cmake.org), you can import this project using `add_su
 
 Note that, due to cmake's design of not exporting file properties of interface libraries (as of version 3.6.2), if you want to have DopeVector's header files in your IDE project tree just add the following:
 
+    option(ATTACH_SOURCES "When generating an IDE project, add DopeVector header files to project sources." ON)
     add_subdirectory("<path-to-where-downloaded-to>" "${CMAKE_CURRENT_BINARY_DIR}/DopeVector")
     include("<path-to-where-downloaded-to>/sources_properties.cmake")
     ...
