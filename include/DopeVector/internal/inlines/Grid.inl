@@ -29,7 +29,7 @@ namespace dope {
 	{
 		IndexD original_offset;
 		original_offset[Dimension-1] = 1;
-		for (SizeType d = Dimension-1; d > 0; --d)
+                for (SizeType d = Dimension-1; d > static_cast<SizeType>(0); --d)
 			original_offset[d-1] = size[d] * original_offset[d];
 		IndexD offset;
 		for (SizeType d = static_cast<SizeType>(0); d < Dimension; ++d) {
@@ -38,7 +38,7 @@ namespace dope {
 				stream << "Index " << order[d] << " is out of range [0, " << Dimension-1 << ']';
 				throw std::out_of_range(stream.str());
 			}
-			offset[d-1] = original_offset[order[d]];
+                        offset[d] = original_offset[order[d]];
 		}
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size, offset);
 	}
@@ -65,7 +65,7 @@ namespace dope {
 				stream << "Index " << order[d] << " is out of range [0, " << Dimension-1 << ']';
 				throw std::out_of_range(stream.str());
 			}
-			offset[d-1] = original_offset[order[d]];
+                        offset[d] = original_offset[order[d]];
 		}
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), Index<Dimension>::Constant(size), offset);
 	}
