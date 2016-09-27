@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.3)
 
 project(DopeVector)
 
+
+
+option(WITH_EIGEN "Build DopeVector with Index<Dimension> as Eigen Matrix (if present) or not." OFF)
+
+
+
 set(hdr_dir ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 set(hdr_internal_files
@@ -59,3 +65,13 @@ set(required_cxx_features
 target_compile_features(${PROJECT_NAME} INTERFACE ${required_cxx_features})
 target_include_directories(${PROJECT_NAME} INTERFACE ${hdr_dir})
 target_sources(${PROJECT_NAME} INTERFACE ${all_hdr})
+
+if (WITH_EIGEN)
+	set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
+	find_package(Eigen3 QUIET)
+	if (EIGEN3_FOUND)
+		message(STATUS "Found Eigen for use in DopeVector")
+		target_include_directories(${PROJECT_NAME} INTERFACE ${EIGEN3_INCLUDE_DIR})
+		target_compile_definitions(${PROJECT_NAME} INTERFACE DOPE_USE_EIGEN_INDEX)
+	endif()
+endif()
