@@ -4,6 +4,7 @@ project(DopeVector)
 
 
 
+option(WITH_RTTI "Build DopeVector using RTTI or not" OFF)
 option(WITH_EIGEN "Build DopeVector with Index<Dimension> as Eigen Matrix (if present) or not." OFF)
 option(ATTACH_SOURCES "When generating an IDE project, add DopeVector header files to project sources." OFF)
 
@@ -76,5 +77,14 @@ if(WITH_EIGEN)
 		message(STATUS "Found Eigen for use in DopeVector")
 		target_include_directories(${PROJECT_NAME} INTERFACE ${EIGEN3_INCLUDE_DIR})
 		target_compile_definitions(${PROJECT_NAME} INTERFACE DOPE_USE_EIGEN_INDEX)
+	else()
+		message(STATUS "Eigen was not found")
 	endif()
+endif()
+
+if(WITH_RTTI)
+	message(STATUS "RTTI is on.")
+	target_compile_definitions(${PROJECT_NAME} INTERFACE DOPE_USE_RTTI)
+else()
+	message(STATUS "RTTI is off.")
 endif()

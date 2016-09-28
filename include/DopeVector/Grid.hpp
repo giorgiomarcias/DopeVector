@@ -38,7 +38,7 @@ namespace dope {
 		////////////////////////////////////////////////////////////////////////
 
 		typedef typename DopeVector<T, Dimension>::IndexD IndexD;
-		typedef std::vector<T, Allocator>	              Data;
+                typedef std::vector<T, Allocator>	          Data;
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -156,9 +156,15 @@ namespace dope {
 		 */
 		inline Data & to_stdvector();
 
+                /**
+                 *    @brief Cast the grid to a std::vectot< T, Allocator >.
+                 *    @return A const reference to the underneath data of the grid.
+                 */
+                inline operator const Data&() const;
+
 		/**
 		 *    @brief Cast the grid to a std::vectot< T, Allocator >.
-		 *    @return A std::vector< T, Allocator > being a copy of the grid.
+                 *    @return A reference to the underneath data of the grid.
 		 */
 		inline operator Data&();
 
@@ -358,11 +364,13 @@ namespace dope {
 		 */
 		inline Grid & operator=(Grid &&o) = default;
 
+#ifdef DOPE_USE_RTTI
 		/**
 		 *    @brief Copies all single elements from o to this matrix.
 		 *    @param o                  The matrix to copy from.
 		 */
 		inline void import(const DopeVector<T, Dimension> &o) override;
+#endif
 
 		/**
 		 *    @brief Swap this with a given grid.

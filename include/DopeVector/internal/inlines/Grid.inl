@@ -121,6 +121,12 @@ namespace dope {
 		return _data;
 	}
 
+        template < typename T, SizeType Dimension, class Allocator >
+        inline Grid<T, Dimension, Allocator>::operator const Data&() const
+        {
+                return _data;
+        }
+
 	template < typename T, SizeType Dimension, class Allocator >
 	inline Grid<T, Dimension, Allocator>::operator Data&()
 	{
@@ -322,11 +328,13 @@ namespace dope {
 	// ASSIGNMENTS
 	////////////////////////////////////////////////////////////////////////////
 
+#ifdef DOPE_USE_RTTI
 	template < typename T, SizeType Dimension, class Allocator >
 	inline void Grid<T, Dimension, Allocator>::import(const DopeVector<T, Dimension> &o)
 	{
 		if (&o == this)
 			return;
+
 		try {
 			const Grid<T, Dimension, Allocator> &oo = dynamic_cast<const Grid<T, Dimension, Allocator> &>(o);
 			IndexD size = DopeVector<T, Dimension>::allSizes();
@@ -337,8 +345,9 @@ namespace dope {
 			DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size); // could be unuseful
 		} catch(std::bad_cast &bc) {
 			DopeVector<T, Dimension>::import(o);
-		}
+                }
 	}
+#endif
 
 	template < typename T, SizeType Dimension, class Allocator >
 	inline void Grid<T, Dimension, Allocator>::swap(Grid &o)
