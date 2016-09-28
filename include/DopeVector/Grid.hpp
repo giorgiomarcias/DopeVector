@@ -59,7 +59,7 @@ namespace dope {
 		 *    @param default_value      Default value assigned to the grid
 		 *                              elements.
 		 */
-		inline explicit Grid(const IndexD &size, const T & default_value = T());
+		inline explicit Grid(const IndexD &size, const T &default_value = T());
 
 		/**
 		 *    @brief Initializer contructor.
@@ -70,7 +70,7 @@ namespace dope {
 		 *    @param default_value      Default value assigned to the grid
 		 *                              elements.
 		 */
-		inline explicit Grid(const IndexD &size, const IndexD &order, const T & default_value = T());
+		inline explicit Grid(const IndexD &size, const IndexD &order, const T &default_value = T());
 
 		/**
 		 *    @brief Initializer contructor.
@@ -79,7 +79,7 @@ namespace dope {
 		 *    @param default_value      Default value assigned to the grid
 		 *                              elements.
 		 */
-		inline explicit Grid(const SizeType size, const T & default_value = T());
+		inline explicit Grid(const SizeType size, const T &default_value = T());
 
 		/**
 		 *    @brief Initializer contructor.
@@ -91,7 +91,7 @@ namespace dope {
 		 *    @param default_value      Default value assigned to the grid
 		 *                              elements.
 		 */
-		inline explicit Grid(const SizeType size, const IndexD &order, const T & default_value = T());
+		inline explicit Grid(const SizeType size, const IndexD &order, const T &default_value = T());
 
 		/**
 		 *    @brief Copy constructor.
@@ -198,7 +198,147 @@ namespace dope {
 		 *    @brief Set all the grid elements to a given value.
 		 *    @param default_value      The value all the elements are set to.
 		 */
-		inline void reset(const T & default_value = T());
+		inline void reset(const T &default_value = T());
+
+		/**
+		 *    @brief Resize the container.
+		 *    @param size               Sizes of the D-dimensional grid.
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 *    @note For performance reasons, data is not kept. See
+		 *          conservativeResize.
+		 */
+		inline void resize(const IndexD &size, const T &default_value = T());
+
+		/**
+		 *    @brief Resize the container.
+		 *    @param size               Sizes of the D-dimensional grid.
+		 *    @param order              A permutation of the matrix indices that
+		 *                              allows the use of different access (e.g.
+		 *                              grid[x][y][z] instead of grid[z][y][x]).
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 *    @note For performance reasons, data is not kept. See
+		 *          conservativeResize.
+		 */
+		inline void resize(const IndexD &size, const IndexD &order, const T &default_value = T());
+
+		/**
+		 *    @brief Resize the container.
+		 *    @param size               Sizes of the D-dimensional grid. The
+		 *                              grid will be an hypercube.
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 *    @note For performance reasons, data is not kept. See
+		 *          conservativeResize.
+		 */
+		inline void resize(const SizeType size, const T &default_value = T());
+
+		/**
+		 *    @brief Resize the container.
+		 *    @param size               Sizes of the D-dimensional grid. The
+		 *                              grid will be an hypercube.
+		 *    @param order              A permutation of the matrix indices that
+		 *                              allows the use of different access (e.g.
+		 *                              grid[x][y][z] instead of grid[z][y][x])
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 *    @note For performance reasons, data is not kept. See
+		 *          conservativeResize.
+		 */
+		inline void resize(const SizeType size, const IndexD &order, const T & default_value = T());
+
+		/**
+		 *    @brief Resize the container assigning values.
+		 *    @param size               Sizes of the D-dimensional grid.
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 */
+		inline void assign(const IndexD &size, const T &default_value);
+
+		/**
+		 *    @brief Resize the container assigning values.
+		 *    @param size               Sizes of the D-dimensional grid.
+		 *    @param order              A permutation of the matrix indices that
+		 *                              allows the use of different access (e.g.
+		 *                              grid[x][y][z] instead of grid[z][y][x]).
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 */
+		inline void assign(const IndexD &size, const IndexD &order, const T &default_value);
+
+		/**
+		 *    @brief Resize the container assigning values.
+		 *    @param size               Sizes of the D-dimensional grid. The
+		 *                              grid will be an hypercube.
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 */
+		inline void assign(const SizeType size, const T &default_value);
+
+		/**
+		 *    @brief Resize the container assigning values.
+		 *    @param size               Sizes of the D-dimensional grid. The
+		 *                              grid will be an hypercube.
+		 *    @param order              A permutation of the matrix indices that
+		 *                              allows the use of different access (e.g.
+		 *                              grid[x][y][z] instead of grid[z][y][x])
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 */
+		inline void assign(const SizeType size, const IndexD &order, const T &default_value);
+
+		/**
+		 *    @brief Resize the container.
+		 *    @param size               Sizes of the D-dimensional grid.
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 *    @note Data is kept as long as possible. That is, the block at the
+		 *          origin with minimum size that fits into the new grid is
+		 *          copied. See resize for faster resizing.
+		 */
+		inline void conservativeResize(const IndexD &size, const T &default_value = T());
+
+		/**
+		 *    @brief Resize the container.
+		 *    @param size               Sizes of the D-dimensional grid.
+		 *    @param order              A permutation of the matrix indices that
+		 *                              allows the use of different access (e.g.
+		 *                              grid[x][y][z] instead of grid[z][y][x]).
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 *    @note Data is kept as long as possible. That is, the block at the
+		 *          origin with minimum size that fits into the new grid is
+		 *          copied. See resize for faster resizing.
+		 */
+		inline void conservativeResize(const IndexD &size, const IndexD &order, const T &default_value = T());
+
+		/**
+		 *    @brief Resize the container.
+		 *    @param size               Sizes of the D-dimensional grid. The
+		 *                              grid will be an hypercube.
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 *    @note Data is kept as long as possible. That is, the block at the
+		 *          origin with minimum size that fits into the new grid is
+		 *          copied. See resize for faster resizing.
+		 */
+		inline void conservativeResize(const SizeType size, const T &default_value = T());
+
+		/**
+		 *    @brief Resize the container.
+		 *    @param size               Sizes of the D-dimensional grid. The
+		 *                              grid will be an hypercube.
+		 *    @param order              A permutation of the matrix indices that
+		 *                              allows the use of different access (e.g.
+		 *                              grid[x][y][z] instead of grid[z][y][x])
+		 *    @param default_value      Default value assigned to the grid
+		 *                              elements.
+		 *    @note Data is kept as long as possible. That is, the block at the
+		 *          origin with minimum size that fits into the new grid is
+		 *          copied. See resize for faster resizing.
+		 */
+		inline void conservativeResize(const SizeType size, const IndexD &order, const T &default_value = T());
 
 		////////////////////////////////////////////////////////////////////////
 

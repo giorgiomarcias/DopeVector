@@ -23,8 +23,8 @@ namespace dope {
 	template < SizeType Dimension >
 	inline Index<Dimension>::Index(const std::initializer_list<SizeType> &il)
 	{
-		std::copy(il.begin(), il.end(), std::array<SizeType, Dimension>::begin());
-		std::fill(std::array<SizeType, Dimension>::begin() + il.size(), std::array<SizeType, Dimension>::end(), std::array<SizeType, Dimension>::operator[](std::min(Dimension, il.size()) - 1));
+		std::copy(il.begin(), il.begin() + std::min(il.size(), Dimension), std::array<SizeType, Dimension>::begin());
+		std::fill(std::array<SizeType, Dimension>::begin() + std::min(il.size(), Dimension), std::array<SizeType, Dimension>::end(), std::array<SizeType, Dimension>::operator[](std::min(Dimension, std::min(il.size(), Dimension)) - 1));
 	}
 
 	template < SizeType Dimension > template < class E >
@@ -32,6 +32,13 @@ namespace dope {
 	{
 		for (SizeType i = 0; i < Dimension; ++i)
 			std::array<SizeType, Dimension>::operator[](i) = e.getAt(i);
+	}
+
+	template < SizeType Dimension >
+	inline Index<Dimension> & Index<Dimension>::operator= (const std::initializer_list<SizeType> &il)
+	{
+		std::copy(il.begin(), il.begin() + std::min(il.size(), Dimension), std::array<SizeType, Dimension>::begin());
+		std::fill(std::array<SizeType, Dimension>::begin() + std::min(il.size(), Dimension), std::array<SizeType, Dimension>::end(), std::array<SizeType, Dimension>::operator[](std::min(Dimension, std::min(il.size(), Dimension)) - 1));
 	}
 
 	template < SizeType Dimension >

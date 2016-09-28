@@ -17,14 +17,14 @@ namespace dope {
 	////////////////////////////////////////////////////////////////////////////
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline Grid<T, Dimension, Allocator>::Grid(const IndexD &size, const T & default_value)
+	inline Grid<T, Dimension, Allocator>::Grid(const IndexD &size, const T &default_value)
 	    : _data(size.prod(), default_value)
 	{
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size);
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline Grid<T, Dimension, Allocator>::Grid(const IndexD &size, const IndexD &order, const T & default_value)
+	inline Grid<T, Dimension, Allocator>::Grid(const IndexD &size, const IndexD &order, const T &default_value)
 	    : _data(size.prod(), default_value)
 	{
 		IndexD original_offset;
@@ -44,14 +44,14 @@ namespace dope {
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline Grid<T, Dimension, Allocator>::Grid(const SizeType size, const T & default_value)
+	inline Grid<T, Dimension, Allocator>::Grid(const SizeType size, const T &default_value)
 	    : _data(Index<Dimension>::Constant(size).prod(), default_value)
 	{
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), Index<Dimension>::Constant(size));
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline Grid<T, Dimension, Allocator>::Grid(const SizeType size, const IndexD &order, const T & default_value)
+	inline Grid<T, Dimension, Allocator>::Grid(const SizeType size, const IndexD &order, const T &default_value)
 	    : _data(Index<Dimension>::Constant(size).prod(), default_value)
 	{
 		IndexD original_offset;
@@ -168,11 +168,150 @@ namespace dope {
 	}
 
 	template < typename T, SizeType Dimension, class Allocator >
-	inline void Grid<T, Dimension, Allocator>::reset(const T & default_value)
+	inline void Grid<T, Dimension, Allocator>::reset(const T &default_value)
 	{
 		IndexD size = DopeVector<T, Dimension>::allSizes();
 		_data.assign(size.prod(), default_value);
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline void Grid<T, Dimension, Allocator>::resize(const IndexD &size, const T &default_value)
+	{
+		_data.resize(size.prod(), default_value);
+		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline void Grid<T, Dimension, Allocator>::resize(const IndexD &size, const IndexD &order, const T &default_value)
+	{
+		_data.resize(size.prod(), default_value);
+		IndexD original_offset;
+		original_offset[Dimension-1] = 1;
+		for (SizeType d = Dimension-1; d > static_cast<SizeType>(0); --d)
+			original_offset[d-1] = size[d] * original_offset[d];
+		IndexD offset;
+		for (SizeType d = static_cast<SizeType>(0); d < Dimension; ++d) {
+			if (order[d] >= Dimension) {
+				std::stringstream stream;
+				stream << "Index " << order[d] << " is out of range [0, " << Dimension-1 << ']';
+				throw std::out_of_range(stream.str());
+			}
+			offset[d] = original_offset[order[d]];
+		}
+		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size, offset);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline void Grid<T, Dimension, Allocator>::resize(const SizeType size, const T &default_value)
+	{
+		IndexD newSize = IndexD::Constant(size);
+		resize(newSize, default_value);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline void Grid<T, Dimension, Allocator>::resize(const SizeType size, const IndexD &order, const T & default_value)
+	{
+		IndexD newSize = IndexD::Constant(size);
+		resize(newSize, order, default_value);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline void Grid<T, Dimension, Allocator>::assign(const IndexD &size, const T &default_value)
+	{
+		_data.assign(size.prod(), default_value);
+		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline void Grid<T, Dimension, Allocator>::assign(const IndexD &size, const IndexD &order, const T &default_value)
+	{
+		_data.assign(size.prod(), default_value);
+		IndexD original_offset;
+		original_offset[Dimension-1] = 1;
+		for (SizeType d = Dimension-1; d > static_cast<SizeType>(0); --d)
+			original_offset[d-1] = size[d] * original_offset[d];
+		IndexD offset;
+		for (SizeType d = static_cast<SizeType>(0); d < Dimension; ++d) {
+			if (order[d] >= Dimension) {
+				std::stringstream stream;
+				stream << "Index " << order[d] << " is out of range [0, " << Dimension-1 << ']';
+				throw std::out_of_range(stream.str());
+			}
+			offset[d] = original_offset[order[d]];
+		}
+		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size, offset);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline void Grid<T, Dimension, Allocator>::assign(const SizeType size, const T &default_value)
+	{
+		IndexD newSize = IndexD::Constant(size);
+		assign(newSize, default_value);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline void Grid<T, Dimension, Allocator>::assign(const SizeType size, const IndexD &order, const T &default_value)
+	{
+		IndexD newSize = IndexD::Constant(size);
+		assign(newSize, order, default_value);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline void Grid<T, Dimension, Allocator>::conservativeResize(const IndexD &size, const T &default_value)
+	{
+		Grid<T, Dimension, Allocator> newGrid(size, default_value);
+		IndexD oldSize = DopeVector<T, Dimension>::allSizes();
+		IndexD minSize;
+		for (SizeType d = static_cast<SizeType>(0); d < Dimension; ++d)
+			minSize[d] = std::min(oldSize[d], size[d]);
+		IndexD start = IndexD::Zero();
+		DopeVector<T, Dimension> oldWindow = DopeVector<T, Dimension>::window(start, minSize);
+		DopeVector<T, Dimension> newWindow = newGrid.window(start, minSize);
+		newWindow.import(oldWindow);
+		*this = std::move(newGrid);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline void Grid<T, Dimension, Allocator>::conservativeResize(const IndexD &size, const IndexD &order, const T &default_value)
+	{
+		IndexD original_offset;
+		original_offset[Dimension-1] = 1;
+		for (SizeType d = Dimension-1; d > static_cast<SizeType>(0); --d)
+			original_offset[d-1] = size[d] * original_offset[d];
+		IndexD offset;
+		for (SizeType d = static_cast<SizeType>(0); d < Dimension; ++d) {
+			if (order[d] >= Dimension) {
+				std::stringstream stream;
+				stream << "Index " << order[d] << " is out of range [0, " << Dimension-1 << ']';
+				throw std::out_of_range(stream.str());
+			}
+			offset[d] = original_offset[order[d]];
+		}
+		Grid<T, Dimension, Allocator> newGrid(size, offset, default_value);
+		IndexD oldSize = DopeVector<T, Dimension>::allSizes();
+		IndexD minSize;
+		for (SizeType d = static_cast<SizeType>(0); d < Dimension; ++d)
+			minSize[d] = std::min(oldSize[d], size[d]);
+		IndexD start = IndexD::Zero();
+		DopeVector<T, Dimension> oldWindow = DopeVector<T, Dimension>::window(start, minSize);
+		DopeVector<T, Dimension> newWindow = newGrid.window(start, minSize);
+		newWindow.import(oldWindow);
+		*this = std::move(newGrid);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline void Grid<T, Dimension, Allocator>::conservativeResize(const SizeType size, const T &default_value)
+	{
+		IndexD newSize = IndexD::Constant(size);
+		conservativeResize(newSize, default_value);
+	}
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline void Grid<T, Dimension, Allocator>::conservativeResize(const SizeType size, const IndexD &order, const T &default_value)
+	{
+		IndexD newSize = IndexD::Constant(size);
+		conservativeResize(newSize, order, default_value);
 	}
 
 	////////////////////////////////////////////////////////////////////////////
@@ -191,7 +330,7 @@ namespace dope {
 		try {
 			const Grid<T, Dimension, Allocator> &oo = dynamic_cast<const Grid<T, Dimension, Allocator> &>(o);
 			IndexD size = DopeVector<T, Dimension>::allSizes();
-			for (SizeType d = 0; d < Dimension; ++d)
+			for (SizeType d = static_cast<SizeType>(0); d < Dimension; ++d)
 				if (size[d] != oo.sizeAt(d))
 					throw std::out_of_range("Matrixes do not have same size.");
 			_data = oo._data;

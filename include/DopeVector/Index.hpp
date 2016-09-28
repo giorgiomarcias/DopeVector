@@ -42,8 +42,9 @@ namespace dope {
 		template < class E >
 		inline Index(const internal::StaticArrayExpression<E, SizeType, Dimension> &e);
 
-		Index & operator= (const Index &) = default;
-		Index & operator= (Index &&) = default;
+		Index        & operator= (const Index &) = default;
+		Index        & operator= (Index &&) = default;
+		inline Index & operator= (const std::initializer_list<SizeType> &il);
 
 		inline bool isApprox(const Index &o) const;
 
