@@ -122,17 +122,18 @@ int main(int argc, char *argv[])
 
 
 	std::cout << "Linear iterator:\n";
-	Grid<std::size_t, 2>::iterator it = grid2D.begin();
+//	Grid<std::size_t, 2>::const_iterator it = const_cast<const Grid<std::size_t, 2> &>(grid2D).begin();
+	Grid<std::size_t, 2>::const_iterator it = grid2D.cbegin();
 	it += grid2D.sizeAt(1);
 	std::cout << "First element of second row: " << *it++ << '\n';
 	std::cout << "Other elements:\n";
-	while (it != grid2D.end())
+	while (it != grid2D.cend())
 		std::cout << *it++ << ' ';
 	std::cout << std::endl;
 
 	std::cout << "\nLinear iterator on lower right window:\n";
-	it = lower_right_window.begin();
-	while (it != lower_right_window.end())
+	it = lower_right_window.cbegin();
+	while (it != lower_right_window.cend())
 		std::cout << *it++ << ' ';
 	std::cout << std::endl;
 

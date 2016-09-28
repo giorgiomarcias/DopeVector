@@ -38,7 +38,7 @@ namespace dope {
 		////////////////////////////////////////////////////////////////////////
 
 		typedef typename DopeVector<T, Dimension>::IndexD IndexD;
-                typedef std::vector<T, Allocator>	          Data;
+		typedef std::vector<T, Allocator>	              Data;
 
 		////////////////////////////////////////////////////////////////////////
 

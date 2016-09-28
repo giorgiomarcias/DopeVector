@@ -75,7 +75,7 @@ namespace dope {
 		{
 			if (!_valid)
 				throw std::range_error("Iterator not valid.");
-                        return dope::to_position< Dimension >(_currentIndex, _data.get().allSizes());
+			return dope::to_position< Dimension >(_currentIndex, _data.get().allSizes());
 		}
 
 		template < typename T, SizeType Dimension, bool Const >
@@ -86,11 +86,17 @@ namespace dope {
 			return _currentIndex;
 		}
 
-                template < typename T, SizeType Dimension, bool Const >
-                inline bool Iterator<T, Dimension, Const>::valid() const
-                {
-                        return _valid;
-                }
+		template < typename T, SizeType Dimension, bool Const >
+		inline bool Iterator<T, Dimension, Const>::isValid() const
+		{
+			return _valid;
+		}
+
+		template < typename T, SizeType Dimension, bool Const >
+		inline Iterator<T, Dimension, Const>::operator bool() const
+		{
+			return isValid();
+		}
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -101,21 +107,20 @@ namespace dope {
 		////////////////////////////////////////////////////////////////////////
 
 		template < typename T, SizeType Dimension, bool Const >
-		inline typename Iterator<T, Dimension, Const>::reference Iterator<T, Dimension, Const>::operator*()
+		inline typename Iterator<T, Dimension, Const>::reference Iterator<T, Dimension, Const>::operator*() const
 		{
 			if (!_valid)
 				throw std::range_error("Iterator not valid.");
-			return _data.get().at(_currentIndex);
-                }
-
-		template < typename T, SizeType Dimension, bool Const >
-		inline typename Iterator<T, Dimension, Const>::pointer Iterator<T, Dimension, Const>::operator->()
-		{
-			if (!_valid)
-				throw std::range_error("Iterator not valid.");
-			return &_data.get().at(_currentIndex);
+			return const_cast<reference>(_data.get().at(_currentIndex));
 		}
 
+		template < typename T, SizeType Dimension, bool Const >
+		inline typename Iterator<T, Dimension, Const>::pointer Iterator<T, Dimension, Const>::operator->() const
+		{
+			if (!_valid)
+				throw std::range_error("Iterator not valid.");
+			return const_cast<pointer>(&_data.get().at(_currentIndex));
+		}
 		template < typename T, SizeType Dimension, bool Const >
 		inline typename Iterator<T, Dimension, Const>::reference Iterator<T, Dimension, Const>::operator[](const SizeType n) const
 		{
