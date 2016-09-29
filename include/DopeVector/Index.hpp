@@ -12,11 +12,11 @@
 #define Index_hpp
 
 #ifdef DOPE_USE_EIGEN_INDEX
-#include <DopeVector/internal/Common.hpp>
-#include <Eigen/Core>
+	#include <DopeVector/internal/Common.hpp>
+	#include <Eigen/Core>
 #else
-#include <DopeVector/internal/Expression.hpp>
-#include <array>
+	#include <DopeVector/internal/Expression.hpp>
+	#include <array>
 #endif
 
 namespace dope {

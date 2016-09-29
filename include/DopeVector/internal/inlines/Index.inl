@@ -17,7 +17,7 @@ namespace dope {
 
 	template < SizeType Dimension > template < typename ... Sizes, class >
 	inline Index<Dimension>::Index(const SizeType size0,  Sizes &&...sizes)
-	    : std::array<SizeType, Dimension>({{size0, static_cast<SizeType>(std::forward<SizeType>(sizes))...}})
+	    : std::array<SizeType, Dimension>({{size0, std::forward<SizeType>(sizes)...}})
 	{ }
 
 	template < SizeType Dimension >
