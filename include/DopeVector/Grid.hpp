@@ -19,8 +19,8 @@ namespace dope {
 	/**
 	 * @brief The Grid class describes a D-dimensional grid, containing elements
 	 *        of a specified type. Each element could be accessed by its regualr
-	 *        index as if it was inside a array-like container. Moreover they can
-	 *        be accessed by their index and through iterator.
+	 *        index as if it was inside a array-like container. Moreover they
+	 *        can be accessed by their index and through iterator.
 	 *        It is possible also to extract slices, windows and such from the
 	 *        grid using its functions.
 	 * @param T             Type of the data to be stored.
@@ -38,7 +38,7 @@ namespace dope {
 		////////////////////////////////////////////////////////////////////////
 
 		typedef typename DopeVector<T, Dimension>::IndexD IndexD;
-                typedef std::vector<T, Allocator>	          Data;
+		typedef std::vector<T, Allocator>	          Data;
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -156,17 +156,17 @@ namespace dope {
 		 */
 		inline Data & to_stdvector();
 
-                /**
-                 *    @brief Cast the grid to a std::vectot< T, Allocator >.
-                 *    @return A const reference to the underneath data of the grid.
-                 */
-                inline operator const Data&() const;
+		/**
+		 *    @brief Cast the grid to a std::vectot< T, Allocator >.
+		 *    @return A const reference to the underneath data of the grid.
+		 */
+		explicit inline operator const Data&() const;
 
 		/**
 		 *    @brief Cast the grid to a std::vectot< T, Allocator >.
-                 *    @return A reference to the underneath data of the grid.
+		 *    @return A reference to the underneath data of the grid.
 		 */
-		inline operator Data&();
+		explicit inline operator Data&();
 
 
 

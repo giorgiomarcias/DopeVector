@@ -121,11 +121,11 @@ namespace dope {
 		return _data;
 	}
 
-        template < typename T, SizeType Dimension, class Allocator >
-        inline Grid<T, Dimension, Allocator>::operator const Data&() const
-        {
-                return _data;
-        }
+	template < typename T, SizeType Dimension, class Allocator >
+	inline Grid<T, Dimension, Allocator>::operator const Data&() const
+	{
+		return _data;
+	}
 
 	template < typename T, SizeType Dimension, class Allocator >
 	inline Grid<T, Dimension, Allocator>::operator Data&()
@@ -345,7 +345,7 @@ namespace dope {
 			DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), size); // could be unuseful
 		} catch(std::bad_cast &bc) {
 			DopeVector<T, Dimension>::import(o);
-                }
+		}
 	}
 #endif
 

@@ -15,7 +15,7 @@ namespace dope {
 
 #ifndef DOPE_USE_EIGEN_INDEX
 
-	template < SizeType Dimension > template < typename ... Sizes >
+	template < SizeType Dimension > template < SizeType ... Sizes >
 	inline Index<Dimension>::Index(const SizeType size0,  Sizes &&...sizes)
 	    : std::array<SizeType, Dimension>({{size0, static_cast<SizeType>(std::forward<SizeType>(sizes))...}})
 	{ }

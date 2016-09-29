@@ -88,11 +88,11 @@ namespace dope {
 			// INFORMATION
 			////////////////////////////////////////////////////////////////////
 
-			inline SizeType         to_original() const;
-			inline SizeType         to_position() const;
-			inline const IndexD &   to_index()    const;
-			inline bool             isValid()     const;
-			inline         operator bool ()       const;
+			inline SizeType         to_original()    const;
+			inline SizeType         to_position()    const;
+			inline const IndexD &   to_index()       const;
+			inline bool             valid()          const;
+			explicit inline         operator bool () const;
 
 			////////////////////////////////////////////////////////////////////
 

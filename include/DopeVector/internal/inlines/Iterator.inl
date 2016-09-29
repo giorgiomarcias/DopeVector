@@ -87,7 +87,7 @@ namespace dope {
 		}
 
 		template < typename T, SizeType Dimension, bool Const >
-		inline bool Iterator<T, Dimension, Const>::isValid() const
+		inline bool Iterator<T, Dimension, Const>::valid() const
 		{
 			return _valid;
 		}
@@ -95,7 +95,7 @@ namespace dope {
 		template < typename T, SizeType Dimension, bool Const >
 		inline Iterator<T, Dimension, Const>::operator bool() const
 		{
-			return isValid();
+			return valid();
 		}
 
 		////////////////////////////////////////////////////////////////////////
