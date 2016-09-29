@@ -80,6 +80,8 @@ if(WITH_EIGEN)
 	else()
 		message(STATUS "Eigen was not found")
 	endif()
+else()
+	message(STATUS "Eigen not used in DopeVector")
 endif()
 
 if(WITH_RTTI)

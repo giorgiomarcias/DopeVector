@@ -21,6 +21,7 @@ using namespace dope;
 int main(int argc, char *argv[])
 {
 	Index2 size(10, 10);
+	Index<5> _prova(2, 3, 2, 3.3);
 	Grid<std::size_t, 2> grid2D(size, std::size_t(0));
 	for (std::size_t i = 0; i < size[0]; ++i) {
 		DopeVector<std::size_t, 1> grid_row = grid2D[i];

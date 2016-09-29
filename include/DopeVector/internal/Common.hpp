@@ -14,7 +14,7 @@
 #include <cstdlib>
 
 #ifndef _SIZETYPE_
-	#define _SIZETYPE_ std::size_t
+	#define DOPE_SIZETYPE std::size_t
 #endif
 
 namespace dope {
@@ -24,7 +24,7 @@ namespace dope {
 	 *        this by changing the define above: just define _SIZETYPE_ before
 	 *        including this file.
 	 */
-	using SizeType = std::make_unsigned<_SIZETYPE_>::type;
+	using SizeType = std::make_unsigned<DOPE_SIZETYPE>::type;
 
 }
 

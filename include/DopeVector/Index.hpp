@@ -28,6 +28,20 @@ namespace dope {
 
 #else
 
+	namespace internal {
+
+		template < typename T, typename ... Rest >
+		struct SizeTypesCheck {
+			static constexpr bool value = (std::is_arithmetic<T>::value) && (SizeTypesCheck<Rest...>::value);
+		};
+
+		template < typename T >
+		struct SizeTypesCheck<T> {
+			static constexpr bool value = std::is_arithmetic<T>::value;
+		};
+
+	}
+
 	/**
 	 * @brief The Index class defines a N-dimensional index, used to refer to an
 	 *        element contained in a DopeVector.
@@ -61,7 +75,7 @@ namespace dope {
 		 * @param sizes     The remaining components of the index,
 		 *                  if its dimension is greater than one.
 		 */
-		template < SizeType ... Sizes >
+		template < typename ... Sizes, class = typename std::enable_if<internal::SizeTypesCheck<SizeType, Sizes...>::value>::type >
 		explicit inline Index(const SizeType size0, Sizes &&...sizes);
 
 		/**
