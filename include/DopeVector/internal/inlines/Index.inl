@@ -149,7 +149,7 @@ namespace dope {
 	template < SizeType Dimension >
 	inline Index<Dimension> to_index(const SizeType position, const Index<Dimension> &range)
 	{
-		Index<Dimension> result = Index<Dimension>::Constant(static_cast<SizeType>(0));
+		Index<Dimension> result = Index<Dimension>::Zero();
 		SizeType i = position;
 		for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
 			SizeType d = D - static_cast<SizeType>(1);
@@ -157,6 +157,19 @@ namespace dope {
 				throw std::overflow_error("Divide by zero exception");
 			result[d] = i % range[d];
 			i = i / range[d];
+		}
+		return result;
+	}
+
+	template < SizeType Dimension >
+	inline Index<Dimension> to_index(const SizeType position, const SizeType initialOffset, const Index<Dimension> &offset)
+	{
+		SizeType linear_position = position - initialOffset;
+		Index<Dimension> result = Index<Dimension>::Zero();
+		for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
+			SizeType d = D - static_cast<SizeType>(1);
+			result[d] = linear_position / offset[d];
+			linear_position %= offset[d];
 		}
 		return result;
 	}

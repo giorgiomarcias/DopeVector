@@ -288,6 +288,19 @@ namespace dope {
 	template < SizeType Dimension >
 	static inline Index<Dimension> to_index(const SizeType position, const Index<Dimension> &range);
 
+	/**
+	 * @brief Returns the index form of a linear position, according to the given
+	 *        range and a given offset.
+	 * @param position      The position to be put in index form.
+	 * @param initialOffset The offset to subtract from position.
+	 * @param offset        The offset in each dimension.
+	 * @return An index built from the given position.
+	 * @note This function was kept outside the Index class for maintaining
+	 *       compatibility between Eigen indices and built-in indices.
+	 */
+	template < SizeType Dimension >
+	static inline Index<Dimension> to_index(const SizeType position, const SizeType initialOffset, const Index<Dimension> &offset);
+
 	////////////////////////////////////////////////////////////////////////
 
 }

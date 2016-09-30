@@ -220,7 +220,14 @@ namespace dope {
 	template < typename T, SizeType Dimension >
 	inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::to_iterator(const SizeType i)
 	{
+		IndexD orig = dope::to_index(iterator(*this, i, true).to_original(), accumulatedOffset(IndexD::Zero()), _offset);
 		return iterator(*this, i, true);
+	}
+
+	template < typename T, SizeType Dimension >
+	inline typename DopeVector<T, Dimension>::iterator DopeVector<T, Dimension>::to_iterator_from_original(const SizeType i)
+	{
+		return iterator(*this, dope::to_index(i, _accumulatedOffset, _offset), true);
 	}
 
 	template < typename T, SizeType Dimension >
@@ -230,12 +237,20 @@ namespace dope {
 	}
 
 	template < typename T, SizeType Dimension >
-	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::to_const_iterator(const SizeType i) const {
+	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::to_const_iterator(const SizeType i) const
+	{
 		return const_iterator(*this, i, true);
 	}
 
 	template < typename T, SizeType Dimension >
-	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::to_const_iterator(const IndexD &i) const {
+	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::to_const_iterator_from_original(const SizeType i) const
+	{
+		return const_iterator(*this, dope::to_index(i, _accumulatedOffset, _offset), true);
+	}
+
+	template < typename T, SizeType Dimension >
+	inline typename DopeVector<T, Dimension>::const_iterator DopeVector<T, Dimension>::to_const_iterator(const IndexD &i) const
+	{
 		return const_iterator(*this, i, true);
 	}
 

@@ -266,24 +266,38 @@ namespace dope {
 
 		/**
 		 *    @brief Convert a given linear index to an iterator.
-		 *    @param i      The linear index of an element in the grid.
-		 *    @return The iterator to the i-th element of the grid.
+		 *    @param i      The linear index of an element in the DopeVector.
+		 *    @return The iterator to the i-th element of the DopeVector.
 		 */
 		inline iterator to_iterator(const SizeType i);
 
 		/**
+		 *    @brief Convert a given linear index to an iterator.
+		 *    @param i      The linear index of an element in the array.
+		 *    @return The iterator to the i-th element of the DopeVector.
+		 */
+		inline iterator to_iterator_from_original(const SizeType i);
+
+		/**
 		 *    @brief Convert a given index to an iterator.
-		 *    @param i      The index of an element in the grid.
+		 *    @param i      The index of an element in the DopeVector.
 		 *    @return The iterator to the element of the grid at given index.
 		 */
 		inline iterator to_iterator(const IndexD &i);
 
 		/**
 		 *    @brief Convert a given linear index to a const iterator.
-		 *    @param i      The linear index of an element in the grid.
-		 *    @return The const iterator to the i-th element of the grid.
+		 *    @param i      The linear index of an element in the DopeVector.
+		 *    @return The const iterator to the i-th element of the DopeVector.
 		 */
 		inline const_iterator to_const_iterator(const SizeType i) const;
+
+		/**
+		 *    @brief Convert a given linear index to an iterator.
+		 *    @param i      The linear index of an element in the array.
+		 *    @return The iterator to the i-th element of the DopeVector.
+		 */
+		inline const_iterator to_const_iterator_from_original(const SizeType i) const;
 
 		/**
 		 *    @brief Convert a given index to an iterator.
