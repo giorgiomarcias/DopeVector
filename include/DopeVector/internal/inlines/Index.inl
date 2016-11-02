@@ -52,6 +52,7 @@ namespace dope {
 	{
 		for (SizeType i = 0; i < Dimension; ++i)
 			std::array<SizeType, Dimension>::operator[](i) = e.getAt(i);
+		return *this;
 	}
 
 	template < SizeType Dimension > template < class E >
@@ -59,6 +60,7 @@ namespace dope {
 	{
 		for (SizeType i = 0; i < Dimension; ++i)
 			std::array<SizeType, Dimension>::operator[](i) += e.getAt(i);
+		return *this;
 	}
 
 	template < SizeType Dimension > template < class E >
@@ -66,6 +68,7 @@ namespace dope {
 	{
 		for (SizeType i = 0; i < Dimension; ++i)
 			std::array<SizeType, Dimension>::operator[](i) -= e.getAt(i);
+		return *this;
 	}
 
 	template < SizeType Dimension > template < class E >
@@ -73,6 +76,7 @@ namespace dope {
 	{
 		for (SizeType i = 0; i < Dimension; ++i)
 			std::array<SizeType, Dimension>::operator[](i) *= e.getAt(i);
+		return *this;
 	}
 
 	template < SizeType Dimension > template < class E >
@@ -80,6 +84,15 @@ namespace dope {
 	{
 		for (SizeType i = 0; i < Dimension; ++i)
 			std::array<SizeType, Dimension>::operator[](i) /= e.getAt(i);
+		return *this;
+	}
+
+	template < SizeType Dimension > template < class E >
+	inline Index<Dimension>& Index<Dimension>::operator%=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e)
+	{
+		for (SizeType i = 0; i < Dimension; ++i)
+			std::array<SizeType, Dimension>::operator[](i) %= e.getAt(i);
+		return *this;
 	}
 
 	template < SizeType Dimension >

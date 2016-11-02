@@ -43,7 +43,7 @@ namespace dope {
 	}
 
 	/**
-	 * @brief The Index class defines a N-dimensional index, used to refer to an
+	 * @brief The Index class defines a D-dimensional index, used to refer to an
 	 *        element contained in a DopeVector.
 	 */
 	template < SizeType Dimension >
@@ -173,6 +173,13 @@ namespace dope {
 		 */
 		template < class E >
 		inline Index& operator/=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e);
+
+		/**
+		 * @brief Expression modulus operator.
+		 * @warning This operator is not Eigen compatible.
+		 */
+		template < class E >
+		inline Index& operator%=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e);
 
 		////////////////////////////////////////////////////////////////////////
 
