@@ -48,7 +48,7 @@ namespace dope {
 		inline T StaticArrayBinaryEigenExpression<El, T, Dimension, Derived, Op>::operator[](const SizeType i) const
 		{
 			if (!_values[i]) {
-				T t = _op(_el[i], _er[i]);
+				T t = _op(_el.getAt(i), _er[i]);
 				_values[i] = [t]()->T{ return t; };
 			}
 			return _values[i]();

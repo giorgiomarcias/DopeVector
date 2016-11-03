@@ -79,6 +79,15 @@ namespace dope {
 		template < class E >
 		inline Index(const internal::StaticArrayExpression<E, SizeType, Dimension> &e);
 
+#ifdef DOPE_USE_EIGEN
+		/**
+		 * @brief Initializer constructor.
+		 * @param e         The result of an Eigen expression.
+		 */
+		template < class Derived >
+		inline Index(const Eigen::MatrixBase<Derived> &e);
+#endif
+
 		////////////////////////////////////////////////////////////////////////
 
 
@@ -168,6 +177,14 @@ namespace dope {
 		 */
 		template < class E >
 		inline Index& operator%=(const internal::StaticArrayExpression<E, SizeType, Dimension> &e);
+
+#ifdef DOPE_USE_EIGEN
+		/**
+		 * @brief Eigen expression assignment operator.
+		 */
+		template < class Derived >
+		inline Index& operator=(const Eigen::MatrixBase<Derived> &e);
+#endif
 
 		////////////////////////////////////////////////////////////////////////
 

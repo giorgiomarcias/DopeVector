@@ -32,6 +32,17 @@ namespace dope {
 			std::array<SizeType, Dimension>::operator[](i) = e.getAt(i);
 	}
 
+#ifdef DOPE_USE_EIGEN
+	template < SizeType Dimension > template < class Derived >
+	inline Index<Dimension>::Index(const Eigen::MatrixBase<Derived> &e)
+	{
+		static_assert((Eigen::MatrixBase<Derived>::RowsAtCompileTime == Dimension && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 1) ||
+					  (Eigen::MatrixBase<Derived>::RowsAtCompileTime == 1 && Eigen::MatrixBase<Derived>::ColsAtCompileTime == Dimension), "Eigen object must be a vertical vector.");
+		for (SizeType i = 0; i < Dimension; ++i)
+			std::array<SizeType, Dimension>::operator[](i) = e[i];
+	}
+#endif
+
 	template < SizeType Dimension >
 	inline Index<Dimension> & Index<Dimension>::operator= (const std::initializer_list<SizeType> &il)
 	{
@@ -92,6 +103,21 @@ namespace dope {
 			std::array<SizeType, Dimension>::operator[](i) %= e.getAt(i);
 		return *this;
 	}
+
+#ifdef DOPE_USE_EIGEN
+	/**
+	 * @brief Eigen expression assignment operator.
+	 */
+	template < SizeType Dimension > template < class Derived >
+	inline Index<Dimension>& Index<Dimension>::operator=(const Eigen::MatrixBase<Derived> &e)
+	{
+		static_assert((Eigen::MatrixBase<Derived>::RowsAtCompileTime == Dimension && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 1) ||
+					  (Eigen::MatrixBase<Derived>::RowsAtCompileTime == 1 && Eigen::MatrixBase<Derived>::ColsAtCompileTime == Dimension), "Eigen object must be a vertical vector.");
+		for (SizeType i = 0; i < Dimension; ++i)
+			std::array<SizeType, Dimension>::operator[](i) = e[i];
+		return *this;
+	}
+#endif
 
 	template < SizeType Dimension >
 	inline SizeType Index<Dimension>::sum() const

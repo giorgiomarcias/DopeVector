@@ -22,7 +22,8 @@ namespace dope {
 
 		template < class Derived, class Er, typename T, SizeType Dimension, typename Op >
 		class EigenStaticArrayBinaryExpression : public StaticArrayExpression<EigenStaticArrayBinaryExpression<Derived, Er, T, Dimension, Op>, T, Dimension> {
-			static_assert(Eigen::MatrixBase<Derived>::RowsAtCompileTime == Dimension && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 1, "Eigen object must be a vertical vector.");
+			static_assert((Eigen::MatrixBase<Derived>::RowsAtCompileTime == Dimension && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 1) ||
+						  (Eigen::MatrixBase<Derived>::RowsAtCompileTime == 1 && Eigen::MatrixBase<Derived>::ColsAtCompileTime == Dimension), "Eigen object must be a vertical vector.");
 		private:
 			const Eigen::MatrixBase<Derived>                  &_el;
 			const Er	                                          &_er;
@@ -39,7 +40,8 @@ namespace dope {
 
 		template < class El, typename T, SizeType Dimension, class Derived, typename Op >
 		class StaticArrayBinaryEigenExpression : public StaticArrayExpression<StaticArrayBinaryEigenExpression<El, T, Dimension, Derived, Op>, T, Dimension> {
-			static_assert(Eigen::MatrixBase<Derived>::RowsAtCompileTime == Dimension && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 1, "Eigen object must be a vertical vector.");
+			static_assert((Eigen::MatrixBase<Derived>::RowsAtCompileTime == Dimension && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 1) ||
+						  (Eigen::MatrixBase<Derived>::RowsAtCompileTime == 1 && Eigen::MatrixBase<Derived>::ColsAtCompileTime == Dimension), "Eigen object must be a vertical vector.");
 		private:
 			const El                                          &_el;
 			const Eigen::MatrixBase<Derived>                  &_er;
