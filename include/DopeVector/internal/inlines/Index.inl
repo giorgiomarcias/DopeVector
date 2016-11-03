@@ -13,8 +13,6 @@
 
 namespace dope {
 
-#ifndef DOPE_USE_EIGEN_INDEX
-
 	template < SizeType Dimension > template < typename ... Sizes, class >
 	inline Index<Dimension>::Index(const SizeType size0,  Sizes &&...sizes)
 	    : std::array<SizeType, Dimension>({{size0, std::forward<SizeType>(sizes)...}})
@@ -130,8 +128,6 @@ namespace dope {
 	{
 		return Index({{value}});
 	}
-
-#endif
 
 	template < SizeType Dimension >
 	inline SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range)

@@ -11,22 +11,10 @@
 #ifndef Index_hpp
 #define Index_hpp
 
-#ifdef DOPE_USE_EIGEN_INDEX
-	#include <DopeVector/internal/Common.hpp>
-	#include <Eigen/Core>
-#else
-	#include <DopeVector/internal/Expression.hpp>
-	#include <array>
-#endif
+#include <DopeVector/internal/Expression.hpp>
+#include <array>
 
 namespace dope {
-
-#ifdef DOPE_USE_EIGEN_INDEX
-
-	template < SizeType Dimension >
-	using Index = Eigen::Matrix<SizeType, Dimension, 1>;
-
-#else
 
 	namespace internal {
 
@@ -237,7 +225,6 @@ namespace dope {
 		////////////////////////////////////////////////////////////////////////
 
 	};
-#endif
 
 	////////////////////////////////////////////////////////////////////////
 	// TYPEDEFS

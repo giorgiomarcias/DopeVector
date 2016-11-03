@@ -8,7 +8,6 @@
 // Author: Maurizio Kovacic
 // email: maurizio.kovacic@gmail.com
 
-#ifndef DOPE_USE_EIGEN_INDEX
 #include <DopeVector/internal/Expression.hpp>
 
 namespace dope {
@@ -35,16 +34,16 @@ namespace dope {
 
 
 
-		template < class E, typename T, typename Op, SizeType Dimension >
-		const Op StaticArrayUnaryExpression<E, T, Op, Dimension>::_op = Op();
+		template < class E, typename T, SizeType Dimension, typename Op >
+		const Op StaticArrayUnaryExpression<E, T, Dimension, Op>::_op = Op();
 
-		template < class E, typename T, typename Op, SizeType Dimension >
-		inline StaticArrayUnaryExpression<E, T, Op, Dimension>::StaticArrayUnaryExpression(const E &e)
+		template < class E, typename T, SizeType Dimension, typename Op >
+		inline StaticArrayUnaryExpression<E, T, Dimension, Op>::StaticArrayUnaryExpression(const E &e)
 		    : _e(e)
 		{ }
 
-		template < class E, typename T, typename Op, SizeType Dimension >
-		inline T StaticArrayUnaryExpression<E, T, Op, Dimension>::operator[](const SizeType i) const
+		template < class E, typename T, SizeType Dimension, typename Op >
+		inline T StaticArrayUnaryExpression<E, T, Dimension, Op>::operator[](const SizeType i) const
 		{
 			if (!_values[i]) {
 				T t = _op(_e.getAt(i));
@@ -55,16 +54,16 @@ namespace dope {
 
 
 
-		template < class El, class Er, typename T, typename Op, SizeType Dimension >
-		const Op StaticArrayBinaryExpression<El, Er, T, Op, Dimension>::_op = Op();
+		template < class El, class Er, typename T, SizeType Dimension, typename Op >
+		const Op StaticArrayBinaryExpression<El, Er, T, Dimension, Op>::_op = Op();
 
-		template < class El, class Er, typename T, typename Op, SizeType Dimension >
-		inline StaticArrayBinaryExpression<El, Er, T, Op, Dimension>::StaticArrayBinaryExpression(const El &el, const Er &er)
+		template < class El, class Er, typename T, SizeType Dimension, typename Op >
+		inline StaticArrayBinaryExpression<El, Er, T, Dimension, Op>::StaticArrayBinaryExpression(const El &el, const Er &er)
 		    : _el(el), _er(er)
 		{ }
 
-		template < class El, class Er, typename T, typename Op, SizeType Dimension >
-		inline T StaticArrayBinaryExpression<El, Er, T, Op, Dimension>::operator[](const SizeType i) const
+		template < class El, class Er, typename T, SizeType Dimension, typename Op >
+		inline T StaticArrayBinaryExpression<El, Er, T, Dimension, Op>::operator[](const SizeType i) const
 		{
 			if (!_values[i]) {
 				T t = _op(_el.getAt(i), _er.getAt(i));
@@ -75,53 +74,51 @@ namespace dope {
 
 
 		template < class E, typename T, SizeType Dimension >
-		inline internal::StaticArrayUnaryExpression<E, T, std::negate<T>, Dimension> operator- (const internal::StaticArrayExpression<E, T, Dimension> &e)
+		inline StaticArrayUnaryExpression<E, T, Dimension, std::negate<T>> operator- (const StaticArrayExpression<E, T, Dimension> &e)
 		{
-			return internal::StaticArrayUnaryExpression<E, T, std::negate<T>, Dimension>(e);
+			return StaticArrayUnaryExpression<E, T, Dimension, std::negate<T>>(e);
 		}
 
 
 
 		template < class El, class Er, typename T, SizeType Dimension >
-		inline internal::StaticArrayBinaryExpression<El, Er, T, std::plus<T>, Dimension> operator+ (const internal::StaticArrayExpression<El, T, Dimension> &el, const internal::StaticArrayExpression<Er, T, Dimension> &er)
+		inline StaticArrayBinaryExpression<El, Er, T, Dimension, std::plus<T>> operator+ (const StaticArrayExpression<El, T, Dimension> &el, const StaticArrayExpression<Er, T, Dimension> &er)
 		{
-			return internal::StaticArrayBinaryExpression<El, Er, T, std::plus<T>, Dimension>(el, er);
+			return StaticArrayBinaryExpression<El, Er, T, Dimension, std::plus<T>>(el, er);
 		}
 
 
 
 		template < class El, class Er, typename T, SizeType Dimension >
-		inline internal::StaticArrayBinaryExpression<El, Er, T, std::minus<T>, Dimension> operator- (const internal::StaticArrayExpression<El, T, Dimension> &el, const internal::StaticArrayExpression<Er, T, Dimension> &er)
+		inline StaticArrayBinaryExpression<El, Er, T, Dimension, std::minus<T>> operator- (const StaticArrayExpression<El, T, Dimension> &el, const StaticArrayExpression<Er, T, Dimension> &er)
 		{
-			return internal::StaticArrayBinaryExpression<El, Er, T, std::minus<T>, Dimension>(el, er);
+			return StaticArrayBinaryExpression<El, Er, T, Dimension, std::minus<T>>(el, er);
 		}
 
 
 
 		template < class El, class Er, typename T, SizeType Dimension >
-		inline internal::StaticArrayBinaryExpression<El, Er, T, std::multiplies<T>, Dimension> operator* (const internal::StaticArrayExpression<El, T, Dimension> &el, const internal::StaticArrayExpression<Er, T, Dimension> &er)
+		inline StaticArrayBinaryExpression<El, Er, T, Dimension, std::multiplies<T>> operator* (const StaticArrayExpression<El, T, Dimension> &el, const StaticArrayExpression<Er, T, Dimension> &er)
 		{
-			return internal::StaticArrayBinaryExpression<El, Er, T, std::multiplies<T>, Dimension>(el, er);
+			return StaticArrayBinaryExpression<El, Er, T, Dimension, std::multiplies<T>>(el, er);
 		}
 
 
 
 		template < class El, class Er, typename T, SizeType Dimension >
-		inline internal::StaticArrayBinaryExpression<El, Er, T, std::divides<T>, Dimension> operator/ (const internal::StaticArrayExpression<El, T, Dimension> &el, const internal::StaticArrayExpression<Er, T, Dimension> &er)
+		inline StaticArrayBinaryExpression<El, Er, T, Dimension, std::divides<T>> operator/ (const StaticArrayExpression<El, T, Dimension> &el, const StaticArrayExpression<Er, T, Dimension> &er)
 		{
-			return internal::StaticArrayBinaryExpression<El, Er, T, std::divides<T>, Dimension>(el, er);
+			return StaticArrayBinaryExpression<El, Er, T, Dimension, std::divides<T>>(el, er);
 		}
 
 
 
 		template < class El, class Er, typename T, SizeType Dimension >
-		inline internal::StaticArrayBinaryExpression<El, Er, T, std::modulus<T>, Dimension> operator% (const internal::StaticArrayExpression<El, T, Dimension> &el, const internal::StaticArrayExpression<Er, T, Dimension> &er)
+		inline StaticArrayBinaryExpression<El, Er, T, Dimension, std::modulus<T>> operator% (const StaticArrayExpression<El, T, Dimension> &el, const StaticArrayExpression<Er, T, Dimension> &er)
 		{
-			return internal::StaticArrayBinaryExpression<El, Er, T, std::modulus<T>, Dimension>(el, er);
+			return StaticArrayBinaryExpression<El, Er, T, Dimension, std::modulus<T>>(el, er);
 		}
 
 	}
 	
 }
-
-#endif
