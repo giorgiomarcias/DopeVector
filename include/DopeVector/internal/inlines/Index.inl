@@ -48,6 +48,7 @@ namespace dope {
 	{
 		std::copy(il.begin(), il.begin() + std::min(il.size(), Dimension), std::array<SizeType, Dimension>::begin());
 		std::fill(std::array<SizeType, Dimension>::begin() + std::min(il.size(), Dimension), std::array<SizeType, Dimension>::end(), std::array<SizeType, Dimension>::operator[](std::min(Dimension, std::min(il.size(), Dimension)) - 1));
+		return *this;
 	}
 
 	template < SizeType Dimension >

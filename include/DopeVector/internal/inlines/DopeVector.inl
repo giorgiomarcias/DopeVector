@@ -378,6 +378,12 @@ namespace dope {
 	}
 
 	template < typename T, SizeType Dimension >
+	inline void DopeVector<T, Dimension>::allSizes(typename DopeVector<T, Dimension>::IndexD &size) const
+	{
+		size = _size;
+	}
+
+	template < typename T, SizeType Dimension >
 	inline const typename DopeVector<T, Dimension>::IndexD & DopeVector<T, Dimension>::allSizes() const
 	{
 		return _size;
