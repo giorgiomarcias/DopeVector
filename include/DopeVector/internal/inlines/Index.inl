@@ -10,6 +10,7 @@
 
 #include <DopeVector/Index.hpp>
 #include <stdexcept>
+#include <algorithm>
 
 namespace dope {
 
@@ -170,16 +171,12 @@ namespace dope {
 	}
 
 	template < SizeType Dimension >
-	inline SizeType to_position(const Index<Dimension> &index, const Index<Dimension> &range, const Index<Dimension> &offset)
+	inline SizeType to_positionFromOffset(const Index<Dimension> &index, const Index<Dimension> &offset)
 	{
-		SizeType result = static_cast<SizeType>(0);
-		SizeType dimProd = static_cast<SizeType>(1);
-		for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
-			SizeType d = D - static_cast<SizeType>(1);
-			result += index[d] * dimProd;
-			dimProd *= range[d] * offset[d];
-		}
-		return result;
+		SizeType position = static_cast<SizeType>(0);
+		for(SizeType d = static_cast<SizeType>(0); d < Dimension; ++d)
+			position += index[d] * offset[d];
+		return position;
 	}
 
 	template < SizeType Dimension >
@@ -198,14 +195,20 @@ namespace dope {
 	}
 
 	template < SizeType Dimension >
-	inline Index<Dimension> to_index(const SizeType position, const SizeType initialOffset, const Index<Dimension> &offset)
+	inline Index<Dimension> to_indexFromOffset(const SizeType position, const Index<Dimension> &offset)
 	{
-		SizeType linear_position = position - initialOffset;
+		SizeType linear_position = position;
+		Index<Dimension> order;
+		for (SizeType i = static_cast<SizeType>(0); i < Dimension; ++i)
+			order[i] = i;
+		std::sort(order.begin(), order.end(), [&offset](const SizeType &l, const SizeType &r)->bool{
+			return offset[l] < offset[r];
+		});
 		Index<Dimension> result = Index<Dimension>::Zero();
 		for(SizeType D = Dimension; D > static_cast<SizeType>(0); --D) {
 			SizeType d = D - static_cast<SizeType>(1);
-			result[d] = linear_position / offset[d];
-			linear_position %= offset[d];
+			result[order[d]] = linear_position / offset[order[d]];
+			linear_position -= result[order[d]] * offset[order[d]];
 		}
 		return result;
 	}

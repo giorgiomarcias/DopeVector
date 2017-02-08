@@ -378,9 +378,9 @@ namespace dope {
 	}
 
 	template < typename T, SizeType Dimension >
-	inline void DopeVector<T, Dimension>::allSizes(typename DopeVector<T, Dimension>::IndexD &size) const
+	inline void DopeVector<T, Dimension>::allSizes(typename DopeVector<T, Dimension>::IndexD &s) const
 	{
-		size = _size;
+		s = _size;
 	}
 
 	template < typename T, SizeType Dimension >
@@ -396,6 +396,29 @@ namespace dope {
 		for (SizeType i = static_cast<SizeType>(1); i < Dimension; ++i)
 			total *= _size[i];
 		return total;
+	}
+
+	template < typename T, SizeType Dimension >
+	inline SizeType DopeVector<T, Dimension>::offsetAt(const SizeType d) const
+	{
+		if (d >= Dimension) {
+			std::stringstream stream;
+			stream << "Index " << d << " is out of range [0, " << Dimension-1 << ']';
+			throw std::out_of_range(stream.str());
+		}
+		return _offset[d];
+	}
+
+	template < typename T, SizeType Dimension >
+	inline void DopeVector<T, Dimension>::allOffsets(typename DopeVector<T, Dimension>::IndexD &o) const
+	{
+		o = _offset;
+	}
+
+	template < typename T, SizeType Dimension >
+	inline const typename DopeVector<T, Dimension>::IndexD & DopeVector<T, Dimension>::allOffsets() const
+	{
+		return _offset;
 	}
 
 	template < typename T, SizeType Dimension >
@@ -811,6 +834,12 @@ namespace dope {
 	}
 
 	template < typename T >
+	inline void DopeVector<T, 1>::allSizes(Index1 &s) const
+	{
+		s = _size;
+	}
+
+	template < typename T >
 	inline const Index1 & DopeVector<T, 1>::allSizes() const
 	{
 		return _size;
@@ -820,6 +849,29 @@ namespace dope {
 	inline SizeType DopeVector<T, 1>::size() const
 	{
 		return _size[0];
+	}
+
+	template < typename T >
+	inline SizeType DopeVector<T, 1>::offsetAt(const SizeType d) const
+	{
+		if (d >= static_cast<SizeType>(1)) {
+			std::stringstream stream;
+			stream << "Index " << d << " is out of range [0, " << static_cast<SizeType>(0) << ']';
+			throw std::out_of_range(stream.str());
+		}
+		return _size[0];
+	}
+
+	template < typename T >
+	inline void DopeVector<T, 1>::allOffsets(Index1 &o) const
+	{
+		o = _offset;
+	}
+
+	template < typename T >
+	inline const Index1 & DopeVector<T, 1>::allOffsets() const
+	{
+		return _offset;
 	}
 
 	template < typename T >

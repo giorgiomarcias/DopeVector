@@ -408,6 +408,25 @@ namespace dope {
 		inline const IndexD & allSizes() const;
 
 		/**
+		 *    @brief Gives the offset of the elements in the d dimension.
+		 *    @param d                  The dimension whose offset is requested.
+		 *    @return The offset of the elements at dimension d.
+		 */
+		inline SizeType offsetAt(const SizeType d) const;
+
+		/**
+		 *    @brief Gives the offset of the elements of this matrix.
+		 *    @param o                  The output array that will contain the
+		 *                              offset of the elements of this matrix.
+		 */
+		inline void allOffsets(IndexD &o) const;
+
+		/**
+		 *    @brief Gives the offset of the elements of this matrix.
+		 */
+		inline const IndexD & allOffsets() const;
+
+		/**
 		 *    @brief Gives the total size (number of elements in memory) of this
 		 *           matrix.
 		 *    @return The total number of elements in memory.
@@ -869,6 +888,26 @@ namespace dope {
 		 *    @return The total number of elements in memory.
 		 */
 		inline SizeType size() const;
+
+		/**
+		 *    @brief Gives the offset of the elements in the d dimension.
+		 *    @param d                  The dimension whose offset is requested
+		 *                              (MUST be 0).
+		 *    @return The offset of the elements at dimension d.
+		 */
+		inline SizeType offsetAt(const SizeType d) const;
+
+		/**
+		 *    @brief Gives the offset of the elements of this matrix.
+		 *    @param o                  The output array that will contain the
+		 *                              offset of the elements of this matrix.
+		 */
+		inline void allOffsets(Index1 &o) const;
+
+		/**
+		 *    @brief Gives the offset of the elements of this matrix.
+		 */
+		inline const Index1 & allOffsets() const;
 
 		/**
 		 *    @brief Gives the total offset, from the beginning of the stored
