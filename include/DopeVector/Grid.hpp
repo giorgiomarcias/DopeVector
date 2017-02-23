@@ -96,12 +96,12 @@ namespace dope {
 		/**
 		 *    @brief Copy constructor.
 		 */
-		inline explicit Grid(const Grid &other) = default;
+		inline explicit Grid(const Grid &o);
 
 		/**
 		 *    @brief Move constructor.
 		 */
-		inline explicit Grid(Grid &&other) = default;
+		inline explicit Grid(Grid &&) = default;
 
 		////////////////////////////////////////////////////////////////////////
 
@@ -357,7 +357,7 @@ namespace dope {
 		/**
 		 *    @brief Copy assignment operator.
 		 */
-		inline Grid & operator=(const Grid &o) = default;
+		inline Grid & operator=(const Grid &o);
 
 		/**
 		 *    @brief Move assignment operator.

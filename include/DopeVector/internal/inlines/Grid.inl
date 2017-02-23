@@ -70,6 +70,13 @@ namespace dope {
 		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), Index<Dimension>::Constant(size), offset);
 	}
 
+	template < typename T, SizeType Dimension, class Allocator >
+	inline Grid<T, Dimension, Allocator>::Grid(const Grid &o)
+		: _data(o._data)
+	{
+		DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), o.allSizes());
+	}
+
 	////////////////////////////////////////////////////////////////////////////
 
 
@@ -327,6 +334,16 @@ namespace dope {
 	////////////////////////////////////////////////////////////////////////////
 	// ASSIGNMENTS
 	////////////////////////////////////////////////////////////////////////////
+
+	template < typename T, SizeType Dimension, class Allocator >
+	inline Grid<T, Dimension, Allocator> & Grid<T, Dimension, Allocator>::operator=(const Grid &o)
+	{
+		if (&o != this) {
+			_data = o._data;
+			DopeVector<T, Dimension>::reset(_data.data(), static_cast<SizeType>(0), o.allSizes());
+		}
+		return *this;
+	}
 
 #ifdef DOPE_USE_RTTI
 	template < typename T, SizeType Dimension, class Allocator >
